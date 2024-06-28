@@ -13,8 +13,7 @@ library(tidyverse)
 library(broom)
 library(pROC)
 
-# library(boot)
-# library(mice)
+
 
 
 
@@ -49,39 +48,14 @@ simulation_nrun_fnc <- function(n_iter,
   results <- NULL
   set.seed(123456)
   
-  all_dev_data <- list()
-  all_models <- list()
-  all_val_data <- list()
+  all_iterations <- list()
   
-  ## Repeat through number of iterations
+  ## Repeat through number of iteraitons
   for (iter in 1:n_iter) {
     
-    dev_data_current <- dev_data_simulation_function(N_dev = N_dev,
-                                                     Y_prev = Y_prev,
-                                                     gamma_x1 = gamma_x1,
-                                                     gamma_x2 = gamma_x2,
-                                                     gamma_x3 = gamma_x3,
-                                                     gamma_x4 = gamma_x4,
-                                                     gamma_x5 = gamma_x5)
     
     
-    
-    
-    val_data_current <- simulation_function(N_val = N_val,
-                                            Y_prev = Y_prev,
-                                            R_prev = R_prev,
-                                            beta_x1 = beta_x1,
-                                            beta_x2 = beta_x2,
-                                            beta_x3 = beta_x3,
-                                            beta_x4 = beta_x4,
-                                            beta_x5 = beta_x5,
-                                            gamma_x1 = gamma_x1,
-                                            gamma_x2 = gamma_x2,
-                                            gamma_x3 = gamma_x3,
-                                            gamma_x4 = gamma_x4,
-                                            gamma_x5 = gamma_x5)
-    
-    models_current <- simulation_singlerun_fnc(N_dev = N_dev,
+    iter_current <- simulation_singlerun_fnc(N_dev = N_dev,
                                                N_val = N_val,
                                                Y_prev = Y_prev,
                                                R_prev = R_prev,
@@ -96,17 +70,21 @@ simulation_nrun_fnc <- function(n_iter,
                                                gamma_x4 = gamma_x4,
                                                gamma_x5 = gamma_x5)
     
-    # Append models and data to separate lists
-    all_models[[iter]] <- models_current
-    all_dev_data[[iter]] <- dev_data_current
-    all_val_data[[iter]] <- val_data_current
+    
+    
+    # Append iterations and data to separate lists
+    all_iterations[[iter]] <- iter_current
     
     print(paste("iteration ", iter, " complete", sep = ""))
   }
   
   
-  return(list(models = all_models, dev_data = all_dev_data, val_data=all_val_data))
+  return(list(iterations = all_iterations))
 }
+
+  
+  
+
 
 #-------------------------------------------------------------------------------
 
@@ -142,7 +120,7 @@ simulation_singlerun_fnc <- function(N_dev,
   
   
   #2.dev_mod_function------------------
-  models <- dev_mod_function(dev_data = dev_data)
+  model <- dev_mod_function(dev_data = dev_data)
   
   #3.val_imp_data function-------------
   df <- simulation_function(N_val = N_val,
@@ -159,12 +137,23 @@ simulation_singlerun_fnc <- function(N_dev,
                             gamma_x4 = gamma_x4,
                             gamma_x5 = gamma_x5)
   
+  #4.master imputation_function-----------------------
+  # Note: not changed this
+  imputed_datasets <- imputation_function(df = df, m=5)
   
   
+  # predictions
+  preds_per_data_set <- val_imp_mod_function(imputed_datasets = imputed_datasets, 
+                                          model = model)
   
-  return(list("dev_data" = dev_data, "models"=models, "validation_data" = df))
+ 
+  return(list("dev_data" = dev_data, 
+              "model"=model,
+              "val_data" = df, 
+              "imputed_datasets" = imputed_datasets, 
+              "preds" = preds_per_data_set))
   
-  
+
 }
 
 
@@ -237,21 +226,21 @@ dev_mod_function <- function(dev_data) {
   # Fit Model
   model_1 <- glm(Y ~ x_1 + x_2 + x_3 + x_4 + x_5, data = dev_data, family = binomial)
   
-  # Obtaining coeff for fi_0, fi_1, fi_2
-  fi_0 <- coef(model_1)[1]
-  fi_x1 <- coef(model_1)[2]
-  fi_x2 <- coef(model_1)[3]
-  fi_x3 <- coef(model_1)[4]
-  fi_x4 <- coef(model_1)[5]
-  fi_x5 <- coef(model_1)[6]
-  
+  # # Obtaining coeff for fi_0, fi_1, fi_2
+  # fi_0 <- coef(model_1)[1]
+  # fi_x1 <- coef(model_1)[2]
+  # fi_x2 <- coef(model_1)[3]
+  # fi_x3 <- coef(model_1)[4]
+  # fi_x4 <- coef(model_1)[5]
+  # fi_x5 <- coef(model_1)[6]
+  # 
 
   return(model_1)
 }
 
 
 ####---------------------------------------
-## 3. Simulate Validation data
+## 3. Function that simulates Validation data
 ####---------------------------------------
 
 simulation_function <- function(N_val,
@@ -318,10 +307,315 @@ simulation_function <- function(N_val,
   ########
   
   
-  validation_data <- IPD %>%
+  ## Store true x values 
+  val_data <- IPD %>%
+    mutate(x_1true = x_1)
+  
+  ## Remove x_1 if R_1 ==0
+  val_data <- val_data %>%
     mutate(x_1 = ifelse(R_1 == 1, x_1, NA))
   
   
-  return(list("validation_data" = validation_data))
+  return(list("val_data" = val_data))
   
 }
+
+
+
+################################################################################
+## Multiple Imputation Functions
+################################################################################
+#
+####---------------------------------------------
+## Multiple imputation function
+####---------------------------------------------
+
+mice_function <- function(df, m = 5, Y) {
+  
+  dummyrun <- mice(df, m = 1, maxit = 0, printFlag = FALSE)
+  predmat <- dummyrun$predictorMatrix
+  
+  if (Y ==FALSE){        #if we don't want to include the Y, then we set it to be 0.
+    predmat["Y",] <- 0
+    predmat[,"Y"] <- 0
+  }
+  predmat[,"ID"] <- 0  #we dont want MI to impute the missing values based on ID, x_1true or R1 hence they're set to be 0
+  predmat["ID",] <- 0
+  predmat[,"R_1"] <- 0
+  predmat["R_1",] <- 0
+  predmat[,"x_1true"] <- 0
+  predmat["x_1true",] <- 0
+  
+  # Attempt imputation using try-catch (unchanged)
+  imp <- tryCatch({
+    mice(df, m, predictorMatrix = predmat, printFlag = FALSE, maxit = 1)
+  }, error = function(e) {
+    message("MICE imputation failed:", e)
+    return(NULL)  # Return NULL on error
+  })
+  
+  # Check if imputation succeeded (unchanged)
+  if (!is.null(imp)) {
+    console_output <- capture.output(imp)
+    return(list(console_output = console_output, MI_data = imp))
+  } else {
+    # Imputation failed, return NA for MI_data (unchanged)
+    return(list(console_output = character(0), MI_data = data.frame(matrix(NA, nrow = nrow(df), ncol = ncol(df)))))  
+  }
+
+  
+}
+
+
+####---------------------------------------------
+## Mean imputation function
+####---------------------------------------------
+
+mean_function <- function(df) {
+  mean_imputed_df <- df
+  
+  mean_imputed_df <- mean_imputed_df %>%
+    mutate(across(starts_with("x_"),
+                  ~tidyr::replace_na(.x,
+                                     mean(.x, na.rm = TRUE))))
+  
+  mean_imputed_df
+}
+
+
+####-------------
+## CCA function
+####-------------
+CCA_function <- function(df) {
+  df[complete.cases(df), ]
+}
+
+
+
+####--------------------------
+## 3. Master imputation function
+####--------------------------
+
+imputation_function <- function(df, m = 5) {
+  
+  ## Extract MI with console output 
+  MI_noY <- mice_function(df$val_data, m = m, Y = FALSE)
+  MI_withY <- mice_function(df$val_data, m = m, Y = TRUE)
+  
+  ## Extract MIDS 
+  MI_val_data_noY <- MI_noY$MI_data
+  str(MI_val_data_noY)
+  MI_val_data_withY <- MI_withY$MI_data
+  str(MI_val_data_withY)
+  
+  # Check for logged events
+  if (!is.null(MI_val_data_noY$loggedEvents)) {
+    warning("Logged events occurred during imputation. Check console output for details.")
+    cat(MI_noY$console_output)  # Print captured output
+  }
+  
+  # Check for logged events
+  if (!is.null(MI_val_data_withY$loggedEvents)) {
+    warning("Logged events occurred during imputation. Check console output for details.")
+    cat(MI_withY$console_output)  # Print captured output
+  }
+  
+  
+  # Handle potentially missing MI_data
+  if (is.null(MI_val_data_noY)) {
+    warning("MICE imputation failed for data without Y. Using NA values.")
+    MI_val_data_noY <- data.frame(matrix(NA, nrow = nrow(df$val_data), ncol = ncol(df$val_data)))
+  }
+  if (is.null(MI_val_data_withY)) {
+    warning("MICE imputation failed for data with Y. Using NA values.")
+    MI_val_data_withY <- data.frame(matrix(NA, nrow = nrow(df$val_data), ncol = ncol(df$val_data)))
+  }
+  
+  
+  CCA_val_data <- CCA_function(df$val_data)
+  
+  mean_val <- mean_function(df$val_data)
+  
+  str(CCA_val_data)
+  
+  return(list(
+    "CCA_val_data" = CCA_val_data,
+    "mean_val" = mean_val,
+    "MI_val_data_noY" = MI_val_data_noY,
+    "MI_val_data_withY" = MI_val_data_withY
+
+  ))
+  
+}
+
+
+####------------------------------------------------------
+##  5. Function that returns prediction for a single dataset
+####-----------------------------------------------------
+
+#this function takes the results of each imputed dataset and the model(s)
+# and then generates predictions from each model on each imputed dataset.
+#The final output combines the original target variable with predictions from 
+#all models into a single data frame.
+
+# The MICE datasets are structured differently and therefore need slightly different code 
+
+
+predict_single_imputed <- function(imputed_datasets, model) {
+  
+## First part is for CCA and MI analysis 
+  if(is.mids(imputed_datasets) == FALSE){ #is.mids checking whether the object is mice or not
+    
+    # Check for existence of "Y" variable
+    if (!"Y" %in% colnames(imputed_datasets)) {
+      warning("Target variable 'Y' not found in imputed_datasets. Returning NA predictions.")
+      return(data.frame(Y = NA, Predictions_Model = NA))
+    }
+    
+    # Extract Y from imputed dataset
+    output_predictions <- data.frame("Y" = imputed_datasets$Y) #defining the Y as the Y column from the imputed datasets
+    
+    # Nested function to get predictions 
+    get_predictions <- function() {
+      # Predictions hold predicted values from CCA and MI
+      predictions <- tryCatch({
+        predict(model, newdata=imputed_datasets, type = 'response')
+      }, error = function(e) {
+        warning("Error during prediction with mids object. Returning NA predictions:", e)
+        return(NA)
+      })
+      # Output of function 
+      return(predictions)
+    }
+    
+    predictions <- get_predictions()  ## Call nested function above
+    
+  }else {
+    
+  ## For MICE datasets 
+    MI_long <- mice::complete(imputed_datasets, action = 'long') #extracts imputed datasets from a 'mids' object
+    
+    # Structure of MI_long
+    str(MI_long)
+    # Print the first few rows of MI_long 
+    head(MI_long, n=5)
+    
+    
+    # Check for existence of "Y" variable
+    if (!"Y" %in% colnames(MI_long)) {
+      warning("Target variable 'Y' not found in MI_long after completing mids object. Returning NA predictions.")
+      return(data.frame(Y = NA, Predictions_Model = NA))
+    }
+    ## This data frame would have additional columns indicating the imputation number and potentially the original row identifier.
+    ## It then extracts the target variable "Y" from MI_long for prediction
+    output_predictions <- data.frame("Y" = MI_long$Y) ## Extracts Y 
+    
+    ## Predicts new predictions
+    predictions <- tryCatch({
+      predict(model, newdata=MI_long, type = 'response')
+    }, error = function(e) {
+      warning("Error during prediction with mids object. Returning NA predictions:", e)
+      return(NA)
+    })
+  }
+  
+  # Combine data frames: "Y" values (output_predictions) and predicted values (predictions)
+  final_predictions <- cbind(output_predictions, predictions)  # Assuming 'Y' and predictions have the same number of rows
+  
+  # Rename the column holding predictions (assuming it's the second column)
+  names(final_predictions)[2] <- "Predictions_Model"
+  
+  # Output exploration (optional)
+  # str(final_predictions)
+  # head(final_predictions, n=5)
+  
+  return(final_predictions)
+}
+
+
+
+
+###-----------------------------------------------------------
+# 6. Function that the model to all imputed datasets
+###-----------------------------------------------------------
+val_imp_mod_function <- function(imputed_datasets, model) {
+
+  # Debugging
+  str(imputed_datasets)
+  #print(imputed_datasets)
+
+  preds_per_data_set <-  map(imputed_datasets, predict_single_imputed, model = model)
+  head(preds_per_data_set, n=5)
+    
+
+  return(preds_per_data_set)
+}
+
+
+
+# 
+# ####---------------------------------------------------------------
+# ## 7. Function to calculate the predictive performance of the models
+# ####---------------------------------------------------------------
+# predictive.performance.function <- function(Y, Predicted_Risks) {
+# 
+#   library(pROC)
+# 
+#   #Input:
+#   # Y = a binary variable of observed outcomes
+#   # Predicted_Risks = a vector of predicted risks for each dataset
+# 
+#   #calculate the performance of each column (4 sets of predictive performance results per datasets) for loop
+#   #for each model within a given dataset, we want a table with the target measures (use dataframe from above)
+# 
+#   ## Calculate Brier Score (mean square error of predictions; the lower, the better)
+#   ####------------------------------------------------------------------
+#   Brier_individuals <- (Predicted_Risks - Y)^2
+#   Brier <- mean(Brier_individuals)
+#   Brier_var <- var(Brier_individuals)/length(Predicted_Risks)
+# 
+#   ## Calibration intercept (i.e. calibration-in-the-large)
+#   ####-------------------------------------------------------------------------------
+#   LP <- log(Predicted_Risks/ (1 - Predicted_Risks))
+#   Cal_Int <- glm(Y ~ offset(LP), family = binomial(link = "logit"))
+#   Cal_Int_var <- vcov(Cal_Int)[1,1]
+# 
+#   ## Calibration slope
+#   ####--------------------------------------------------------------------------
+#   Cal_Slope <- glm(Y ~ LP, family = binomial(link = "logit"))
+#   Cal_Slope_var <- vcov(Cal_Slope)[2,2]
+# 
+# 
+#   #Cal_Slope_SE <- summary(Cal_Slope)$coefficients[, 2][2]
+# 
+# 
+#   ## Discrimination (c-statistic?)
+#   ####------------------------------------------------------------------------
+#   AUC <- roc(response = Y,
+#              predictor = as.vector(Predicted_Risks),
+#              direction = "<",
+#              levels = c(0,1))$auc
+# 
+# 
+#   AUC_var <- var(AUC, method = "delong") #approximation method used for AUC to calculate the variance
+# 
+# 
+#   ## Store performance results in a data.frame and return
+#   ####------------------------------------------------------------------------
+#   Target_measures <- data.frame(
+#     "Cal_Int" = as.numeric(coef(Cal_Int)),
+#                                 "Cal_Int_var" = Cal_Int_var,
+#                                 "Cal_Slope" = as.numeric(coef(Cal_Slope)[2]),
+#                                 "Cal_Slope_var" = as.numeric(Cal_Slope_var),
+#                                 "AUC" = as.numeric(AUC),
+#                                 "AUC_var" = as.numeric(AUC_var),
+#                                 "Brier" = as.numeric(Brier),
+#                                 "Brier_var" = as.numeric(Brier_var))
+# 
+# 
+#   return(Target_measures)
+# 
+# }
+# 
+# 
+# 
