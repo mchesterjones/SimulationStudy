@@ -469,7 +469,7 @@ predict_single_imputed <- function(imputed_datasets, model) {
     # Check for existence of "Y" variable
     if (!"Y" %in% colnames(imputed_datasets)) {
       warning("Target variable 'Y' not found in imputed_datasets. Returning NA predictions.")
-      return(data.frame(Y = NA, Predictions_Model = NA))
+      return(data.frame(Y = NA, Prediction_Model = NA))
     }
     
     # Extract Y from imputed dataset
@@ -504,7 +504,7 @@ predict_single_imputed <- function(imputed_datasets, model) {
     # Check for existence of "Y" variable
     if (!"Y" %in% colnames(MI_long)) {
       warning("Target variable 'Y' not found in MI_long after completing mids object. Returning NA predictions.")
-      return(data.frame(Y = NA, Predictions_Model = NA))
+      return(data.frame(Y = NA, Prediction_Model = NA))
     }
     ## This data frame would have additional columns indicating the imputation number and potentially the original row identifier.
     ## It then extracts the target variable "Y" from MI_long for prediction
@@ -523,7 +523,7 @@ predict_single_imputed <- function(imputed_datasets, model) {
   final_predictions <- cbind(output_predictions, predictions)  # Assuming 'Y' and predictions have the same number of rows
   
   # Rename the column holding predictions (assuming it's the second column)
-  names(final_predictions)[2] <- "Predictions_Model"
+  names(final_predictions)[2] <- "Prediction_Model"
   
   # Output exploration (optional)
   # str(final_predictions)
@@ -544,78 +544,119 @@ val_imp_mod_function <- function(imputed_datasets, model) {
   str(imputed_datasets)
   #print(imputed_datasets)
 
+  ## Make predictions for each imputed dataset using the development model 
   preds_per_data_set <-  map(imputed_datasets, predict_single_imputed, model = model)
   head(preds_per_data_set, n=5)
+  
+  target_measures <- c()
+  
+  for (i in seq_along(preds_per_data_set)) {
+    # Extract Y and Prediction_Model from the current sub-list
+    current_Y <- preds_per_data_set[[i]]$Y
+    current_pred <- preds_per_data_set[[i]]$Prediction_Model
     
+    # Create a data frame for this element and add it to target_measures1
+    data_frame_to_add <- data.frame(dataset = names(preds_per_data_set)[i],
+                                    Y = current_Y,
+                                    Predicted_Risks = current_pred)
+    target_measures <- rbind(target_measures, data_frame_to_add)
+  }
+  
+  
+  
+  # 
+  # ## Create a dataframe for each of the imputed_datasets 
+  # df <- eval(parse(text=(paste("preds_per_data_set$",names(preds_per_data_set), sep=""))))
+  # 
+  # target_measures1 <- as.data.frame(c(dataset = names(preds_per_data_set),
+  #                                     Y = df$Y, 
+  #                                   Predicted_Risks = df$Prediction_Model))                                                                               
+  # 
+  
+  # target_measures<- as.data.frame(dataset = names(preds_per_data_set),
+  #                                       Y = df$Y, 
+  #                                       Predicted_Risks = df$Prediction_Model)
+  # 
+  # target_measures_data <- as.data.frame(dataset = names(preds_per_data_set),
+  #                                       Y = df$Y, 
+  #                                       Predicted_Risks = df$Prediction_Model)  # Assuming Prediction_Model exists
+  # 
+  #                                                                                                                      
+ #  target_measures_data <- list(dataset = names(preds_per_data_set),
+ #                                Y = df$Y,
+ #                               Predicted_Risks = df$Prediction_Model)
+ # 
+ # target_measures <- as.data.frame(target_measures_data)
+  
+  # target_measures <- as.data.frame(Y = preds_per_data_set$Y, 
+  #                                   Predicted_Risks = preds_per_data_set$Prediction_Model)                                                      
 
-  return(preds_per_data_set)
+  return(list("preds_per_data_set"=preds_per_data_set, "target_measures"=target_measures))
 }
 
 
 
-# 
-# ####---------------------------------------------------------------
-# ## 7. Function to calculate the predictive performance of the models
-# ####---------------------------------------------------------------
-# predictive.performance.function <- function(Y, Predicted_Risks) {
-# 
-#   library(pROC)
-# 
-#   #Input:
-#   # Y = a binary variable of observed outcomes
-#   # Predicted_Risks = a vector of predicted risks for each dataset
-# 
-#   #calculate the performance of each column (4 sets of predictive performance results per datasets) for loop
-#   #for each model within a given dataset, we want a table with the target measures (use dataframe from above)
-# 
-#   ## Calculate Brier Score (mean square error of predictions; the lower, the better)
-#   ####------------------------------------------------------------------
-#   Brier_individuals <- (Predicted_Risks - Y)^2
-#   Brier <- mean(Brier_individuals)
-#   Brier_var <- var(Brier_individuals)/length(Predicted_Risks)
-# 
-#   ## Calibration intercept (i.e. calibration-in-the-large)
-#   ####-------------------------------------------------------------------------------
-#   LP <- log(Predicted_Risks/ (1 - Predicted_Risks))
-#   Cal_Int <- glm(Y ~ offset(LP), family = binomial(link = "logit"))
-#   Cal_Int_var <- vcov(Cal_Int)[1,1]
-# 
-#   ## Calibration slope
-#   ####--------------------------------------------------------------------------
-#   Cal_Slope <- glm(Y ~ LP, family = binomial(link = "logit"))
-#   Cal_Slope_var <- vcov(Cal_Slope)[2,2]
-# 
-# 
-#   #Cal_Slope_SE <- summary(Cal_Slope)$coefficients[, 2][2]
-# 
-# 
-#   ## Discrimination (c-statistic?)
-#   ####------------------------------------------------------------------------
-#   AUC <- roc(response = Y,
-#              predictor = as.vector(Predicted_Risks),
-#              direction = "<",
-#              levels = c(0,1))$auc
-# 
-# 
-#   AUC_var <- var(AUC, method = "delong") #approximation method used for AUC to calculate the variance
-# 
-# 
-#   ## Store performance results in a data.frame and return
-#   ####------------------------------------------------------------------------
-#   Target_measures <- data.frame(
-#     "Cal_Int" = as.numeric(coef(Cal_Int)),
-#                                 "Cal_Int_var" = Cal_Int_var,
-#                                 "Cal_Slope" = as.numeric(coef(Cal_Slope)[2]),
-#                                 "Cal_Slope_var" = as.numeric(Cal_Slope_var),
-#                                 "AUC" = as.numeric(AUC),
-#                                 "AUC_var" = as.numeric(AUC_var),
-#                                 "Brier" = as.numeric(Brier),
-#                                 "Brier_var" = as.numeric(Brier_var))
-# 
-# 
-#   return(Target_measures)
-# 
-# }
-# 
-# 
-# 
+
+####---------------------------------------------------------------
+## 7. Function to calculate the predictive performance of the models
+####---------------------------------------------------------------
+predictive.performance.function <- function(Y, Predicted_Risks) {
+
+  library(pROC)
+
+  #Input:
+  # Y = a binary variable of observed outcomes
+  # Predicted_Risks = a vector of predicted risks for each dataset
+  # Within a given dataset, we want a table with the target measures (use dataframe from above)
+
+  ## Calculate Brier Score (mean square error of predictions; the lower, the better)
+  ####------------------------------------------------------------------
+  Brier_individuals <- (Predicted_Risks - Y)^2
+  Brier <- mean(Brier_individuals)
+  Brier_var <- var(Brier_individuals)/length(Predicted_Risks)
+
+  ## Calibration intercept (i.e. calibration-in-the-large)
+  ####-------------------------------------------------------------------------------
+  LP <- log(Predicted_Risks/ (1 - Predicted_Risks))
+  # Cal_Int <- glm(Y ~ offset(LP), family = binomial(link = "logit"))
+  # Cal_Int_var <- vcov(Cal_Int)[1,1]
+
+  ## Calibration slope
+  ####--------------------------------------------------------------------------
+  # Cal_Slope <- glm(Y ~ LP, family = binomial(link = "logit"))
+  # Cal_Slope_var <- vcov(Cal_Slope)[2,2]
+
+
+  #Cal_Slope_SE <- summary(Cal_Slope)$coefficients[, 2][2]
+
+
+  ## Discrimination (c-statistic?)
+  ####------------------------------------------------------------------------
+  AUC <- roc(response = Y,
+             predictor = as.vector(Predicted_Risks),
+             direction = "<",
+             levels = c(0,1))$auc
+
+
+  AUC_var <- var(AUC, method = "delong") #approximation method used for AUC to calculate the variance
+
+
+  ## Store performance results in a data.frame and return
+  ####------------------------------------------------------------------------
+  Target_measures <- data.frame(
+    "Cal_Int" = as.numeric(coef(Cal_Int)),
+                                "Cal_Int_var" = Cal_Int_var,
+                                "Cal_Slope" = as.numeric(coef(Cal_Slope)[2]),
+                                "Cal_Slope_var" = as.numeric(Cal_Slope_var),
+                                "AUC" = as.numeric(AUC),
+                                "AUC_var" = as.numeric(AUC_var),
+                                "Brier" = as.numeric(Brier),
+                                "Brier_var" = as.numeric(Brier_var))
+
+
+  return(Target_measures)
+
+}
+
+
+
