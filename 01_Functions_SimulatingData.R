@@ -557,40 +557,12 @@ val_imp_mod_function <- function(imputed_datasets, model) {
     
     # Create a data frame for this element and add it to target_measures1
     data_frame_to_add <- data.frame(dataset = names(preds_per_data_set)[i],
-                                    Y = current_Y,
-                                    Predicted_Risks = current_pred)
+                                    predictive.performance.function(Y = current_Y,
+                                    Predicted_Risks = current_pred))
     target_measures <- rbind(target_measures, data_frame_to_add)
   }
   
   
-  
-  # 
-  # ## Create a dataframe for each of the imputed_datasets 
-  # df <- eval(parse(text=(paste("preds_per_data_set$",names(preds_per_data_set), sep=""))))
-  # 
-  # target_measures1 <- as.data.frame(c(dataset = names(preds_per_data_set),
-  #                                     Y = df$Y, 
-  #                                   Predicted_Risks = df$Prediction_Model))                                                                               
-  # 
-  
-  # target_measures<- as.data.frame(dataset = names(preds_per_data_set),
-  #                                       Y = df$Y, 
-  #                                       Predicted_Risks = df$Prediction_Model)
-  # 
-  # target_measures_data <- as.data.frame(dataset = names(preds_per_data_set),
-  #                                       Y = df$Y, 
-  #                                       Predicted_Risks = df$Prediction_Model)  # Assuming Prediction_Model exists
-  # 
-  #                                                                                                                      
- #  target_measures_data <- list(dataset = names(preds_per_data_set),
- #                                Y = df$Y,
- #                               Predicted_Risks = df$Prediction_Model)
- # 
- # target_measures <- as.data.frame(target_measures_data)
-  
-  # target_measures <- as.data.frame(Y = preds_per_data_set$Y, 
-  #                                   Predicted_Risks = preds_per_data_set$Prediction_Model)                                                      
-
   return(list("preds_per_data_set"=preds_per_data_set, "target_measures"=target_measures))
 }
 
@@ -618,16 +590,16 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   ## Calibration intercept (i.e. calibration-in-the-large)
   ####-------------------------------------------------------------------------------
   LP <- log(Predicted_Risks/ (1 - Predicted_Risks))
-  # Cal_Int <- glm(Y ~ offset(LP), family = binomial(link = "logit"))
-  # Cal_Int_var <- vcov(Cal_Int)[1,1]
+  Cal_Int <- glm(Y ~ offset(LP), family = binomial(link = "logit"))
+  Cal_Int_var <- vcov(Cal_Int)[1,1]
 
   ## Calibration slope
   ####--------------------------------------------------------------------------
-  # Cal_Slope <- glm(Y ~ LP, family = binomial(link = "logit"))
-  # Cal_Slope_var <- vcov(Cal_Slope)[2,2]
+  Cal_Slope <- glm(Y ~ LP, family = binomial(link = "logit"))
+  Cal_Slope_var <- vcov(Cal_Slope)[2,2]
 
 
-  #Cal_Slope_SE <- summary(Cal_Slope)$coefficients[, 2][2]
+  Cal_Slope_SE <- summary(Cal_Slope)$coefficients[, 2][2]
 
 
   ## Discrimination (c-statistic?)
