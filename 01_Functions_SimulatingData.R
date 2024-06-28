@@ -551,11 +551,12 @@ val_imp_mod_function <- function(imputed_datasets, model) {
   target_measures <- c()
   
   for (i in seq_along(preds_per_data_set)) {
+    
     # Extract Y and Prediction_Model from the current sub-list
     current_Y <- preds_per_data_set[[i]]$Y
     current_pred <- preds_per_data_set[[i]]$Prediction_Model
     
-    # Create a data frame for this element and add it to target_measures1
+    # Create a data frame for this element and add it to target_measures
     data_frame_to_add <- data.frame(dataset = names(preds_per_data_set)[i],
                                     predictive.performance.function(Y = current_Y,
                                     Predicted_Risks = current_pred))

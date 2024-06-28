@@ -9,6 +9,10 @@
 ################################################################################
 # Check Generate Development Dataset Generation 
 ################################################################################
+
+load("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Results_Yprev0.1_Rprev0.5_28Jun2024.Rdata")
+
+
 iters=3
 
 # Check for NAs
