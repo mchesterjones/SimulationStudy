@@ -29,10 +29,10 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 
 sims_parameters <- crossing(
   n_iter = 3, 
-  N_dev = 100,
-  N_val = 100, 
-  Y_prev = c(0.1), ## 0.5 for now
-  R_prev = c(0.5),
+  N_dev = 100000,
+  N_val = 100000, 
+  Y_prev = c(0.01), 
+  R_prev = c(0.25),
   ## Beta = affect on Missingness R   
   beta_x1 = c(0), ## 0 for MAR
   beta_x2 = c(0.5), ## Affect on missingness  
@@ -85,5 +85,5 @@ Rprev <- paste("Rprev",sims_parameters$R_prev)
 filename <- paste0("Results_","Yprev", sims_parameters$Y_prev, "_Rprev", sims_parameters$R_prev, "_",  today, ".Rdata")
 
 # Save results
-write_rds(simulation_results, file = filename)
+save(simulation_results, file = filename)
 

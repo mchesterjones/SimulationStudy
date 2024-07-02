@@ -233,7 +233,19 @@ dev_mod_function <- function(dev_data) {
   # fi_x3 <- coef(model_1)[4]
   # fi_x4 <- coef(model_1)[5]
   # fi_x5 <- coef(model_1)[6]
-  # 
+  
+  # Check Convergence
+  if (!all(summary(model_1)$convergence)) {
+    warning("Model fitting might not have converged. Check coefficients and diagnostics.")
+  }
+  
+  # Check Boundary
+  if (any(attr(model_1, "boundary") == TRUE)) {
+    warning("Model encountered separation issues. Consider regularization or alternative models.")
+  }
+  
+  
+  
 
   return(model_1)
 }
@@ -519,6 +531,9 @@ predict_single_imputed <- function(imputed_datasets, model) {
     })
   }
   
+  
+
+
   # Combine data frames: "Y" values (output_predictions) and predicted values (predictions)
   final_predictions <- cbind(output_predictions, predictions)  # Assuming 'Y' and predictions have the same number of rows
   
@@ -526,8 +541,8 @@ predict_single_imputed <- function(imputed_datasets, model) {
   names(final_predictions)[2] <- "Prediction_Model"
   
   # Output exploration (optional)
-  # str(final_predictions)
-  # head(final_predictions, n=5)
+#  str(final_predictions)
+#  head(final_predictions, n=5)
   
   return(final_predictions)
 }
