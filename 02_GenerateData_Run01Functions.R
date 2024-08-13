@@ -28,10 +28,10 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 
 
 sims_parameters <- crossing(
-  n_iter = 3, 
+  n_iter = 100, 
   N_dev = 100000,
   N_val = 100000, 
-  Y_prev = c(0.01), 
+  Y_prev = c(0.1), 
   R_prev = c(0.25),
   ## Beta = affect on Missingness R   
   beta_x1 = c(0), ## 0 for MAR

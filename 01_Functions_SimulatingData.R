@@ -599,22 +599,35 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
 
   ## Calculate Brier Score (mean square error of predictions; the lower, the better)
   ####------------------------------------------------------------------
-  Brier_individuals <- (Predicted_Risks - Y)^2
-  Brier <- mean(Brier_individuals)
-  Brier_var <- var(Brier_individuals)/length(Predicted_Risks)
+  ## Why this Measures? 
+  # What is the accuracy of the porbailistic predictions? 
+  Brier_individuals <- (Predicted_Risks - Y)^2 ## Predicted risks - true outcome
+  Brier <- mean(Brier_individuals) # Average of these sqaured errors
+  Brier_var <- var(Brier_individuals)/length(Predicted_Risks) # Variance of the individual Brier Scores 
 
-  ## Calibration intercept (i.e. calibration-in-the-large)
+  ## Calibration intercept (i.e. calibration-in-the-large): Overall Bias in Predictions
   ####-------------------------------------------------------------------------------
-  LP <- log(Predicted_Risks/ (1 - Predicted_Risks))
-  Cal_Int <- glm(Y ~ offset(LP), family = binomial(link = "logit"))
-  Cal_Int_var <- vcov(Cal_Int)[1,1]
+  ## Why this measure? 
+  ## We want to understand whether what we are predicting is systematically too high or too low compared to true OUTCOMES
+  ## Does the average predicted probability match the average observed outcome 
+  ## Named intercept because that's where regression line crosses y-axis
+  ## Therefore if intercept is significantly different from zero, model's predictions are systematically biased
+  
+  LP <- log(Predicted_Risks/ (1 - Predicted_Risks)) ## Converts predicted probabilities to continuouis (log scale) log odds (i.e., log(odds/1-odds))
+  Cal_Int <- glm(Y ~ offset(LP), family = binomial(link = "logit"))  ## Fits a GLM with binomial family and logit link function, offset uses LP as offset fixing coefficient to 1
+  Cal_Int_var <- vcov(Cal_Int)[1,1] # Variance-covariance matrix of fitted model assesses uncertainty of calibration intercept estimate
 
-  ## Calibration slope
+  ## Calibration slope: Spread or dispersion of predictions
   ####--------------------------------------------------------------------------
+  ## Why this measure? 
+  ## This measures the spread of predictions over entire range 
+  ## Measures the agreements between observed and actual
+  # 1 = perfect calibration
+  # Slope < 1: Indicates that the model’s predictions are too extreme.  High probabilities are overestimated, and low probabilities are underestimated.
+  # Slope > 1: Indicates that the model’s predictions are too conservative. High probabilities are underestimated, and low probabilities are overestimated.
+ 
   Cal_Slope <- glm(Y ~ LP, family = binomial(link = "logit"))
   Cal_Slope_var <- vcov(Cal_Slope)[2,2]
-
-
   Cal_Slope_SE <- summary(Cal_Slope)$coefficients[, 2][2]
 
 
