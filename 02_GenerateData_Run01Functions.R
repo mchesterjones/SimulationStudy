@@ -28,7 +28,7 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 
 
 sims_parameters <- crossing(
-  n_iter = 100, 
+  n_iter = 50, 
   N_dev = 100000,
   N_val = 100000, 
   Y_prev = c(0.1), 
@@ -79,10 +79,11 @@ warnings()
 today <- format(Sys.Date(), "%d%b%Y")  
 Yprev <- paste("Yprev",sims_parameters$Y_prev)
 Rprev <- paste("Rprev",sims_parameters$R_prev)
+Nsim <- paste("Nsim", sims_parameters$n_iter)
 
 
 # Construct the filename with today's date
-filename <- paste0("Results_","Yprev", sims_parameters$Y_prev, "_Rprev", sims_parameters$R_prev, "_",  today, ".Rdata")
+filename <- paste0("Results_", "Nsim", "_", "Yprev", sims_parameters$Y_prev, "_Rprev", sims_parameters$R_prev, "_",  today, ".Rdata")
 
 # Save results
 save(simulation_results, file = filename)
