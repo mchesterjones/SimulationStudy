@@ -109,6 +109,21 @@ simulation_singlerun_fnc <- function(N_dev,
                                      gamma_x5) {
   
   
+  parameters <- list(N_dev = N_dev,
+                     N_val = N_val,
+                     Y_prev = Y_prev,
+                     R_prev = R_prev,
+                     beta_x1 = beta_x1,
+                     beta_x2 = beta_x2,
+                     beta_x3 = beta_x3,
+                     beta_x4 = beta_x4,
+                     beta_x5 = beta_x5,
+                     gamma_x1 = gamma_x1,
+                     gamma_x2 = gamma_x2,
+                     gamma_x3 = gamma_x3,
+                     gamma_x4 = gamma_x4,
+                     gamma_x5 = gamma_x5)
+  
   #1.dev_data function------------
   dev_data <- dev_data_simulation_function(N_dev = N_dev,
                                            gamma_x1 = gamma_x1,
@@ -147,7 +162,8 @@ simulation_singlerun_fnc <- function(N_dev,
                                           model = model)
   
  
-  return(list("dev_data" = dev_data, 
+  return(list("Parameters" = parameters,
+              "dev_data" = dev_data, 
               "model"=model,
               "val_data" = df, 
               "imputed_datasets" = imputed_datasets, 

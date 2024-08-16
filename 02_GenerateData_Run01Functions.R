@@ -28,11 +28,11 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 
 
 sims_parameters <- crossing(
-  n_iter = 50, 
+  n_iter = 20, 
   N_dev = 100000,
   N_val = 100000, 
-  Y_prev = c(0.1), 
-  R_prev = c(0.25),
+  Y_prev = c(0.05,0.1), 
+  R_prev = c(0.25,0.5),
   ## Beta = affect on Missingness R   
   beta_x1 = c(0), ## 0 for MAR
   beta_x2 = c(0.5), ## Affect on missingness  
@@ -48,43 +48,63 @@ sims_parameters <- crossing(
 )
 
 
-
-
+###############################################################################
+# Run through combinations 
+###############################################################################
+for (i in 1:nrow(sims_parameters)) {
+  # Extract parameters for the current iteration
+  n_iter <- sims_parameters$n_iter[i]
+  N_val <- sims_parameters$N_val[i]
+  N_dev <- sims_parameters$N_dev[i]
+  Y_prev <- sims_parameters$Y_prev[i]
+  R_prev <- sims_parameters$R_prev[i]
+  beta_x1 <- sims_parameters$beta_x1[i]
+  beta_x2 <- sims_parameters$beta_x2[i]
+  beta_x3 <- sims_parameters$beta_x3[i]
+  beta_x4 <- sims_parameters$beta_x4[i]
+  beta_x5 <- sims_parameters$beta_x5[i]
+  gamma_x1 <- sims_parameters$gamma_x1[i]
+  gamma_x2 <- sims_parameters$gamma_x2[i]
+  gamma_x3 <- sims_parameters$gamma_x3[i]
+  gamma_x4 <- sims_parameters$gamma_x4[i]
+  gamma_x5 <- sims_parameters$gamma_x5[i]
+  
+  
 ################################################################################
 # Store Simulation Results
 ################################################################################
 
 s <-1
 
+## Simulation Results
 simulation_results <- simulation_nrun_fnc(
-  n_iter = sims_parameters$n_iter[s],
-  N_dev = sims_parameters$N_dev[s],
-  N_val = sims_parameters$N_val[s],
-  Y_prev = sims_parameters$Y_prev[s],
-  R_prev = sims_parameters$R_prev[s],
-  beta_x1 = sims_parameters$beta_x1[s],
-  beta_x2 = sims_parameters$beta_x2[s],
-  beta_x3 = sims_parameters$beta_x3[s],
-  beta_x4 = sims_parameters$beta_x4[s],
-  beta_x5 = sims_parameters$beta_x5[s],
-  gamma_x1 = sims_parameters$gamma_x1[s],
-  gamma_x2 = sims_parameters$gamma_x2[s],
-  gamma_x3 = sims_parameters$gamma_x3[s],
-  gamma_x4 = sims_parameters$gamma_x4[s],
-  gamma_x5 = sims_parameters$gamma_x5[s])
+  n_iter = n_iter,
+  N_dev = N_dev,
+  N_val = N_val,
+  Y_prev = Y_prev,
+  R_prev = R_prev,
+  beta_x1 = beta_x1,
+  beta_x2 = beta_x2,
+  beta_x3 = beta_x3,
+  beta_x4 = beta_x4,
+  beta_x5 = beta_x5,
+  gamma_x1 = gamma_x1,
+  gamma_x2 = gamma_x2,
+  gamma_x3 = gamma_x3,
+  gamma_x4 = gamma_x4,
+  gamma_x5 = gamma_x5)
 
-warnings()
 
 # Get today's date Y Prev and R Previn a format suitable for filenames
 today <- format(Sys.Date(), "%d%b%Y")  
-Yprev <- paste("Yprev",sims_parameters$Y_prev)
-Rprev <- paste("Rprev",sims_parameters$R_prev)
-Nsim <- paste("Nsim", sims_parameters$n_iter)
-
 
 # Construct the filename with today's date
-filename <- paste0("Results_", "Nsim", "_", "Yprev", sims_parameters$Y_prev, "_Rprev", sims_parameters$R_prev, "_",  today, ".Rdata")
-
+filename <- paste0("Results_", i, "_Nsim_", sims_parameters$n_iter[i], "_Yprev_", sims_parameters$Y_prev[i], "_Rprev_", sims_parameters$R_prev[i], "_", today, ".Rdata")
 # Save results
 save(simulation_results, file = filename)
+
+}
+
+warnings()
+
 
