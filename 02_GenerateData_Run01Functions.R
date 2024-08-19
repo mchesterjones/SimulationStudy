@@ -29,10 +29,10 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 
 sims_parameters <- crossing(
   n_iter = 20, 
-  N_dev = 100000,
-  N_val = 100000, 
-  Y_prev = c(0.05,0.1), 
-  R_prev = c(0.25,0.5),
+  N_dev = 500,
+  N_val = 500, 
+  Y_prev = c(0.01), 
+  R_prev = c(0.5,0.75),
   ## Beta = affect on Missingness R   
   beta_x1 = c(0), ## 0 for MAR
   beta_x2 = c(0.5), ## Affect on missingness  
@@ -99,7 +99,7 @@ simulation_results <- simulation_nrun_fnc(
 today <- format(Sys.Date(), "%d%b%Y")  
 
 # Construct the filename with today's date
-filename <- paste0("Results_", i, "_Nsim_", sims_parameters$n_iter[i], "_Yprev_", sims_parameters$Y_prev[i], "_Rprev_", sims_parameters$R_prev[i], "_", today, ".Rdata")
+filename <- paste0("Results_", i, "_Nval_", sims_parameters$N_val[i], "_Yprev_", sims_parameters$Y_prev[i], "_Rprev_", sims_parameters$R_prev[i], "_", today, ".Rdata")
 # Save results
 save(simulation_results, file = filename)
 

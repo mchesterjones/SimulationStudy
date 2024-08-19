@@ -649,14 +649,22 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
 
   ## Discrimination (c-statistic?)
   ####------------------------------------------------------------------------
-  AUC <- roc(response = Y,
-             predictor = as.vector(Predicted_Risks),
-             direction = "<",
-             levels = c(0,1))$auc
-
-
-  AUC_var <- var(AUC, method = "delong") #approximation method used for AUC to calculate the variance
-
+ 
+  ## Updated the code 19Aug2024 to handle errors of no positve cases that may occur at small sample sizes
+  AUC <-  tryCatch({
+    roc(response = Y, 
+        predictor = as.vector(Predicted_Risks), 
+        direction = "<", levels = c(0, 1))$auc
+  }, error = function(e) {
+    message("Error in ROC calculation: ", e$message)
+    NA  # Return NA or any other placeholder value
+  })
+  
+  AUC_var <- if (!is.na(AUC)) {
+    var(AUC, method = "delong")
+  } else {
+    NA
+  }
 
   ## Store performance results in a data.frame and return
   ####------------------------------------------------------------------------

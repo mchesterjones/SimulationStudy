@@ -33,7 +33,7 @@ library(tidyr)
 # Extract target measures 
 ################################
       extract_measures_fnc <- function(simresults) {
-      data <- list()
+        combined_data <- list()
       
       for (i in 1:length(simresults[["iterations"]])) {
         df <- simresults[["iterations"]][[i]][["preds"]][["target_measures"]]
@@ -185,10 +185,10 @@ for (i in 1:num_iterations) {
                        dataset == "MI_val_data_noY" ~ "Multiple Imputation without Outcome",
                        dataset == "MI_val_data_withY" ~  "Multiple Imputation with Outcome"),
     Parameter = case_when(
-      df == "simresults_Yprev10Rprev50" ~ "Yprev 10% Rprev 50%",
-      df == "simresults_Yprev10Rprev25" ~ "Yprev 10% Rprev 25%",
-      df == "simresults_Yprev5Rprev50" ~ "Yprev 5% Rprev 50%",
-      df == "simresults_Yprev5Rprev25" ~ "Yprev 5% Rprev 25%") )
+      df == "simresults_Yprev10Rprev50" ~ "Outcome prevalence 10% and Missingness 50%",
+      df == "simresults_Yprev10Rprev25" ~ "Outcome prevalence 10% and Missingness 75%",
+      df == "simresults_Yprev5Rprev50" ~ "Outcome prevalence 5% and Missingness 50%",
+      df == "simresults_Yprev5Rprev25" ~ "Outcome prevalence 5% and Missingness 75%") )
   
   # Add Scale Group
   simulation_parameters_long$scale_group <- ifelse(
@@ -202,29 +202,32 @@ for (i in 1:num_iterations) {
 ## Plot AUC  
 ##############################################################################
 ## Four columns, onegraph 
-  auc_plot <- ggplot(simulation_parameters_long %>% filter(Measure=="AUC"), 
+  auc_plot <-
+    ggplot(simulation_parameters_long %>% filter(Measure=="AUC"), 
          aes(x = AVG, y = Method, colour = Method)) +
     geom_point(size = 3) +
     geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.2) +
     labs(y = NULL,
          x = NULL,
-         title = "Performance Measures of Interest",
          colour = "Method\n(Mean, 95% CI)") +
     theme_minimal() + 
-    facet_grid(Measure ~ Parameter, scales = "free_x") + 
+    facet_wrap( ~Parameter , scales = "fixed", ncol=1) + 
+  #  facet_grid( Parameter ~ Measure, scales = "fixed") + 
   #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
+    xlim(0.72,0.79)+
     scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
                                    "Mean Imputation" = "red", 
                                    "Multiple Imputation with Outcome" = "green",
                                    "Multiple Imputation without Outcome" = "purple")) +
     theme(legend.position = "right",
-          strip.text.y = element_text(size = 14, angle = 0, hjust = 0.5, vjust=0.5),         
-          strip.text.x = element_text(size = 14, hjust = 0),  # Align column strip text to the left
+          strip.text = element_text(size = 14),  # Customize strip text size
+          strip.placement = "outside",  # Place strip labels outside the plot area
+          strip.background = element_blank(),  # Remove strip background
           axis.title.x = element_text(size = 14), 
           axis.title.y = element_text(size = 14), 
           axis.text.x = element_text(size = 12), 
           axis.text.y = element_blank(),  # Remove y-axis text
-          axis.ticks.y = element_blank())  # Remove y-axis ticks
+          axis.ticks.y = element_blank())  # Remove y-axis tick
   
 
   
@@ -233,33 +236,225 @@ for (i in 1:num_iterations) {
   ## Plot Brier   
   ##############################################################################
   ## Four columns, onegraph 
-  ## Note: Need to fix the axis of these 
-brier_plot <- ggplot(simulation_parameters_long %>% filter(Measure=="Brier Score"), 
-                     aes(x = AVG, y = Method, colour = Method)) +
+
+  ## Four columns, onegraph 
+  brier_plot <-
+    ggplot(simulation_parameters_long %>% filter(Measure=="Brier Score"), 
+           aes(x = AVG, y = Method, colour = Method)) +
     geom_point(size = 3) +
     geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.2) +
     labs(y = NULL,
          x = NULL,
-         title = "Performance Measures of Interest",
          colour = "Method\n(Mean, 95% CI)") +
     theme_minimal() + 
-    facet_grid(Measure ~ Parameter, scales = "free_x") + 
+    facet_wrap( ~Parameter , scales = "fixed", ncol=1) + 
+    #  facet_grid( Parameter ~ Measure, scales = "fixed") + 
     #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
+    scale_x_continuous(limits = c(0.042, 0.092), breaks = seq(0.04, 0.1, by = 0.004)) +    
     scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
                                    "Mean Imputation" = "red", 
                                    "Multiple Imputation with Outcome" = "green",
                                    "Multiple Imputation without Outcome" = "purple")) +
     theme(legend.position = "right",
-          strip.text.y = element_text(size = 14, angle = 0, hjust = 0.5, vjust=0.5),         
-          strip.text.x = element_text(size = 14, hjust = 0),  # Align column strip text to the left
+          strip.text = element_text(size = 14),  # Customize strip text size
+          strip.placement = "outside",  # Place strip labels outside the plot area
+          strip.background = element_blank(),  # Remove strip background
           axis.title.x = element_text(size = 14), 
           axis.title.y = element_text(size = 14), 
           axis.text.x = element_text(size = 12), 
           axis.text.y = element_blank(),  # Remove y-axis text
-          axis.ticks.y = element_blank())  # Remove y-axis ticks
+          axis.ticks.y = element_blank())  # Remove y-axis tick
   
   
   
+ # ggplot(simulation_parameters_long %>% filter(Measure=="Brier Score"), 
+ #                     aes(x = AVG, y = Method, colour = Method)) +
+ #    geom_point(size = 3) +
+ #    geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.2) +
+ #    labs(y = NULL,
+ #         x = NULL,
+ #         title = "Performance Measures of Interest",
+ #         colour = "Method\n(Mean, 95% CI)") +
+ #    theme_minimal() + 
+ #    facet_grid(Measure ~ Parameter, scales = "free_x") + 
+ #    #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
+ #    scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
+ #                                   "Mean Imputation" = "red", 
+ #                                   "Multiple Imputation with Outcome" = "green",
+ #                                   "Multiple Imputation without Outcome" = "purple")) +
+ #    theme(legend.position = "right",
+ #          strip.text.y = element_text(size = 14, angle = 0, hjust = 0.5, vjust=0.5),         
+ #          strip.text.x = element_text(size = 14, hjust = 0),  # Align column strip text to the left
+ #          axis.title.x = element_text(size = 14), 
+ #          axis.title.y = element_text(size = 14), 
+ #          axis.text.x = element_text(size = 12), 
+ #          axis.text.y = element_blank(),  # Remove y-axis text
+ #          axis.ticks.y = element_blank())  # Remove y-axis ticks
+ #  
+ #  
+  
+  
+  ##############################################################################
+  ## Plot Calibration   
+  ##############################################################################
+  ## Four columns, onegraph 
+ calibrationslope_plot <-
+    ggplot(simulation_parameters_long %>% filter(Measure=="Calibration Slope"), 
+           aes(x = AVG, y = Method, colour = Method)) +
+    geom_point(size = 3) +
+    geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.2) +
+    labs(y = NULL,
+         x = NULL,
+         colour = "Method\n(Mean, 95% CI)") +
+    theme_minimal() + 
+    facet_wrap( ~Parameter , scales = "fixed", ncol=1) + 
+    #  facet_grid( Parameter ~ Measure, scales = "fixed") + 
+    #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
+    scale_x_continuous(limits = c(0.7, 1.1), breaks = seq(0.7, 1.1, by = 0.1)) +    
+    scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
+                                   "Mean Imputation" = "red", 
+                                   "Multiple Imputation with Outcome" = "green",
+                                   "Multiple Imputation without Outcome" = "purple")) +
+    theme(legend.position = "right",
+          strip.text = element_text(size = 14),  # Customize strip text size
+          strip.placement = "outside",  # Place strip labels outside the plot area
+          strip.background = element_blank(),  # Remove strip background
+          axis.title.x = element_text(size = 14), 
+          axis.title.y = element_text(size = 14), 
+          axis.text.x = element_text(size = 12), 
+          axis.text.y = element_blank(),  # Remove y-axis text
+          axis.ticks.y = element_blank())  # Remove y-axis tick
+  
+  ##############################################################################
+  ## Plot Calibration   Intercept
+  ##############################################################################
+  ## Four columns, onegraph 
+  calibrationint_plot <-
+    ggplot(simulation_parameters_long %>% filter(Measure=="Calibration in the Large"), 
+           aes(x = AVG, y = Method, colour = Method)) +
+    geom_point(size = 3) +
+    geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.2) +
+    labs(y = NULL,
+         x = NULL,
+         colour = "Method\n(Mean, 95% CI)") +
+    theme_minimal() + 
+    facet_wrap( ~Parameter , scales = "fixed", ncol=1) + 
+    #  facet_grid( Parameter ~ Measure, scales = "fixed") + 
+    #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
+    scale_x_continuous(limits = c(-0.16, 0.18), breaks = seq(-.16, 0.17, by = 0.04)) +    
+    scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
+                                   "Mean Imputation" = "red", 
+                                   "Multiple Imputation with Outcome" = "green",
+                                   "Multiple Imputation without Outcome" = "purple")) +
+    theme(legend.position = "right",
+          strip.text = element_text(size = 14),  # Customize strip text size
+          strip.placement = "outside",  # Place strip labels outside the plot area
+          strip.background = element_blank(),  # Remove strip background
+          axis.title.x = element_text(size = 14), 
+          axis.title.y = element_text(size = 14), 
+          axis.text.x = element_text(size = 12), 
+          axis.text.y = element_blank(),  # Remove y-axis text
+          axis.ticks.y = element_blank())  # Remove y-axis tick
+  
+  
+  
+  ##############################################################################
+  ## Plot MSE  
+  ##############################################################################
+  ## Four columns, onegraph 
+  mse_plot <-
+    ggplot(simulation_parameters_long %>% filter(Measure=="Mean Square Error"), 
+           aes(x = AVG, y = Method, colour = Method)) +
+    geom_point(size = 3) +
+    geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.2) +
+    labs(y = NULL,
+         x = NULL,
+         colour = "Method\n(Mean, 95% CI)") +
+    theme_minimal() + 
+    facet_wrap( ~Parameter , scales = "fixed", ncol=1) + 
+    #  facet_grid( Parameter ~ Measure, scales = "fixed") + 
+    #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
+   # xlim(0.72,0.79)+
+    scale_x_continuous(limits = c(0.042, 0.092), breaks = seq(0.04, 0.1, by = 0.004)) +    
+    scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
+                                   "Mean Imputation" = "red", 
+                                   "Multiple Imputation with Outcome" = "green",
+                                   "Multiple Imputation without Outcome" = "purple")) +
+    theme(legend.position = "right",
+          strip.text = element_text(size = 14),  # Customize strip text size
+          strip.placement = "outside",  # Place strip labels outside the plot area
+          strip.background = element_blank(),  # Remove strip background
+          axis.title.x = element_text(size = 14), 
+          axis.title.y = element_text(size = 14), 
+          axis.text.x = element_text(size = 12), 
+          axis.text.y = element_blank(),  # Remove y-axis text
+          axis.ticks.y = element_blank())  # Remove y-axis tick
+  
+  
+  ##############################################################################
+  ## Plot RMSE  
+  ##############################################################################
+  ## Four columns, onegraph 
+  rmse_plot <-
+    ggplot(simulation_parameters_long %>% filter(Measure=="Root Mean Square Error"), 
+           aes(x = AVG, y = Method, colour = Method)) +
+    geom_point(size = 3) +
+    geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.2) +
+    labs(y = NULL,
+         x = NULL,
+         colour = "Method\n(Mean, 95% CI)") +
+    theme_minimal() + 
+    facet_wrap( ~Parameter , scales = "fixed", ncol=1) + 
+    #  facet_grid( Parameter ~ Measure, scales = "fixed") + 
+    #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
+    # xlim(0.72,0.79)+
+    scale_x_continuous(limits = c(0.205, 0.305), breaks = seq(0.2, 0.30, by = 0.01)) +    
+    scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
+                                   "Mean Imputation" = "red", 
+                                   "Multiple Imputation with Outcome" = "green",
+                                   "Multiple Imputation without Outcome" = "purple")) +
+    theme(legend.position = "right",
+          strip.text = element_text(size = 14),  # Customize strip text size
+          strip.placement = "outside",  # Place strip labels outside the plot area
+          strip.background = element_blank(),  # Remove strip background
+          axis.title.x = element_text(size = 14), 
+          axis.title.y = element_text(size = 14), 
+          axis.text.x = element_text(size = 12), 
+          axis.text.y = element_blank(),  # Remove y-axis text
+          axis.ticks.y = element_blank())  # Remove y-axis tick  
+  
+  ##############################################################################
+  ## Plot Bias   
+  ##############################################################################
+  ## Four columns, onegraph 
+  
+  ## Four columns, onegraph 
+  bias_plot <-
+    ggplot(simulation_parameters_long %>% filter(Measure=="Bias"), 
+           aes(x = AVG, y = Method, colour = Method)) +
+    geom_point(size = 3) +
+    geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.2) +
+    labs(y = NULL,
+         x = NULL,
+         colour = "Method\n(Mean, 95% CI)") +
+    theme_minimal() + 
+    facet_wrap( ~Parameter , scales = "fixed", ncol=1) + 
+    #  facet_grid( Parameter ~ Measure, scales = "fixed") + 
+    #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
+   # scale_x_continuous(limits = c(0.042, 0.092), breaks = seq(0.04, 0.1, by = 0.004)) +    
+    scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
+                                   "Mean Imputation" = "red", 
+                                   "Multiple Imputation with Outcome" = "green",
+                                   "Multiple Imputation without Outcome" = "purple")) +
+    theme(legend.position = "right",
+          strip.text = element_text(size = 14),  # Customize strip text size
+          strip.placement = "outside",  # Place strip labels outside the plot area
+          strip.background = element_blank(),  # Remove strip background
+          axis.title.x = element_text(size = 14), 
+          axis.title.y = element_text(size = 14), 
+          axis.text.x = element_text(size = 12), 
+          axis.text.y = element_blank(),  # Remove y-axis text
+          axis.ticks.y = element_blank())  # Remove y-axis tick
   
   
 ##############################################################################
