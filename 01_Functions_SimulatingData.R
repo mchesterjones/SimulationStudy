@@ -46,7 +46,7 @@ simulation_nrun_fnc <- function(n_iter,
   
   ## Define an empty variable, which will be used to store the results across all iterations
   results <- NULL
-  set.seed(123456)
+  set.seed(n_iter*4)
   
   all_iterations <- list()
   
