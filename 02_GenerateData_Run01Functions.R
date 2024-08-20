@@ -28,11 +28,11 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 
 
 sims_parameters <- crossing(
-  n_iter = 20, 
+  n_iter = 100, 
   N_dev = 500,
   N_val = 500, 
-  Y_prev = c(0.01), 
-  R_prev = c(0.5,0.75),
+  Y_prev = c(0.01, 0.05, 0.1), 
+  R_prev = c(0.25,0.5,0.75), 
   ## Beta = affect on Missingness R   
   beta_x1 = c(0), ## 0 for MAR
   beta_x2 = c(0.5), ## Affect on missingness  
@@ -101,6 +101,7 @@ today <- format(Sys.Date(), "%d%b%Y")
 # Construct the filename with today's date
 filename <- paste0("Results_", i, "_Nval_", sims_parameters$N_val[i], "_Yprev_", sims_parameters$Y_prev[i], "_Rprev_", sims_parameters$R_prev[i], "_", today, ".Rdata")
 # Save results
+setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data") 
 save(simulation_results, file = filename)
 
 }

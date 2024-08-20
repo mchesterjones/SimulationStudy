@@ -341,7 +341,7 @@ simulation_function <- function(N_val,
   
   ## Remove x_1 if R_1 ==0
   val_data <- val_data %>%
-    mutate(x_1 = ifelse(R_1 == 1, x_1, NA))
+    mutate(x_1 = ifelse(R_1 == 0, x_1, NA)) ## Error spotted 20Aug2024
   
   
   return(list("val_data" = val_data))
@@ -432,9 +432,9 @@ imputation_function <- function(df, m = 5) {
   
   ## Extract MIDS 
   MI_val_data_noY <- MI_noY$MI_data
-  str(MI_val_data_noY)
+ # str(MI_val_data_noY)
   MI_val_data_withY <- MI_withY$MI_data
-  str(MI_val_data_withY)
+ # str(MI_val_data_withY)
   
   # Check for logged events
   if (!is.null(MI_val_data_noY$loggedEvents)) {
@@ -464,7 +464,7 @@ imputation_function <- function(df, m = 5) {
   
   mean_val <- mean_function(df$val_data)
   
-  str(CCA_val_data)
+ # str(CCA_val_data)
   
   return(list(
     "CCA_val_data" = CCA_val_data,
@@ -524,9 +524,9 @@ predict_single_imputed <- function(imputed_datasets, model) {
     MI_long <- mice::complete(imputed_datasets, action = 'long') #extracts imputed datasets from a 'mids' object
     
     # Structure of MI_long
-    str(MI_long)
+   # str(MI_long)
     # Print the first few rows of MI_long 
-    head(MI_long, n=5)
+   # head(MI_long, n=5)
     
     
     # Check for existence of "Y" variable
@@ -572,7 +572,7 @@ predict_single_imputed <- function(imputed_datasets, model) {
 val_imp_mod_function <- function(imputed_datasets, model) {
 
   # Debugging
-  str(imputed_datasets)
+ # str(imputed_datasets)
   #print(imputed_datasets)
 
   ## Make predictions for each imputed dataset using the development model 
