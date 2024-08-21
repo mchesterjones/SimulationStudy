@@ -47,7 +47,7 @@ simulation_nrun_fnc <- function(n_iter,
   ## Define an empty variable, which will be used to store the results across all iterations
   results <- NULL
   set.seed(n_iter*4)
-  
+
   all_iterations <- list()
   
   ## Repeat through number of iteraitons
@@ -615,8 +615,7 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
 
   ## Calculate Brier Score (mean square error of predictions; the lower, the better)
   ####------------------------------------------------------------------
-  ## Why this Measures? 
-  # What is the accuracy of the porbailistic predictions? 
+  # What is the accuracy of the probalistic predictions? 
   Brier_individuals <- (Predicted_Risks - Y)^2 ## Predicted risks - true outcome
   Brier <- mean(Brier_individuals) # Average of these sqaured errors
   Brier_var <- var(Brier_individuals)/length(Predicted_Risks) # Variance of the individual Brier Scores 
@@ -628,11 +627,115 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   ## Does the average predicted probability match the average observed outcome 
   ## Named intercept because that's where regression line crosses y-axis
   ## Therefore if intercept is significantly different from zero, model's predictions are systematically biased
+  if (sum(Y) == 0) {
+    Cal_Int <- NA
+    Cal_Int_var <- NA
+    Cal_Slope <- NA
+    Cal_Slope_var <- NA
+    Cal_Slope_SE <- NA
+    
+    message("All outcomes are zero. Calibration intercept and slope cannot be calculated.")
+  } else {
+    warning_or_error_occurred <- FALSE
+    
+    Cal_Int_model <- tryCatch({
+      glm(Y ~ offset(LP), family = binomial(link = "logit"))
+    }, warning = function(w) {
+      warning_or_error_occurred <- TRUE
+      invokeRestart("muffleWarning")
+    }, error = function(e) {
+      warning_or_error_occurred <- TRUE
+      NULL
+    })
+    
+    if (warning_or_error_occurred || is.null(Cal_Int_model)) {
+      Cal_Int <- NA
+      Cal_Int_var <- NA
+    } else {
+      Cal_Int_var <- vcov(Cal_Int_model)[1, 1]
+      Cal_Int <- as.numeric(coef(Cal_Int_model))
+      print(Cal_Int)
+    }
+    
+    Cal_Slope_model <- tryCatch({
+      glm(Y ~ LP, family = binomial(link = "logit"))
+    }, warning = function(w) {
+      warning_or_error_occurred <- TRUE
+      invokeRestart("muffleWarning")
+    }, error = function(e) {
+      warning_or_error_occurred <- TRUE
+      NULL
+    })
+    
+    if (warning_or_error_occurred || is.null(Cal_Slope_model)) {
+      Cal_Slope <- NA
+      Cal_Slope_var <- NA
+      Cal_Slope_SE <- NA
+    } else {
+      Cal_Slope_var <- vcov(Cal_Slope_model)[2, 2]
+      Cal_Slope_SE <- summary(Cal_Slope_model)$coefficients[, 2][2]
+      Cal_Slope <- as.numeric(coef(Cal_Slope_model)[2])
+      print(Cal_Slope)
+    }
+  }
   
-  LP <- log(Predicted_Risks/ (1 - Predicted_Risks)) ## Converts predicted probabilities to continuouis (log scale) log odds (i.e., log(odds/1-odds))
-  Cal_Int <- glm(Y ~ offset(LP), family = binomial(link = "logit"))  ## Fits a GLM with binomial family and logit link function, offset uses LP as offset fixing coefficient to 1
-  Cal_Int_var <- vcov(Cal_Int)[1,1] # Variance-covariance matrix of fitted model assesses uncertainty of calibration intercept estimate
-
+  # 
+  # LP <- log(Predicted_Risks/ (1 - Predicted_Risks))#
+  # 
+  # Cal_Int_model <- tryCatch({
+  #   glm(Y ~ offset(LP), family = binomial(link = "logit"))
+  # }, warning = function(w) {
+  #   message("Warning during calibration intercept calculation: ", w$message)
+  #   NA
+  # }, error = function(e) {
+  #   message("Error during calibration intercept calculation: ", e$message)
+  #   NA
+  # })
+  # 
+  # Cal_Int_var <- if (is.glm(Cal_Int_model)) {
+  #   vcov(Cal_Int_model)[1, 1]
+  # } else {
+  #   NA
+  # }
+  # Cal_Int <- if (is.glm(Cal_Int_model)) {
+  #   coef(Cal_Int_model)[1]  # Access intercept directly
+  # } else {
+  #   NA
+  # }
+  # 
+  # 
+  # 
+  # 
+  # 
+  # 
+  # 
+  # 
+  # # 
+  # # LP <- log(Predicted_Risks/ (1 - Predicted_Risks))
+  # # 
+  # if (sum(Y) == 0) {
+  #   Cal_Int <- NA
+  #   Cal_Int_var <- NA
+  #   Cal_Slope <- NA
+  #   Cal_Slope_var <- NA
+  #   Cal_Slope_SE <- NA
+  # 
+  #   message("All outcomes are zero. Calibration intercept and slope cannot be calculated.")
+  # } else {
+  #   Cal_Int_model <- glm(Y ~ offset(LP), family = binomial(link = "logit"))
+  #   Cal_Int_var <- vcov(Cal_Int_model)[1, 1]
+  #   Cal_Int <- as.numeric(coef(Cal_Int_model))
+  #   
+  #   print(Cal_Int)
+  # 
+  #   Cal_Slope_model <- glm(Y ~ LP, family = binomial(link = "logit"))
+  #   Cal_Slope_var <- vcov(Cal_Slope_model)[2, 2]
+  #   Cal_Slope_SE <- summary(Cal_Slope_model)$coefficients[, 2][2]
+  #   Cal_Slope <- as.numeric(coef(Cal_Slope_model)[2])
+  #   print(Cal_Slope)
+  #   }
+  # 
+  # 
   ## Calibration slope: Spread or dispersion of predictions
   ####--------------------------------------------------------------------------
   ## Why this measure? 
@@ -642,9 +745,9 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   # Slope < 1: Indicates that the model’s predictions are too extreme.  High probabilities are overestimated, and low probabilities are underestimated.
   # Slope > 1: Indicates that the model’s predictions are too conservative. High probabilities are underestimated, and low probabilities are overestimated.
  
-  Cal_Slope <- glm(Y ~ LP, family = binomial(link = "logit"))
-  Cal_Slope_var <- vcov(Cal_Slope)[2,2]
-  Cal_Slope_SE <- summary(Cal_Slope)$coefficients[, 2][2]
+  # Cal_Slope <- glm(Y ~ LP, family = binomial(link = "logit"))
+  # Cal_Slope_var <- vcov(Cal_Slope)[2,2]
+  # Cal_Slope_SE <- summary(Cal_Slope)$coefficients[, 2][2]
 
 
   ## Discrimination (c-statistic?)
@@ -669,14 +772,15 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   ## Store performance results in a data.frame and return
   ####------------------------------------------------------------------------
   Target_measures <- data.frame(
-    "Cal_Int" = as.numeric(coef(Cal_Int)),
-                                "Cal_Int_var" = Cal_Int_var,
-                                "Cal_Slope" = as.numeric(coef(Cal_Slope)[2]),
-                                "Cal_Slope_var" = as.numeric(Cal_Slope_var),
-                                "AUC" = as.numeric(AUC),
-                                "AUC_var" = as.numeric(AUC_var),
-                                "Brier" = as.numeric(Brier),
-                                "Brier_var" = as.numeric(Brier_var))
+    "Cal_Int" =  as.numeric(Cal_Int),
+    "Cal_Int_var" = Cal_Int_var,
+    "Cal_Slope" = Cal_Slope,
+    "Cal_Slope_var" = Cal_Slope_var,
+    "AUC" = as.numeric(AUC),
+    "AUC_var" = as.numeric(AUC_var),
+    "Brier" = as.numeric(Brier),
+    "Brier_var" = as.numeric(Brier_var)
+  )
 
 
   return(Target_measures)

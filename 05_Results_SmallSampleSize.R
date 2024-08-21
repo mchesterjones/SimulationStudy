@@ -7,40 +7,39 @@ library(ggplot2)
 library(tidyr)
 ################################################################################
 ## Set working directory 
-  setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy")
+setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data") 
 
 ## Load required datasets 
 ################################
 ## The following datasets are small sample size (n=500)
- setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data") load("Results_4_Nsim_20_Yprev_0.1_Rprev_0.5_15Aug2024.Rdata")
 
-load("Results_1_Nval_500_Yprev_0.01_Rprev_0.25_20Aug2024.Rdata")
+load("Results_1_Nval_500_Yprev_0.01_Rprev_0.25_21Aug2024.Rdata")
   simresults_Yprev1Rprev25 <- simulation_results
-load("Results_2_Nval_500_Yprev_0.01_Rprev_0.5_20Aug2024.Rdata")
+load("Results_2_Nval_500_Yprev_0.01_Rprev_0.5_21Aug2024.Rdata")
   simresults_Yprev1Rprev50 <- simulation_results
-load("Results_3_Nval_500_Yprev_0.01_Rprev_0.75_20Aug2024.Rdata")
+load("Results_3_Nval_500_Yprev_0.01_Rprev_0.75_21Aug2024.Rdata")
   simresults_Yprev1Rprev75 <- simulation_results
-load("Results_4_Nval_500_Yprev_0.05_Rprev_0.25_20Aug2024.Rdata")
+load("Results_4_Nval_500_Yprev_0.05_Rprev_0.25_21Aug2024.Rdata")
   simresults_Yprev5Rprev25 <- simulation_results
-load("Results_5_Nval_500_Yprev_0.05_Rprev_0.5_20Aug2024.Rdata")
+load("Results_5_Nval_500_Yprev_0.05_Rprev_0.5_21Aug2024.Rdata")
   simresults_Yprev5Rprev50 <- simulation_results
-load("Results_6_Nval_500_Yprev_0.05_Rprev_0.75_20Aug2024.Rdata")
+load("Results_6_Nval_500_Yprev_0.05_Rprev_0.75_21Aug2024.Rdata")
   simresults_Yprev5Rprev75 <- simulation_results
-load("Results_7_Nval_500_Yprev_0.1_Rprev_0.25_20Aug2024.Rdata")
+load("Results_7_Nval_500_Yprev_0.1_Rprev_0.25_21Aug2024.Rdata")
   simresults_Yprev10Rprev25 <- simulation_results
-load("Results_8_Nval_500_Yprev_0.1_Rprev_0.5_20Aug2024.Rdata")
+load("Results_8_Nval_500_Yprev_0.1_Rprev_0.5_21Aug2024.Rdata")
   simresults_Yprev10Rprev50 <- simulation_results
-load("Results_9_Nval_500_Yprev_0.1_Rprev_0.75_20Aug2024.Rdata")
+load("Results_9_Nval_500_Yprev_0.1_Rprev_0.75_21Aug2024.Rdata")
   simresults_Yprev10Rprev75 <- simulation_results
 
 ## Store parameters 
 ################################
   # Note: doesn't matter which iteration, all the same. 
-  parameters_Yprev10Rprev50 <- data.frame(simresults_Yprev10Rprev50[["iterations"]][[1]][["Parameters"]])
-  parameters_Yprev10Rprev25 <- data.frame(simresults_Yprev10Rprev25[["iterations"]][[1]][["Parameters"]])
-  parameters_Yprev5Rprev50 <- data.frame(simresults_Yprev5Rprev50[["iterations"]][[1]][["Parameters"]])
-  parameters_Yprev5Rprev25 <- data.frame(simresults_Yprev5Rprev25[["iterations"]][[1]][["Parameters"]])
-
+  # parameters_Yprev10Rprev50 <- data.frame(simresults_Yprev10Rprev50[["iterations"]][[1]][["Parameters"]])
+  # parameters_Yprev10Rprev25 <- data.frame(simresults_Yprev10Rprev25[["iterations"]][[1]][["Parameters"]])
+  # parameters_Yprev5Rprev50 <- data.frame(simresults_Yprev5Rprev50[["iterations"]][[1]][["Parameters"]])
+  # parameters_Yprev5Rprev25 <- data.frame(simresults_Yprev5Rprev25[["iterations"]][[1]][["Parameters"]])
+  # 
 
 # Extract target measures 
 ################################
@@ -225,24 +224,25 @@ for (i in 1:num_iterations) {
     "Group2"
   )
   
+ 
   
+  table_results <- simulation_parameters_long
+  table_results <- simulation_parameters_long %>% 
+        select(Parameter,"Method", "Measure", "AVG", "LCI", "UCI", "NACount") %>%
+        mutate(across(c(AVG, LCI, UCI),  ~ round(.x, 4)))
+   
   ## quick table 
   library(flextable)
-  library(officer)
-  
-  table_results <- simulation_parameters_long %>%
-    select("Parameter","Method", "Measure", "AVG", "LCI", "UCI", "NACount") %>%
-    mutate(across(c(AVG, LCI, UCI),  ~ round(.x, 4)))
-  
   ft_results <- flextable(table_results)
   
   # Create a Word document and add the table
+  library(officer)
   doc <- read_docx() %>%
     body_add_flextable(ft_results) %>%
     body_end_section_landscape()
   
   # Save the document
-  print(doc, target = "SmallSampleSizeResults_20Aug2024.docx")
+  print(doc, target = "SmallSampleSizeResults_21Aug2024.docx")
   
 ##############################################################################
 ## Plot AUC  

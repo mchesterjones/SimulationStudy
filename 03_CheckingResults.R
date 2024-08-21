@@ -8,6 +8,7 @@
 
 ################################################################################
 # Check Generate Development Dataset Generation 
+iters<-1
 
 # Check for NAs
 #--------------------------------------------------------
@@ -162,7 +163,6 @@ for (i in 1:iters) {
 ################################################################################
 # Check Generation of Validation Dataset Generation 
 ################################################################################
-iters=3
 
 
 # Check prevalence of Y (outcome)
@@ -243,6 +243,5 @@ for (i in 1:iters) {
   print(simulation_results[["iterations"]][[i]][["imputed_datasets"]][["MI_val_data_noY"]][["loggedEvents"]])
   print(simulation_results[["iterations"]][[i]][["imputed_datasets"]][["MI_val_data_withY"]][["loggedEvents"]])
 }
-
 
 
