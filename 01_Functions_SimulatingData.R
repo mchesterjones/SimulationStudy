@@ -587,10 +587,25 @@ val_imp_mod_function <- function(imputed_datasets, model) {
     current_Y <- preds_per_data_set[[i]]$Y
     current_pred <- preds_per_data_set[[i]]$Prediction_Model
     
+    # Calculate variance
+    variance <- var(current_pred)
+  
+    # Check if variance is zero
+    if (variance == 0) {
+      print("All predicted risks are the same.")
+    }
+    
+    # Check for convergence issues (example: NA values in predictions)
+    if (any(is.na(current_pred))) {
+      warning(paste("Convergence issue detected in dataset:", names(preds_per_data_set)[i]))
+    }
+    
     # Create a data frame for this element and add it to target_measures
     data_frame_to_add <- data.frame(dataset = names(preds_per_data_set)[i],
                                     predictive.performance.function(Y = current_Y,
                                     Predicted_Risks = current_pred))
+    
+    # Bind dataset to create target measures
     target_measures <- rbind(target_measures, data_frame_to_add)
   }
   
@@ -627,6 +642,8 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   ## Does the average predicted probability match the average observed outcome 
   ## Named intercept because that's where regression line crosses y-axis
   ## Therefore if intercept is significantly different from zero, model's predictions are systematically biased
+   LP <- log(Predicted_Risks/ (1 - Predicted_Risks))#
+  
   if (sum(Y) == 0) {
     Cal_Int <- NA
     Cal_Int_var <- NA
@@ -638,11 +655,19 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   } else {
     warning_or_error_occurred <- FALSE
     
-    Cal_Int_model <- tryCatch({
-      glm(Y ~ offset(LP), family = binomial(link = "logit"))
-    }, warning = function(w) {
-      warning_or_error_occurred <- TRUE
+    # Custom warning handler
+    custom_warning_handler <- function(w) {
+      if (grepl("glm.fit: fitted probabilities numerically 0 or 1 occurred", w$message)) {
+        warning_or_error_occurred <- TRUE
+      }
       invokeRestart("muffleWarning")
+    }
+    
+    Cal_Int_model <- tryCatch({
+      withCallingHandlers(
+        glm(Y ~ offset(LP), family = binomial(link = "logit")),
+        warning = custom_warning_handler
+      )
     }, error = function(e) {
       warning_or_error_occurred <- TRUE
       NULL
@@ -658,10 +683,10 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
     }
     
     Cal_Slope_model <- tryCatch({
-      glm(Y ~ LP, family = binomial(link = "logit"))
-    }, warning = function(w) {
-      warning_or_error_occurred <- TRUE
-      invokeRestart("muffleWarning")
+      withCallingHandlers(
+        glm(Y ~ LP, family = binomial(link = "logit")),
+        warning = custom_warning_handler
+      )
     }, error = function(e) {
       warning_or_error_occurred <- TRUE
       NULL
@@ -679,8 +704,59 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
     }
   }
   
+  # if (sum(Y) == 0) {
+  #   Cal_Int <- NA
+  #   Cal_Int_var <- NA
+  #   Cal_Slope <- NA
+  #   Cal_Slope_var <- NA
+  #   Cal_Slope_SE <- NA
+  #   
+  #   message("All outcomes are zero. Calibration intercept and slope cannot be calculated.")
+  # } else {
+  #   warning_or_error_occurred <- FALSE
+  #   
+  #   Cal_Int_model <- tryCatch({
+  #     glm(Y ~ offset(LP), family = binomial(link = "logit"))
+  #   }, warning = function(w) {
+  #     warning_or_error_occurred <- TRUE
+  #     invokeRestart("muffleWarning")
+  #   }, error = function(e) {
+  #     warning_or_error_occurred <- TRUE
+  #     NULL
+  #   })
+  #   
+  #   if (warning_or_error_occurred || is.null(Cal_Int_model)) {
+  #     Cal_Int <- NA
+  #     Cal_Int_var <- NA
+  #   } else {
+  #     Cal_Int_var <- vcov(Cal_Int_model)[1, 1]
+  #     Cal_Int <- as.numeric(coef(Cal_Int_model))
+  #     print(Cal_Int)
+  #   }
+  #   
+  #   Cal_Slope_model <- tryCatch({
+  #     glm(Y ~ LP, family = binomial(link = "logit"))
+  #   }, warning = function(w) {
+  #     warning_or_error_occurred <- TRUE
+  #     invokeRestart("muffleWarning")
+  #   }, error = function(e) {
+  #     warning_or_error_occurred <- TRUE
+  #     NULL
+  #   })
+  #   
+  #   if (warning_or_error_occurred || is.null(Cal_Slope_model)) {
+  #     Cal_Slope <- NA
+  #     Cal_Slope_var <- NA
+  #     Cal_Slope_SE <- NA
+  #   } else {
+  #     Cal_Slope_var <- vcov(Cal_Slope_model)[2, 2]
+  #     Cal_Slope_SE <- summary(Cal_Slope_model)$coefficients[, 2][2]
+  #     Cal_Slope <- as.numeric(coef(Cal_Slope_model)[2])
+  #     print(Cal_Slope)
+  #   }
+  # }
   # 
-  # LP <- log(Predicted_Risks/ (1 - Predicted_Risks))#
+  # 
   # 
   # Cal_Int_model <- tryCatch({
   #   glm(Y ~ offset(LP), family = binomial(link = "logit"))

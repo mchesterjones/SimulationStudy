@@ -101,13 +101,14 @@ Cal_Int_var_CCA <- vcov(Cal_Int_CCA)[1,1] # Variance-covariance matrix of fitted
 summary(Cal_Int_CCA)
 
 
-Predicted_Risks_mean <- simulation_results[["iterations"]][[1]][["preds"]][["preds_per_data_set"]][["mean_val"]][["Prediction_Model"]]
-Y_mean <- simulation_results[["iterations"]][[1]][["preds"]][["preds_per_data_set"]][["mean_val"]][["Y"]]
+Predicted_Risks_mean <- simulation_results[["iterations"]][[54]][["preds"]][["preds_per_data_set"]][["mean_val"]][["Prediction_Model"]]
+Y_mean <- simulation_results[["iterations"]][[54]][["preds"]][["preds_per_data_set"]][["mean_val"]][["Y"]]
 LP_mean <- log(Predicted_Risks_mean/ (1 - Predicted_Risks_mean)) ## Converts predicted probabilities to continuouis (log scale) log odds (i.e., log(odds/1-odds))
 Cal_Int_mean <- glm(Y_mean ~ offset(LP_mean), family = binomial(link = "logit"))  ## Fits a GLM with binomial family and logit link function, offset uses LP as offset fixing coefficient to 1
 Cal_Int_var_mean <- vcov(Cal_Int_mean)[1,1] # Variance-covariance matrix of fitted model assesses uncertainty of calibration intercept estimate
 summary(Cal_Int_mean)
 Cal_Slope_model_mean <- glm(Y_mean ~ LP_mean, family = binomial(link = "logit"))
+as.numeric(coef(Cal_Int_mean))
 
 Predicted_Risks_MInoY <- simulation_results[["iterations"]][[1]][["preds"]][["preds_per_data_set"]][["MI_val_data_noY"]][["Prediction_Model"]]
 Y_MInoY <- simulation_results[["iterations"]][[1]][["preds"]][["preds_per_data_set"]][["MI_val_data_noY"]][["Y"]]

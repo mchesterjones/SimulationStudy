@@ -260,7 +260,7 @@ for (i in 1:num_iterations) {
     facet_wrap( ~Parameter , scales = "fixed", ncol=1) + 
   #  facet_grid( Parameter ~ Measure, scales = "fixed") + 
   #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
-    xlim(0.72,0.79)+
+ #   xlim(0.72,0.79)+
     scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
                                    "Mean Imputation" = "red", 
                                    "Multiple Imputation with Outcome" = "green",
