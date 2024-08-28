@@ -34,11 +34,13 @@ simulation_nrun_fnc <- function(n_iter,
                                 beta_x3 = beta_x3,
                                 beta_x4 = beta_x4,
                                 beta_x5 = beta_x5,
+                                beta_U = beta_U,
                                 gamma_x1 = gamma_x1,
                                 gamma_x2 = gamma_x2,
                                 gamma_x3 = gamma_x3,
                                 gamma_x4 = gamma_x4,
-                                gamma_x5 = gamma_x5)
+                                gamma_x5 = gamma_x5,
+                                gamma_U = gamma_U)
 
 {
   
@@ -64,11 +66,13 @@ simulation_nrun_fnc <- function(n_iter,
                                                beta_x3 = beta_x3,
                                                beta_x4 = beta_x4,
                                                beta_x5 = beta_x5,
+                                               beta_U = beta_U,
                                                gamma_x1 = gamma_x1,
                                                gamma_x2 = gamma_x2,
                                                gamma_x3 = gamma_x3,
                                                gamma_x4 = gamma_x4,
-                                               gamma_x5 = gamma_x5)
+                                               gamma_x5 = gamma_x5,
+                                               gamma_U = gamma_U)
     
     
     
@@ -102,11 +106,13 @@ simulation_singlerun_fnc <- function(N_dev,
                                      beta_x3,
                                      beta_x4,
                                      beta_x5,
+                                     beta_U,
                                      gamma_x1,
                                      gamma_x2,
                                      gamma_x3,
                                      gamma_x4,
-                                     gamma_x5) {
+                                     gamma_x5,
+                                     gamma_U) {
   
   
   parameters <- list(N_dev = N_dev,
@@ -118,11 +124,13 @@ simulation_singlerun_fnc <- function(N_dev,
                      beta_x3 = beta_x3,
                      beta_x4 = beta_x4,
                      beta_x5 = beta_x5,
+                     beta_U = beta_U,
                      gamma_x1 = gamma_x1,
                      gamma_x2 = gamma_x2,
                      gamma_x3 = gamma_x3,
                      gamma_x4 = gamma_x4,
-                     gamma_x5 = gamma_x5)
+                     gamma_x5 = gamma_x5,
+                     gamma_U = gamma_U)
   
   #1.dev_data function------------
   dev_data <- dev_data_simulation_function(N_dev = N_dev,
@@ -131,6 +139,7 @@ simulation_singlerun_fnc <- function(N_dev,
                                            gamma_x3 = gamma_x3,
                                            gamma_x4 = gamma_x4,
                                            gamma_x5 = gamma_x5,
+                                           gamma_U = gamma_U,
                                            Y_prev = Y_prev)
   
   
@@ -146,11 +155,13 @@ simulation_singlerun_fnc <- function(N_dev,
                             beta_x3 = beta_x3,
                             beta_x4 = beta_x4,
                             beta_x5 = beta_x5,
+                            beta_U = beta_U, 
                             gamma_x1 = gamma_x1,
                             gamma_x2 = gamma_x2,
                             gamma_x3 = gamma_x3,
                             gamma_x4 = gamma_x4,
-                            gamma_x5 = gamma_x5)
+                            gamma_x5 = gamma_x5,
+                            gamma_U = gamma_U)
   
   #4.master imputation_function-----------------------
   # Note: not changed this
@@ -195,7 +206,8 @@ dev_data_simulation_function <- function(
     gamma_x2,  ## Coefficient of X2 on outcome Y
     gamma_x3,  ## Coefficient of X3 on outcome Y
     gamma_x4,  ## Coefficient of X4 on outcome Y
-    gamma_x5)  ## Coefficient of X5 on outcome Y
+    gamma_x5,  ## Coefficient of X5 on outcome Y
+    gamma_U) ## Coefficient of U on outcome Y 
   
   
 {
@@ -206,6 +218,7 @@ dev_data_simulation_function <- function(
                          "x_3" = rnorm(N_dev, mean = 0, sd = 1),
                          "x_4" = rnorm(N_dev, mean = 0, sd = 1),
                          "x_5" = rnorm(N_dev, mean = 0, sd = 1),
+                         "U" = rnorm(N_dev, mean = 0, sd = 1),  ## Added 28Aug2024 for MNAR 
                          "ID" = 1:N_dev
   )
   
@@ -217,7 +230,8 @@ dev_data_simulation_function <- function(
                                             gamma_x2*x_2 +
                                             gamma_x2*x_3 +
                                             gamma_x4*x_4 +
-                                            gamma_x5*x_5),
+                                            gamma_x5*x_5 +
+                                            gamma_U*U),
                                  family = binomial(link = "logit"),
                                  data = dev_data_IPD))[1])
   
@@ -227,7 +241,8 @@ dev_data_simulation_function <- function(
                                                   gamma_x2*dev_data_IPD$x_2 +
                                                   gamma_x3*dev_data_IPD$x_3 +
                                                   gamma_x4*dev_data_IPD$x_4 +
-                                                  gamma_x5*dev_data_IPD$x_5))
+                                                  gamma_x5*dev_data_IPD$x_5 + 
+                                                  gamma_U*dev_data_IPD$U))
   
   return(dev_data_IPD)
 }
@@ -241,6 +256,7 @@ dev_mod_function <- function(dev_data) {
   
   # Fit Model
   model_1 <- glm(Y ~ x_1 + x_2 + x_3 + x_4 + x_5, data = dev_data, family = binomial)
+        # Note: Y not dependent on U in development model
   
   # # Obtaining coeff for fi_0, fi_1, fi_2
   # fi_0 <- coef(model_1)[1]
@@ -279,12 +295,14 @@ simulation_function <- function(N_val,
                                 beta_x3,  ## Coefficient of X3 on Missing
                                 beta_x4, ## Coefficient of X4 on Missing
                                 beta_x5,  ## Coefficient of X5 on Missing
+                                beta_U,   ## Coefficient of U on Missing 
                                 gamma_0,  ## Intercept in Y model
                                 gamma_x1,  ## Coefficient of X1 on outcome Y
                                 gamma_x2,  ## Coefficient of X2 on outcome Y
                                 gamma_x3,  ## Coefficient of X3 on outcome Y
                                 gamma_x4,  ## Coefficient of X4 on outcome Y
-                                gamma_x5)  ## Coefficient of X5 on outcome Y
+                                gamma_x5,  ## Coefficient of X5 on outcome Y
+                                gamma_U)   ## Coefficient on U on outcome Y 
 {
   
   IPD <- tibble("x_1" = rnorm(N_val, mean = 0, sd = 1),
@@ -292,6 +310,7 @@ simulation_function <- function(N_val,
                 "x_3" = rnorm(N_val, mean = 0, sd = 1),
                 "x_4" = rnorm(N_val, mean = 0, sd = 1),
                 "x_5" = rnorm(N_val, mean = 0, sd = 1),
+                "U" = rnorm(N_val, mean = 0, sd = 1), 
                 "ID" = 1:N_val
   )
   
@@ -302,7 +321,8 @@ simulation_function <- function(N_val,
                                            beta_x2*x_2 +
                                            beta_x3*x_3 +
                                            beta_x4*x_4 +
-                                           beta_x5*x_5), #R_prev is the missingness level so we control that? We control this by the Y_prev(the number of times R1 is 1 or 0)
+                                           beta_x5*x_5 + #R_prev is the missingness level so we control that? We control this by the Y_prev(the number of times R1 is 1 or 0)
+                                           beta_U*U),
                                 family = binomial(link = "logit"),
                                 data = IPD))[1])
   
@@ -312,7 +332,8 @@ simulation_function <- function(N_val,
                                            beta_x2*IPD$x_2 +
                                            beta_x3*IPD$x_3 +
                                            beta_x4*IPD$x_4 +
-                                           beta_x5*IPD$x_5))
+                                           beta_x5*IPD$x_5 + 
+                                           beta_U*IPD$U))
   
   #determine the prevalence of Y through _0
   gamma_0 <- as.numeric(coef(glm(rbinom(N_val, 1, prob = Y_prev) ~
@@ -320,7 +341,8 @@ simulation_function <- function(N_val,
                                             gamma_x2*x_2 +
                                             gamma_x2*x_3 +
                                             gamma_x4*x_4 +
-                                            gamma_x5*x_5),
+                                            gamma_x5*x_5 + 
+                                            gamma_U*U),
                                  family = binomial(link = "logit"),
                                  data = IPD))[1])
   
@@ -331,7 +353,8 @@ simulation_function <- function(N_val,
                                          gamma_x2*IPD$x_2 +
                                          gamma_x3*IPD$x_3 +
                                          gamma_x4*IPD$x_4 +
-                                         gamma_x5*IPD$x_5))
+                                         gamma_x5*IPD$x_5 +
+                                         gamma_U*IPD$U))
   ########
   
   
@@ -367,12 +390,14 @@ mice_function <- function(df, m = 5, Y) {
     predmat["Y",] <- 0
     predmat[,"Y"] <- 0
   }
-  predmat[,"ID"] <- 0  #we dont want MI to impute the missing values based on ID, x_1true or R1 hence they're set to be 0
+  predmat[,"ID"] <- 0  #we dont want MI to impute the missing values based on ID, U, x_1true or R1 hence they're set to be 0
   predmat["ID",] <- 0
   predmat[,"R_1"] <- 0
   predmat["R_1",] <- 0
   predmat[,"x_1true"] <- 0
   predmat["x_1true",] <- 0
+  predmat[,"U"] <- 0
+  predmat["U",] <- 0
   
   # Attempt imputation using try-catch (unchanged)
   imp <- tryCatch({
@@ -587,14 +612,7 @@ val_imp_mod_function <- function(imputed_datasets, model) {
     current_Y <- preds_per_data_set[[i]]$Y
     current_pred <- preds_per_data_set[[i]]$Prediction_Model
     
-    # Calculate variance
-    variance <- var(current_pred)
   
-    # Check if variance is zero
-    if (variance == 0) {
-      print("All predicted risks are the same.")
-    }
-    
     # Check for convergence issues (example: NA values in predictions)
     if (any(is.na(current_pred))) {
       warning(paste("Convergence issue detected in dataset:", names(preds_per_data_set)[i]))
@@ -635,215 +653,114 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   Brier <- mean(Brier_individuals) # Average of these sqaured errors
   Brier_var <- var(Brier_individuals)/length(Predicted_Risks) # Variance of the individual Brier Scores 
 
-  ## Calibration intercept (i.e. calibration-in-the-large): Overall Bias in Predictions
+  ## Calibration intercept and Slope 
   ####-------------------------------------------------------------------------------
-  ## Why this measure? 
-  ## We want to understand whether what we are predicting is systematically too high or too low compared to true OUTCOMES
-  ## Does the average predicted probability match the average observed outcome 
-  ## Named intercept because that's where regression line crosses y-axis
-  ## Therefore if intercept is significantly different from zero, model's predictions are systematically biased
-   LP <- log(Predicted_Risks/ (1 - Predicted_Risks))#
+ ## (i.e. Calibration-in-the-large): Overall Bias in Predictions
+    ## Why this measure? 
+    ## We want to understand whether what we are predicting is systematically too high or too low compared to true OUTCOMES
+    ## Does the average predicted probability match the average observed outcome 
+    ## Named intercept because that's where regression line crosses y-axis
+    ## Therefore if intercept is significantly different from zero, model's predictions are systematically biased
+
+  ## Calibration slope: Spread or dispersion of predictions
+  ####--------------------------------------------------------------------------
+    ## Why this measure? 
+    ## This measures the spread of predictions over entire range 
+    ## Measures the agreements between observed and actual
+    # 1 = perfect calibration
+    # Slope < 1: Indicates that the model’s predictions are too extreme.  High probabilities are overestimated, and low probabilities are underestimated.
+    # Slope > 1: Indicates that the model’s predictions are too conservative. High probabilities are underestimated, and low probabilities are overestimated.
   
-  if (sum(Y) == 0) {
+  # Calculate log of predicted risks 
+   LP <- log(Predicted_Risks/ (1 - Predicted_Risks))
+
+  # Calculate variance of log of PRs
+  variance_LP <- var(LP)
+ # print(variance_LP)
+  
+  # Calculate variance of predicted risks
+  variance_PR <- var(Predicted_Risks)
+ # print(variance_PR)
+  
+  # Check if variance is zero
+  if (variance_PR == 0) {
+    message("All predicted risks are the same and variance is zero")
+  }
+  # Check if variance is very small 
+  if (variance_PR < 1e-10) {
+    message("All predicted risks are very similar and variance is very small")
+  }
+  
+  # Check if variance of Log Odds is very large 
+  if (variance_LP > 10 ) {
+    message("Log  risks variance is too high indicating extremes")
+  }
+  
+  # Check if all outcomes are zero 
+  if (sum(Y) == 0) { 
+    message("All outcomes are zero")
+  }
+  
+  ## Put Calibration to NAs if outcomes are all the same and variance of predicted risks is 0 
+  if ((sum(Y) == 0) | (variance_PR == 0) | (variance_PR <1e-10)  |   (variance_LP > 10) ){
     Cal_Int <- NA
     Cal_Int_var <- NA
     Cal_Slope <- NA
     Cal_Slope_var <- NA
     Cal_Slope_SE <- NA
     
-    message("All outcomes are zero. Calibration intercept and slope cannot be calculated.")
+    message("Calibration intercept and slope cannot be calculated.")
+    
   } else {
-    warning_or_error_occurred <- FALSE
-    
-    # Custom warning handler
-    custom_warning_handler <- function(w) {
-      if (grepl("glm.fit: fitted probabilities numerically 0 or 1 occurred", w$message)) {
-        warning_or_error_occurred <- TRUE
-      }
-      invokeRestart("muffleWarning")
-    }
-    
-    Cal_Int_model <- tryCatch({
-      withCallingHandlers(
-        glm(Y ~ offset(LP), family = binomial(link = "logit")),
-        warning = custom_warning_handler
-      )
-    }, error = function(e) {
-      warning_or_error_occurred <- TRUE
-      NULL
-    })
-    
-    if (warning_or_error_occurred || is.null(Cal_Int_model)) {
-      Cal_Int <- NA
-      Cal_Int_var <- NA
-    } else {
+      ## Calibration in the Large
+      Cal_Int_model <- glm(Y ~ offset(LP), family = binomial(link = "logit"))
       Cal_Int_var <- vcov(Cal_Int_model)[1, 1]
       Cal_Int <- as.numeric(coef(Cal_Int_model))
-      print(Cal_Int)
-    }
-    
-    Cal_Slope_model <- tryCatch({
-      withCallingHandlers(
-        glm(Y ~ LP, family = binomial(link = "logit")),
-        warning = custom_warning_handler
-      )
-    }, error = function(e) {
-      warning_or_error_occurred <- TRUE
-      NULL
-    })
-    
-    if (warning_or_error_occurred || is.null(Cal_Slope_model)) {
-      Cal_Slope <- NA
-      Cal_Slope_var <- NA
-      Cal_Slope_SE <- NA
-    } else {
+     # print(Cal_Int)
+      
+      ## Calibration Model
+      Cal_Slope_model <- glm(Y ~ LP, family = binomial(link = "logit"))
       Cal_Slope_var <- vcov(Cal_Slope_model)[2, 2]
       Cal_Slope_SE <- summary(Cal_Slope_model)$coefficients[, 2][2]
-      Cal_Slope <- as.numeric(coef(Cal_Slope_model)[2])
-      print(Cal_Slope)
-    }
+      
+      if (Cal_Slope_SE >10 ) {
+        message("Calibration SE too high and slope cannot be calculated.")
+        
+        Cal_Slope <- NA
+      } else {
+        Cal_Slope <- as.numeric(coef(Cal_Slope_model)[2])
+        
+        
+      }
+      #print(Cal_Slope)
   }
+    
   
-  # if (sum(Y) == 0) {
-  #   Cal_Int <- NA
-  #   Cal_Int_var <- NA
-  #   Cal_Slope <- NA
-  #   Cal_Slope_var <- NA
-  #   Cal_Slope_SE <- NA
-  #   
-  #   message("All outcomes are zero. Calibration intercept and slope cannot be calculated.")
-  # } else {
-  #   warning_or_error_occurred <- FALSE
-  #   
-  #   Cal_Int_model <- tryCatch({
-  #     glm(Y ~ offset(LP), family = binomial(link = "logit"))
-  #   }, warning = function(w) {
-  #     warning_or_error_occurred <- TRUE
-  #     invokeRestart("muffleWarning")
-  #   }, error = function(e) {
-  #     warning_or_error_occurred <- TRUE
-  #     NULL
-  #   })
-  #   
-  #   if (warning_or_error_occurred || is.null(Cal_Int_model)) {
-  #     Cal_Int <- NA
-  #     Cal_Int_var <- NA
-  #   } else {
-  #     Cal_Int_var <- vcov(Cal_Int_model)[1, 1]
-  #     Cal_Int <- as.numeric(coef(Cal_Int_model))
-  #     print(Cal_Int)
-  #   }
-  #   
-  #   Cal_Slope_model <- tryCatch({
-  #     glm(Y ~ LP, family = binomial(link = "logit"))
-  #   }, warning = function(w) {
-  #     warning_or_error_occurred <- TRUE
-  #     invokeRestart("muffleWarning")
-  #   }, error = function(e) {
-  #     warning_or_error_occurred <- TRUE
-  #     NULL
-  #   })
-  #   
-  #   if (warning_or_error_occurred || is.null(Cal_Slope_model)) {
-  #     Cal_Slope <- NA
-  #     Cal_Slope_var <- NA
-  #     Cal_Slope_SE <- NA
-  #   } else {
-  #     Cal_Slope_var <- vcov(Cal_Slope_model)[2, 2]
-  #     Cal_Slope_SE <- summary(Cal_Slope_model)$coefficients[, 2][2]
-  #     Cal_Slope <- as.numeric(coef(Cal_Slope_model)[2])
-  #     print(Cal_Slope)
-  #   }
-  # }
-  # 
-  # 
-  # 
-  # Cal_Int_model <- tryCatch({
-  #   glm(Y ~ offset(LP), family = binomial(link = "logit"))
-  # }, warning = function(w) {
-  #   message("Warning during calibration intercept calculation: ", w$message)
-  #   NA
-  # }, error = function(e) {
-  #   message("Error during calibration intercept calculation: ", e$message)
-  #   NA
-  # })
-  # 
-  # Cal_Int_var <- if (is.glm(Cal_Int_model)) {
-  #   vcov(Cal_Int_model)[1, 1]
-  # } else {
-  #   NA
-  # }
-  # Cal_Int <- if (is.glm(Cal_Int_model)) {
-  #   coef(Cal_Int_model)[1]  # Access intercept directly
-  # } else {
-  #   NA
-  # }
-  # 
-  # 
-  # 
-  # 
-  # 
-  # 
-  # 
-  # 
-  # # 
-  # # LP <- log(Predicted_Risks/ (1 - Predicted_Risks))
-  # # 
-  # if (sum(Y) == 0) {
-  #   Cal_Int <- NA
-  #   Cal_Int_var <- NA
-  #   Cal_Slope <- NA
-  #   Cal_Slope_var <- NA
-  #   Cal_Slope_SE <- NA
-  # 
-  #   message("All outcomes are zero. Calibration intercept and slope cannot be calculated.")
-  # } else {
-  #   Cal_Int_model <- glm(Y ~ offset(LP), family = binomial(link = "logit"))
-  #   Cal_Int_var <- vcov(Cal_Int_model)[1, 1]
-  #   Cal_Int <- as.numeric(coef(Cal_Int_model))
-  #   
-  #   print(Cal_Int)
-  # 
-  #   Cal_Slope_model <- glm(Y ~ LP, family = binomial(link = "logit"))
-  #   Cal_Slope_var <- vcov(Cal_Slope_model)[2, 2]
-  #   Cal_Slope_SE <- summary(Cal_Slope_model)$coefficients[, 2][2]
-  #   Cal_Slope <- as.numeric(coef(Cal_Slope_model)[2])
-  #   print(Cal_Slope)
-  #   }
-  # 
-  # 
-  ## Calibration slope: Spread or dispersion of predictions
-  ####--------------------------------------------------------------------------
-  ## Why this measure? 
-  ## This measures the spread of predictions over entire range 
-  ## Measures the agreements between observed and actual
-  # 1 = perfect calibration
-  # Slope < 1: Indicates that the model’s predictions are too extreme.  High probabilities are overestimated, and low probabilities are underestimated.
-  # Slope > 1: Indicates that the model’s predictions are too conservative. High probabilities are underestimated, and low probabilities are overestimated.
- 
-  # Cal_Slope <- glm(Y ~ LP, family = binomial(link = "logit"))
-  # Cal_Slope_var <- vcov(Cal_Slope)[2,2]
-  # Cal_Slope_SE <- summary(Cal_Slope)$coefficients[, 2][2]
-
 
   ## Discrimination (c-statistic?)
   ####------------------------------------------------------------------------
  
   ## Updated the code 19Aug2024 to handle errors of no positve cases that may occur at small sample sizes
-  AUC <-  tryCatch({
-    roc(response = Y, 
-        predictor = as.vector(Predicted_Risks), 
-        direction = "<", levels = c(0, 1))$auc
-  }, error = function(e) {
-    message("Error in ROC calculation: ", e$message)
-    NA  # Return NA or any other placeholder value
-  })
-  
-  AUC_var <- if (!is.na(AUC)) {
-    var(AUC, method = "delong")
+  if ((sum(Y) == 0) | (variance_PR == 0) | (variance_PR <1e-10)  |   (variance_LP > 10) ){
+    AUC <-NA
+    AUC_var <- NA
   } else {
-    NA
+    AUC <- tryCatch({
+      roc_obj <- roc(response = Y, predictor = as.vector(Predicted_Risks), direction = "<", levels = c(0, 1))
+      roc_obj$auc
+    }, error = function(e) {
+      message("Error in ROC calculation: ", e$message)
+      NA  # Return NA or any other placeholder value
+    })
+    
+    AUC_var <- if (!is.na(AUC)) {
+      var(roc_obj, method = "delong")
+    } else {
+      NA
+    }
   }
+
+    
 
   ## Store performance results in a data.frame and return
   ####------------------------------------------------------------------------

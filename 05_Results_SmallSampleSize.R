@@ -13,11 +13,11 @@ setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Progr
 ################################
 ## The following datasets are small sample size (n=500)
 
-load("Results_1_Nval_500_Yprev_0.01_Rprev_0.25_21Aug2024.Rdata")
+load("Results_1_Nval_500_Yprev_0.01_Rprev_0.25_22Aug2024.Rdata")
   simresults_Yprev1Rprev25 <- simulation_results
-load("Results_2_Nval_500_Yprev_0.01_Rprev_0.5_21Aug2024.Rdata")
+load("Results_2_Nval_500_Yprev_0.01_Rprev_0.5_22Aug2024.Rdata")
   simresults_Yprev1Rprev50 <- simulation_results
-load("Results_3_Nval_500_Yprev_0.01_Rprev_0.75_21Aug2024.Rdata")
+load("Results_3_Nval_500_Yprev_0.01_Rprev_0.75_22Aug2024.Rdata")
   simresults_Yprev1Rprev75 <- simulation_results
 load("Results_4_Nval_500_Yprev_0.05_Rprev_0.25_21Aug2024.Rdata")
   simresults_Yprev5Rprev25 <- simulation_results
@@ -242,7 +242,7 @@ for (i in 1:num_iterations) {
     body_end_section_landscape()
   
   # Save the document
-  print(doc, target = "SmallSampleSizeResults_21Aug2024.docx")
+  print(doc, target = "SmallSampleSizeResults_22Aug2024.docx")
   
 ##############################################################################
 ## Plot AUC  
@@ -282,8 +282,6 @@ for (i in 1:num_iterations) {
   ## Plot Brier   
   ##############################################################################
   ## Four columns, onegraph 
-
-  ## Four columns, onegraph 
   brier_plot <-
     ggplot(simulation_parameters_long %>% filter(Measure=="Brier Score"), 
            aes(x = AVG, y = Method, colour = Method)) +
@@ -296,7 +294,7 @@ for (i in 1:num_iterations) {
     facet_wrap( ~Parameter , scales = "fixed", ncol=1) + 
     #  facet_grid( Parameter ~ Measure, scales = "fixed") + 
     #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
-    scale_x_continuous(limits = c(0.042, 0.092), breaks = seq(0.04, 0.1, by = 0.004)) +    
+    # scale_x_continuous(limits = c(0.042, 0.092), breaks = seq(0.04, 0.1, by = 0.004)) +    
     scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
                                    "Mean Imputation" = "red", 
                                    "Multiple Imputation with Outcome" = "green",
@@ -356,7 +354,7 @@ for (i in 1:num_iterations) {
     facet_wrap( ~Parameter , scales = "fixed", ncol=1) + 
     #  facet_grid( Parameter ~ Measure, scales = "fixed") + 
     #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
-    scale_x_continuous(limits = c(0.7, 1.1), breaks = seq(0.7, 1.1, by = 0.1)) +    
+   # scale_x_continuous(limits = c(0.7, 1.1), breaks = seq(0.7, 1.1, by = 0.1)) +    
     scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
                                    "Mean Imputation" = "red", 
                                    "Multiple Imputation with Outcome" = "green",
@@ -387,7 +385,7 @@ for (i in 1:num_iterations) {
     facet_wrap( ~Parameter , scales = "fixed", ncol=1) + 
     #  facet_grid( Parameter ~ Measure, scales = "fixed") + 
     #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
-    scale_x_continuous(limits = c(-0.16, 0.18), breaks = seq(-.16, 0.17, by = 0.04)) +    
+    # scale_x_continuous(limits = c(-0.16, 0.18), breaks = seq(-.16, 0.17, by = 0.04)) +    
     scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
                                    "Mean Imputation" = "red", 
                                    "Multiple Imputation with Outcome" = "green",
@@ -421,7 +419,7 @@ for (i in 1:num_iterations) {
     #  facet_grid( Parameter ~ Measure, scales = "fixed") + 
     #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
    # xlim(0.72,0.79)+
-    scale_x_continuous(limits = c(0.042, 0.092), breaks = seq(0.04, 0.1, by = 0.004)) +    
+   # scale_x_continuous(limits = c(0.042, 0.092), breaks = seq(0.04, 0.1, by = 0.004)) +    
     scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
                                    "Mean Imputation" = "red", 
                                    "Multiple Imputation with Outcome" = "green",
@@ -454,7 +452,7 @@ for (i in 1:num_iterations) {
     #  facet_grid( Parameter ~ Measure, scales = "fixed") + 
     #  facet_wrap(Measure ~ Parameter, scales = "free_x") + 
     # xlim(0.72,0.79)+
-    scale_x_continuous(limits = c(0.205, 0.305), breaks = seq(0.2, 0.30, by = 0.01)) +    
+  #  scale_x_continuous(limits = c(0.205, 0.305), breaks = seq(0.2, 0.30, by = 0.01)) +    
     scale_colour_manual(values = c("Complete Case Analysis" = "blue", 
                                    "Mean Imputation" = "red", 
                                    "Multiple Imputation with Outcome" = "green",
@@ -501,6 +499,26 @@ for (i in 1:num_iterations) {
           axis.text.x = element_text(size = 12), 
           axis.text.y = element_blank(),  # Remove y-axis text
           axis.ticks.y = element_blank())  # Remove y-axis tick
+  
+  
+#############################################################################
+  ## Save Plots
+############################################################################
+  # Create a list of your plots
+  plots <- list(auc_plot,bias_plot, brier_plot,calibrationint_plot, calibrationslope_plot, mse_plot,rmse_plot)
+  plot_names <- c("AUC", "BIAS", "BRIERSCORE", "CALIBRATIONINT", "CALIBRATIONSLOPE", "MSE", "RMSE")
+  # Define the aspect ratio 
+  width <- 2000
+  height <- 1319  
+  
+  # Loop through the plots and save each one
+  for (i in 1:length(plots)) {
+    png_filename <- paste0(plot_names[i], "_SmallSampleSize_22Aug2024.png")
+    png(png_filename, width = width, height = height)
+    print(plots[[i]])
+    dev.off()
+  }
+  
   
   
 ##############################################################################

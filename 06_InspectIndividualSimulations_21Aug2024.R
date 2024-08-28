@@ -22,7 +22,7 @@ sims_parameters <- crossing(
   N_dev = 500,
   N_val = 500, 
   Y_prev = c(0.01), 
-  R_prev = c(0.75), 
+  R_prev = c(0.25, 0.50, 0.75), 
   ## Beta = affect on Missingness R   
   beta_x1 = c(0), ## 0 for MAR
   beta_x2 = c(0.5), ## Affect on missingness  
@@ -92,27 +92,41 @@ warnings()
 ################################################################################
 # Performance Measures ReCreate
 ################################################################################
-Predicted_Risks_CCA <-simulation_results[["iterations"]][[1]][["preds"]][["preds_per_data_set"]][["CCA_val_data"]][["Prediction_Model"]]
-Y_CCA <- simulation_results[["iterations"]][[1]][["preds"]][["preds_per_data_set"]][["CCA_val_data"]][["Y"]]
-
+Predicted_Risks_CCA <-simulation_results[["iterations"]][[77]][["preds"]][["preds_per_data_set"]][["CCA_val_data"]][["Prediction_Model"]]
+Y_CCA <- simulation_results[["iterations"]][[77]][["preds"]][["preds_per_data_set"]][["CCA_val_data"]][["Y"]]
+hist(Predicted_Risks_CCA)
 LP_CCA <- log(Predicted_Risks_CCA/ (1 - Predicted_Risks_CCA)) ## Converts predicted probabilities to continuouis (log scale) log odds (i.e., log(odds/1-odds))
+hist(LP_CCA)
 Cal_Int_CCA <- glm(Y_CCA ~ offset(Predicted_Risks_CCA), family = binomial(link = "logit"))  ## Fits a GLM with binomial family and logit link function, offset uses LP as offset fixing coefficient to 1
 Cal_Int_var_CCA <- vcov(Cal_Int_CCA)[1,1] # Variance-covariance matrix of fitted model assesses uncertainty of calibration intercept estimate
 summary(Cal_Int_CCA)
+auc_CCA <- roc(response = Y_CCA, 
+    predictor = as.vector(Predicted_Risks_CCA), 
+    direction = "<", levels = c(0, 1))$auc
+
+var(auc_CCA)
 
 
-Predicted_Risks_mean <- simulation_results[["iterations"]][[54]][["preds"]][["preds_per_data_set"]][["mean_val"]][["Prediction_Model"]]
-Y_mean <- simulation_results[["iterations"]][[54]][["preds"]][["preds_per_data_set"]][["mean_val"]][["Y"]]
+Predicted_Risks_mean <- simulation_results[["iterations"]][[77]][["preds"]][["preds_per_data_set"]][["mean_val"]][["Prediction_Model"]]
+Y_mean <- simulation_results[["iterations"]][[77]][["preds"]][["preds_per_data_set"]][["mean_val"]][["Y"]]
 LP_mean <- log(Predicted_Risks_mean/ (1 - Predicted_Risks_mean)) ## Converts predicted probabilities to continuouis (log scale) log odds (i.e., log(odds/1-odds))
+hist(LP_mean)
+var(LP_mean)
 Cal_Int_mean <- glm(Y_mean ~ offset(LP_mean), family = binomial(link = "logit"))  ## Fits a GLM with binomial family and logit link function, offset uses LP as offset fixing coefficient to 1
 Cal_Int_var_mean <- vcov(Cal_Int_mean)[1,1] # Variance-covariance matrix of fitted model assesses uncertainty of calibration intercept estimate
 summary(Cal_Int_mean)
 Cal_Slope_model_mean <- glm(Y_mean ~ LP_mean, family = binomial(link = "logit"))
 as.numeric(coef(Cal_Int_mean))
+roc(response = Y_mean, 
+    predictor = as.vector(Predicted_Risks_mean), 
+    direction = "<", levels = c(0, 1))$auc
 
-Predicted_Risks_MInoY <- simulation_results[["iterations"]][[1]][["preds"]][["preds_per_data_set"]][["MI_val_data_noY"]][["Prediction_Model"]]
-Y_MInoY <- simulation_results[["iterations"]][[1]][["preds"]][["preds_per_data_set"]][["MI_val_data_noY"]][["Y"]]
+
+Predicted_Risks_MInoY <- simulation_results[["iterations"]][[98]][["preds"]][["preds_per_data_set"]][["MI_val_data_noY"]][["Prediction_Model"]]
+hist(Predicted_Risks_MInoY, breaks=20)
+Y_MInoY <- simulation_results[["iterations"]][[98]][["preds"]][["preds_per_data_set"]][["MI_val_data_noY"]][["Y"]]
 LP_MInoY <- log(Predicted_Risks_MInoY/ (1 - Predicted_Risks_MInoY)) ## Converts predicted probabilities to continuouis (log scale) log odds (i.e., log(odds/1-odds))
+hist(LP_MInoY)
 Cal_Int_MInoY <- glm(Y_MInoY ~ offset(LP_MInoY), family = binomial(link = "logit"))  ## Fits a GLM with binomial family and logit link function, offset uses LP as offset fixing coefficient to 1
 Cal_Int_var_MInoY <- vcov(Cal_Int_MInoY)[1,1] # Variance-covariance matrix of fitted model assesses uncertainty of calibration intercept estimate
 summary(Cal_Int_MInoY)
