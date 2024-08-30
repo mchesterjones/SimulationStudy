@@ -29,24 +29,24 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 
 sims_parameters <- crossing(
   n_iter = 100, 
-  N_dev = 100000,
-  N_val = 100000, 
+  N_dev = 500,
+  N_val = 500, 
   Y_prev = c(0.01, 0.05, 0.1), 
-  R_prev = c(0.25,0.5,0.75), 
+  R_prev = c(0.25, 0.5,0.75), 
   ## Beta = affect on Missingness R   
   beta_x1 = c(0.5), ## 0 for MAR and 0.5 for MNAR
   beta_x2 = c(0.5), ## Affect on missingness  
   beta_x3 = c(0), 
   beta_x4 = c(0), 
   beta_x5 = c(0), 
-  beta_U = c(0.5), # 0.5 for MNAR
+  beta_U = c(0.5), # 0 for Mar and  0.5 for MNAR
   # Gamma = affect on Y
   gamma_x1 = c(0.5), 
   gamma_x2 = c(0.5), 
   gamma_x3 = c(0.5),
   gamma_x4 = c(0.5), 
   gamma_x5 = c(0.5), 
-  gamma_U = c(0.5) # 0.5 for MNAR
+  gamma_U = c(0.5) # 0 for MAR and 0.5 for MNAR 
   
 )
 

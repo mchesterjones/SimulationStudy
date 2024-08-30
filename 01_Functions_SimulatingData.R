@@ -173,11 +173,11 @@ simulation_singlerun_fnc <- function(N_dev,
                                           model = model)
   
  
-  return(list("Parameters" = parameters,
-              "dev_data" = dev_data, 
-              "model"=model,
-              "val_data" = df, 
-              "imputed_datasets" = imputed_datasets, 
+  return(list(#"Parameters" = parameters,
+              #"dev_data" = dev_data, 
+              #"model"=model,
+              #"val_data" = df, 
+             # "imputed_datasets" = imputed_datasets, 
               "preds" = preds_per_data_set))
   
 
@@ -692,9 +692,14 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   }
   
   # Check if variance of Log Odds is very large 
-  if (variance_LP > 10 ) {
+  if (variance_LP >= 8 ) {
     message("Log  risks variance is too high indicating extremes")
   }
+  
+  # Check if variance of Log Odds is very large 
+#  if (variance_LP > 2 & variance_LP <9 ) {
+ #   message("Does this exist and not through an error?")
+  #}
   
   # Check if all outcomes are zero 
   if (sum(Y) == 0) { 
@@ -702,7 +707,7 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   }
   
   ## Put Calibration to NAs if outcomes are all the same and variance of predicted risks is 0 
-  if ((sum(Y) == 0) | (variance_PR == 0) | (variance_PR <1e-10)  |   (variance_LP > 10) ){
+  if ((sum(Y) == 0) | (variance_PR == 0) | (variance_PR <1e-10)  |   (variance_LP > 8) ){
     Cal_Int <- NA
     Cal_Int_var <- NA
     Cal_Slope <- NA
@@ -741,7 +746,7 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   ####------------------------------------------------------------------------
  
   ## Updated the code 19Aug2024 to handle errors of no positve cases that may occur at small sample sizes
-  if ((sum(Y) == 0) | (variance_PR == 0) | (variance_PR <1e-10)  |   (variance_LP > 10) ){
+  if ((sum(Y) == 0) | (variance_PR == 0) | (variance_PR <1e-10)  |   (variance_LP > 9) ){
     AUC <-NA
     AUC_var <- NA
   } else {
@@ -753,6 +758,10 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
       NA  # Return NA or any other placeholder value
     })
     
+    if (!is.na(AUC) && AUC == 1) {
+      AUC <- NA
+      message("AUC is 1, setting AUC to NA.")
+    }
     AUC_var <- if (!is.na(AUC)) {
       var(roc_obj, method = "delong")
     } else {
