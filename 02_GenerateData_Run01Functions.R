@@ -31,8 +31,8 @@ sims_parameters <- crossing(
   n_iter = 100, 
   N_dev = 500,
   N_val = 500, 
-  Y_prev = c(0.01, 0.05, 0.1), 
-  R_prev = c(0.25, 0.5,0.75), 
+  Y_prev = c(0.01), 
+  R_prev = c(0.25,0.5,0.75), 
   ## Beta = affect on Missingness R   
   beta_x1 = c(0.5), ## 0 for MAR and 0.5 for MNAR
   beta_x2 = c(0.5), ## Affect on missingness  

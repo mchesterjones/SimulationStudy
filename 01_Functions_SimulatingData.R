@@ -25,7 +25,6 @@ library(pROC)
 ####-----------------------------------------------------------------------------------------
 
 simulation_nrun_fnc <- function(n_iter,
-                                N_dev = N_dev,
                                 N_val = N_val,
                                 Y_prev = Y_prev,
                                 R_prev = R_prev,
@@ -57,8 +56,7 @@ simulation_nrun_fnc <- function(n_iter,
     
     
     
-    iter_current <- simulation_singlerun_fnc(N_dev = N_dev,
-                                               N_val = N_val,
+    iter_current <- simulation_singlerun_fnc(N_val = N_val,
                                                Y_prev = Y_prev,
                                                R_prev = R_prev,
                                                beta_x1 = beta_x1,
@@ -97,8 +95,7 @@ simulation_nrun_fnc <- function(n_iter,
 ## Function that gives a single run per scenario
 ####---------------------------------------------
 
-simulation_singlerun_fnc <- function(N_dev,
-                                     Y_prev,
+simulation_singlerun_fnc <- function(Y_prev,
                                      N_val,
                                      R_prev,
                                      beta_x1,
@@ -115,8 +112,7 @@ simulation_singlerun_fnc <- function(N_dev,
                                      gamma_U) {
   
   
-  parameters <- list(N_dev = N_dev,
-                     N_val = N_val,
+  parameters <- list(N_val = N_val,
                      Y_prev = Y_prev,
                      R_prev = R_prev,
                      beta_x1 = beta_x1,
@@ -132,21 +128,8 @@ simulation_singlerun_fnc <- function(N_dev,
                      gamma_x5 = gamma_x5,
                      gamma_U = gamma_U)
   
-  #1.dev_data function------------
-  dev_data <- dev_data_simulation_function(N_dev = N_dev,
-                                           gamma_x1 = gamma_x1,
-                                           gamma_x2 = gamma_x2,
-                                           gamma_x3 = gamma_x3,
-                                           gamma_x4 = gamma_x4,
-                                           gamma_x5 = gamma_x5,
-                                           gamma_U = gamma_U,
-                                           Y_prev = Y_prev)
   
-  
-  #2.dev_mod_function------------------
-  model <- dev_mod_function(dev_data = dev_data)
-  
-  #3.val_imp_data function-------------
+  #1.val_imp_data function-------------
   df <- simulation_function(N_val = N_val,
                             Y_prev = Y_prev,
                             R_prev = R_prev,
@@ -193,94 +176,6 @@ simulation_singlerun_fnc <- function(N_dev,
 ## Function to extract the OR from the coeffiction
 expit_function <- function(x) {1/(1+exp(-x))} ## Recal ex/1+ex this is the same to get the P(Y=1)
 
-###############################################################################
-## 1. Function that creates development dataset
-###############################################################################
-
-
-dev_data_simulation_function <- function(
-    N_dev,
-    Y_prev, ## Prevalence of Y
-    gamma_0,  ## Intercept in Y model
-    gamma_x1,  ## Coefficient of X1 on outcome Y
-    gamma_x2,  ## Coefficient of X2 on outcome Y
-    gamma_x3,  ## Coefficient of X3 on outcome Y
-    gamma_x4,  ## Coefficient of X4 on outcome Y
-    gamma_x5,  ## Coefficient of X5 on outcome Y
-    gamma_U) ## Coefficient of U on outcome Y 
-  
-  
-{
-  
-  
-  dev_data_IPD <- tibble("x_1" = rnorm(N_dev, mean = 0, sd = 1),
-                         "x_2" = rnorm(N_dev, mean = 0, sd = 1),
-                         "x_3" = rnorm(N_dev, mean = 0, sd = 1),
-                         "x_4" = rnorm(N_dev, mean = 0, sd = 1),
-                         "x_5" = rnorm(N_dev, mean = 0, sd = 1),
-                         "U" = rnorm(N_dev, mean = 0, sd = 1),  ## Added 28Aug2024 for MNAR 
-                         "ID" = 1:N_dev
-  )
-  
-  
-  
-  #determine the prevalence of the outcome based on the gamma_0
-  gamma_0 <- as.numeric(coef(glm(rbinom(N_dev, 1, prob = Y_prev) ~
-                                   offset(gamma_x1*x_1 +
-                                            gamma_x2*x_2 +
-                                            gamma_x2*x_3 +
-                                            gamma_x4*x_4 +
-                                            gamma_x5*x_5 +
-                                            gamma_U*U),
-                                 family = binomial(link = "logit"),
-                                 data = dev_data_IPD))[1])
-  
-  dev_data_IPD$Y = rbinom(N_dev, size = 1,
-                          prob = expit_function(gamma_0 +
-                                                  gamma_x1*dev_data_IPD$x_1 +
-                                                  gamma_x2*dev_data_IPD$x_2 +
-                                                  gamma_x3*dev_data_IPD$x_3 +
-                                                  gamma_x4*dev_data_IPD$x_4 +
-                                                  gamma_x5*dev_data_IPD$x_5 + 
-                                                  gamma_U*dev_data_IPD$U))
-  
-  return(dev_data_IPD)
-}
-
-# 
-####---------------------------------------
-## 2. Model fitting function
-####---------------------------------------
-
-dev_mod_function <- function(dev_data) {
-  
-  # Fit Model
-  model_1 <- glm(Y ~ x_1 + x_2 + x_3 + x_4 + x_5, data = dev_data, family = binomial)
-        # Note: Y not dependent on U in development model
-  
-  # # Obtaining coeff for fi_0, fi_1, fi_2
-  # fi_0 <- coef(model_1)[1]
-  # fi_x1 <- coef(model_1)[2]
-  # fi_x2 <- coef(model_1)[3]
-  # fi_x3 <- coef(model_1)[4]
-  # fi_x4 <- coef(model_1)[5]
-  # fi_x5 <- coef(model_1)[6]
-  
-  # Check Convergence
-  if (!all(summary(model_1)$convergence)) {
-    warning("Model fitting might not have converged. Check coefficients and diagnostics.")
-  }
-  
-  # Check Boundary
-  if (any(attr(model_1, "boundary") == TRUE)) {
-    warning("Model encountered separation issues. Consider regularization or alternative models.")
-  }
-  
-  
-  
-
-  return(model_1)
-}
 
 
 ####---------------------------------------
@@ -691,15 +586,16 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
     message("All predicted risks are very similar and variance is very small")
   }
   
+ 
   # Check if variance of Log Odds is very large 
   if (variance_LP >= 8 ) {
     message("Log  risks variance is too high indicating extremes")
   }
   
   # Check if variance of Log Odds is very large 
-#  if (variance_LP > 2 & variance_LP <9 ) {
- #   message("Does this exist and not through an error?")
-  #}
+ # if (variance_LP > 6 & variance_LP <9 ) {
+#    message("Does this exist and is not an error?")
+#  }
   
   # Check if all outcomes are zero 
   if (sum(Y) == 0) { 
@@ -732,6 +628,9 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
         message("Calibration SE too high and slope cannot be calculated.")
         
         Cal_Slope <- NA
+        Cal_Int <- NA
+        Cal_Int_var <- NA
+        Cal_Slope_var <- NA
       } else {
         Cal_Slope <- as.numeric(coef(Cal_Slope_model)[2])
         

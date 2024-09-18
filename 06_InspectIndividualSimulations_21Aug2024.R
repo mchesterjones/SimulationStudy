@@ -90,16 +90,15 @@ for (i in 1:nrow(sims_parameters)) {
 
 warnings()
 ################################################################################
-setwd("H:\\SimulationStudyHDrive\\MNAR 500")
-  load("MNAR_Results_3_Nval_500_Yprev_0.01_Rprev_0.75_28Aug2024.Rdata")
 
 setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
-  load("MNAR_500_Combined_Long_28Aug2024.Rdata")
+  load("MNAR_Results_2_Nval_500_Yprev_0.01_Rprev_0.5_30Aug2024.Rdata")
+
 ################################################################################
 # Performance Measures ReCreate
 ################################################################################
-Predicted_Risks_CCA <-simulation_results[["iterations"]][[38]][["preds"]][["preds_per_data_set"]][["CCA_val_data"]][["Prediction_Model"]]
-Y_CCA <- simulation_results[["iterations"]][[38]][["preds"]][["preds_per_data_set"]][["CCA_val_data"]][["Y"]]
+Predicted_Risks_CCA <-simulation_results[["iterations"]][[42]][["preds"]][["preds_per_data_set"]][["CCA_val_data"]][["Prediction_Model"]]
+Y_CCA <- simulation_results[["iterations"]][[42]][["preds"]][["preds_per_data_set"]][["CCA_val_data"]][["Y"]]
 hist(Predicted_Risks_CCA)
 LP_CCA <- log(Predicted_Risks_CCA/ (1 - Predicted_Risks_CCA)) ## Converts predicted probabilities to continuouis (log scale) log odds (i.e., log(odds/1-odds))
 hist(LP_CCA)
@@ -114,15 +113,19 @@ auc_CCA <- roc(response = Y_CCA,
 var(auc_CCA)
 
 
-Predicted_Risks_mean <- simulation_results[["iterations"]][[64]][["preds"]][["preds_per_data_set"]][["mean_val"]][["Prediction_Model"]]
-Y_mean <- simulation_results[["iterations"]][[64]][["preds"]][["preds_per_data_set"]][["mean_val"]][["Y"]]
+Predicted_Risks_mean <- simulation_results[["iterations"]][[42]][["preds"]][["preds_per_data_set"]][["mean_val"]][["Prediction_Model"]]
+variance_PR <- var(Predicted_Risks_mean)
+variance_PR
+  Y_mean <- simulation_results[["iterations"]][[42]][["preds"]][["preds_per_data_set"]][["mean_val"]][["Y"]]
 LP_mean <- log(Predicted_Risks_mean/ (1 - Predicted_Risks_mean)) ## Converts predicted probabilities to continuouis (log scale) log odds (i.e., log(odds/1-odds))
 hist(LP_mean)
 var(LP_mean)
 Cal_Int_mean <- glm(Y_mean ~ offset(LP_mean), family = binomial(link = "logit"))  ## Fits a GLM with binomial family and logit link function, offset uses LP as offset fixing coefficient to 1
 Cal_Int_var_mean <- vcov(Cal_Int_mean)[1,1] # Variance-covariance matrix of fitted model assesses uncertainty of calibration intercept estimate
 summary(Cal_Int_mean)
-Cal_Slope_model_mean <- glm(Y_mean ~ LP_mean, family = binomial(link = "logit"))
+Cal_Slope_model_meani <- glm(Y_mean ~ LP_mean, family = binomial(link = "logit"))
+Cal_Slope_meani_var <- vcov(Cal_Slope_model_meani)[2, 2]
+Cal_Slope_meani_SE <- summary(Cal_Slope_model_meani)$coefficients[, 2][2]
 as.numeric(coef(Cal_Int_mean))
 roc(response = Y_mean, 
     predictor = as.vector(Predicted_Risks_mean), 

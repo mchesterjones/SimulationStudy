@@ -1028,7 +1028,7 @@ load("MNAR_Results_1_Nval_1e+05_Yprev_0.05_Rprev_0.25_28Aug2024.Rdata")
 simresults_Yprev5Rprev25 <- simulation_results
 load("MNAR_Results_2_Nval_1e+05_Yprev_0.05_Rprev_0.5_28Aug2024.Rdata")
 simresults_Yprev5Rprev50 <- simulation_results
-#load("MNAR_Results_3_Nval_1e+05_Yprev_0.05_Rprev_0.75_28Aug2024.Rdata")
+load("MNAR_Results_3_Nval_1e+05_Yprev_0.05_Rprev_0.75_28Aug2024.Rdata")
 simresults_Yprev5Rprev75 <- simulation_results
 load("MNAR_Results_4_Nval_1e+05_Yprev_0.1_Rprev_0.25_28Aug2024.Rdata")
 simresults_Yprev10Rprev25 <- simulation_results
@@ -1171,14 +1171,36 @@ simulation_parameters_long <- simulation_parameters_long %>%
                        dataset == "MI_val_data_noY" ~ "Multiple Imputation without Outcome",
                        dataset == "MI_val_data_withY" ~  "Multiple Imputation with Outcome"),
     Parameter = case_when(
-      # df == "simresults_Yprev10Rprev25" ~ "Outcome prevalence 10% and Missingness 25%",
-      # df == "simresults_Yprev10Rprev50" ~ "Outcome prevalence 10% and Missingness 50%",
-      # df == "simresults_Yprev10Rprev75" ~ "Outcome prevalence 10% and Missingness 75%",
-      # df == "simresults_Yprev5Rprev25" ~ "Outcome prevalence 5% and Missingness 25%",
-      # df == "simresults_Yprev5Rprev50" ~ "Outcome prevalence 5% and Missingness 50%",
-      # df == "simresults_Yprev5Rprev75" ~ "Outcome prevalence 5% and Missingness 75%",
-      # df == "simresults_Yprev1Rprev25" ~ "Outcome prevalence 1% and Missingness 25%",
-      # df == "simresults_Yprev1Rprev50" ~ "Outcome prevalence 1% and Missingness 50%" ,
+      df == "simresults_Yprev1Rprev75" ~ "Outcome prevalence 1% and Missingness 75%"
+    )) %>%
+  mutate(Parameter = factor(Parameter, levels = c(
+    "Outcome prevalence 1% and Missingness 75%"
+  )))
+
+
+# Rename metric to measure
+simulation_parameters_long <- simulation_parameters_long %>%
+  mutate(Measure = case_when(
+    Metric == "Cal_Int" ~ "Calibration in the Large", 
+    Metric == "Cal_Slope" ~ "Calibration Slope", 
+    Metric == "AUC" ~ "AUC",
+    Metric == "Brier" ~ "Brier Score", 
+    Metric == "bias" ~ "Bias",
+    Metric == "mse" ~ "Mean Square Error",
+    Metric == "rmse" ~ "Root Mean Square Error"),
+    Method = case_when(dataset == "CCA_val_data" ~"Complete Case Analysis", 
+                       dataset == "mean_val" ~"Mean Imputation",
+                       dataset == "MI_val_data_noY" ~ "Multiple Imputation without Outcome",
+                       dataset == "MI_val_data_withY" ~  "Multiple Imputation with Outcome"),
+    Parameter = case_when(
+      df == "simresults_Yprev10Rprev25" ~ "Outcome prevalence 10% and Missingness 25%",
+      df == "simresults_Yprev10Rprev50" ~ "Outcome prevalence 10% and Missingness 50%",
+      df == "simresults_Yprev10Rprev75" ~ "Outcome prevalence 10% and Missingness 75%",
+      df == "simresults_Yprev5Rprev25" ~ "Outcome prevalence 5% and Missingness 25%",
+      df == "simresults_Yprev5Rprev50" ~ "Outcome prevalence 5% and Missingness 50%",
+      df == "simresults_Yprev5Rprev75" ~ "Outcome prevalence 5% and Missingness 75%",
+      df == "simresults_Yprev1Rprev25" ~ "Outcome prevalence 1% and Missingness 25%",
+      df == "simresults_Yprev1Rprev50" ~ "Outcome prevalence 1% and Missingness 50%" ,
      df == "simresults_Yprev1Rprev75" ~ "Outcome prevalence 1% and Missingness 75%"
       )) %>%
   mutate(Parameter = factor(Parameter, levels = c(
@@ -1202,7 +1224,7 @@ simulation_parameters_long$scale_group <- ifelse(
 
 simulation_parameters_1_75 <- simulation_parameters_long
 load("MNAR_100000_Combined_Long_29Aug2024.Rdata")
-simulation_parameters_all <- simulation_parameters_long
+simulation_parameters_all <- simulation_parameters_long %>% filter(df!="simresults_Yprev1Rprev75")
 simulation_parameters_long <- rbind(simulation_parameters_all,simulation_parameters_1_75)
 
 simulation_parameters_long <- simulation_parameters_long %>% 
@@ -1220,6 +1242,4 @@ simulation_parameters_long <- simulation_parameters_long %>%
 
 #Save_File
 save(simulation_parameters_long,file = "MNAR_100000_Combined_Long_30Aug2024.Rdata")
-
-
 
