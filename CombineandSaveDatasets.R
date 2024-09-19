@@ -11,6 +11,8 @@
 ################################################################################
 library(dplyr)
 library(tidyr)
+
+
 ## MAR 500 ## 
 ################################################################################
 ## Open datasets
@@ -19,23 +21,23 @@ library(tidyr)
 setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data") 
 
 ## Load required datasets 
-load("Results_1_Nval_500_Yprev_0.01_Rprev_0.25_22Aug2024.Rdata")
+load("MAR_Results_1_Nval_500_Yprev_0.01_Rprev_0.25_18Sep2024.Rdata")
 simresults_Yprev1Rprev25 <- simulation_results
-load("Results_2_Nval_500_Yprev_0.01_Rprev_0.5_22Aug2024.Rdata")
+load("MAR_Results_2_Nval_500_Yprev_0.01_Rprev_0.5_18Sep2024.Rdata")
 simresults_Yprev1Rprev50 <- simulation_results
-load("Results_3_Nval_500_Yprev_0.01_Rprev_0.75_22Aug2024.Rdata")
+load("MAR_Results_3_Nval_500_Yprev_0.01_Rprev_0.75_18Sep2024.Rdata")
 simresults_Yprev1Rprev75 <- simulation_results
-load("Results_4_Nval_500_Yprev_0.05_Rprev_0.25_21Aug2024.Rdata")
+load("MAR_Results_4_Nval_500_Yprev_0.05_Rprev_0.25_18Sep2024.Rdata")
 simresults_Yprev5Rprev25 <- simulation_results
-load("Results_5_Nval_500_Yprev_0.05_Rprev_0.5_21Aug2024.Rdata")
+load("MAR_Results_5_Nval_500_Yprev_0.05_Rprev_0.5_18Sep2024.Rdata")
 simresults_Yprev5Rprev50 <- simulation_results
-load("Results_6_Nval_500_Yprev_0.05_Rprev_0.75_21Aug2024.Rdata")
+load("MAR_Results_6_Nval_500_Yprev_0.05_Rprev_0.75_18Sep2024.Rdata")
 simresults_Yprev5Rprev75 <- simulation_results
-load("Results_7_Nval_500_Yprev_0.1_Rprev_0.25_21Aug2024.Rdata")
+load("MAR_Results_7_Nval_500_Yprev_0.1_Rprev_0.25_18Sep2024.Rdata")
 simresults_Yprev10Rprev25 <- simulation_results
-load("Results_8_Nval_500_Yprev_0.1_Rprev_0.5_21Aug2024.Rdata")
+load("MAR_Results_8_Nval_500_Yprev_0.1_Rprev_0.5_18Sep2024.Rdata")
 simresults_Yprev10Rprev50 <- simulation_results
-load("Results_9_Nval_500_Yprev_0.1_Rprev_0.75_21Aug2024.Rdata")
+load("MAR_Results_9_Nval_500_Yprev_0.1_Rprev_0.75_18Sep2024.Rdata")
 simresults_Yprev10Rprev75 <- simulation_results
 
 
@@ -69,7 +71,7 @@ target_measures <- list(
 
 ## Create summary of bias 
 # Define the number of iterations
-num_iterations <- 100
+num_iterations <- 200
 
 
 # Initialize empty lists to store bias summaries for each dataset
@@ -203,10 +205,10 @@ simulation_parameters_long$scale_group <- ifelse(
 
 
 #Save_File
-save(simulation_parameters_long,file = "MAR_500_Combined_Long_28Aug2024.Rdata")
+save(simulation_parameters_long,file = "MNAR_500_Combined_Long_18Sep2024.Rdata")
 
 
-
+# Save 
 
 
 
@@ -271,7 +273,7 @@ target_measures <- list(
 
 ## Create summary of bias 
 # Define the number of iterations
-num_iterations <- 100
+num_iterations <- 200
 
 
 # Initialize empty lists to store bias summaries for each dataset
@@ -474,7 +476,7 @@ simresults_Yprev10Rprev25 = extract_measures_fnc(simresults_Yprev10Rprev25)
 
 ## Create summary of bias 
 # Define the number of iterations
-num_iterations <- 100
+num_iterations <- 200
 
 
 # Initialize empty lists to store bias summaries for each dataset
@@ -628,24 +630,25 @@ save(simulation_parameters_long,file = "MAR_100000_Combined_Long_30Aug2024.Rdata
 setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data") 
 
 ## Load required datasets 
-load("MNAR_Results_1_Nval_500_Yprev_0.01_Rprev_0.25_30Aug2024.Rdata")
+load("MNAR_Results_1_Nval_500_Yprev_0.01_Rprev_0.25_18Sep2024.Rdata")
 simresults_Yprev1Rprev25 <- simulation_results
-load("MNAR_Results_2_Nval_500_Yprev_0.01_Rprev_0.5_30Aug2024.Rdata")
+load("MNAR_Results_2_Nval_500_Yprev_0.01_Rprev_0.5_18Sep2024.Rdata")
 simresults_Yprev1Rprev50 <- simulation_results
-load("MNAR_Results_3_Nval_500_Yprev_0.01_Rprev_0.75_30Aug2024.Rdata")
+load("MNAR_Results_3_Nval_500_Yprev_0.01_Rprev_0.75_18Sep2024.Rdata")
 simresults_Yprev1Rprev75 <- simulation_results
-load("MNAR_Results_4_Nval_500_Yprev_0.05_Rprev_0.25_30Aug2024.Rdata")
+load("MNAR_Results_4_Nval_500_Yprev_0.05_Rprev_0.25_18Sep2024.Rdata")
 simresults_Yprev5Rprev25 <- simulation_results
-load("MNAR_Results_5_Nval_500_Yprev_0.05_Rprev_0.5_30Aug2024.Rdata")
+load("MNAR_Results_5_Nval_500_Yprev_0.05_Rprev_0.5_18Sep2024.Rdata")
 simresults_Yprev5Rprev50 <- simulation_results
-load("MNAR_Results_6_Nval_500_Yprev_0.05_Rprev_0.75_30Aug2024.Rdata")
+load("MNAR_Results_6_Nval_500_Yprev_0.05_Rprev_0.75_18Sep2024.Rdata")
 simresults_Yprev5Rprev75 <- simulation_results
-load("MNAR_Results_7_Nval_500_Yprev_0.1_Rprev_0.25_30Aug2024.Rdata")
+load("MNAR_Results_7_Nval_500_Yprev_0.1_Rprev_0.25_18Sep2024.Rdata")
 simresults_Yprev10Rprev25 <- simulation_results
-load("MNAR_Results_8_Nval_500_Yprev_0.1_Rprev_0.5_30Aug2024.Rdata")
+load("MNAR_Results_8_Nval_500_Yprev_0.1_Rprev_0.5_18Sep2024.Rdata")
 simresults_Yprev10Rprev50 <- simulation_results
-load("MNAR_Results_9_Nval_500_Yprev_0.1_Rprev_0.75_30Aug2024.Rdata")
+load("MNAR_Results_9_Nval_500_Yprev_0.1_Rprev_0.75_18Sep2024.Rdata")
 simresults_Yprev10Rprev75 <- simulation_results
+
 
 
 # Extract target measures 
@@ -677,7 +680,7 @@ target_measures <- list(
 
 ## Create summary of bias 
 # Define the number of iterations
-num_iterations <- 100
+num_iterations <- 200
 
 
 # Initialize empty lists to store bias summaries for each dataset
@@ -811,7 +814,11 @@ simulation_parameters_long$scale_group <- ifelse(
 
 
 #Save_File
-save(simulation_parameters_long,file = "MNAR_500_Combined_Long_30Aug2024.Rdata")
+save(simulation_parameters_long,file = "MNAR_500_Combined_Long_18Sep2024.Rdata")
+
+
+# Store all values at each iteraiton 
+save(combined_df,file = "MNAR_500_Combined_18Sep2024.Rdata")
 
 ################################################################################
 ## MNAR 10000
@@ -870,7 +877,7 @@ target_measures <- list(
 
 ## Create summary of bias 
 # Define the number of iterations
-num_iterations <- 100
+num_iterations <- 200
 
 
 # Initialize empty lists to store bias summaries for each dataset
@@ -1067,7 +1074,7 @@ target_measures <- list(
 
 ## Create summary of bias 
 # Define the number of iterations
-num_iterations <- 100
+num_iterations <- 200
 
 
 # Initialize empty lists to store bias summaries for each dataset
