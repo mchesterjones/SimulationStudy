@@ -22,7 +22,7 @@ set.seed(189)
 
 sims_parameters <- crossing(
   N_dev = 100000,
-  Y_prev = c(0.05), 
+  Y_prev = c(0.01), 
   # Gamma = affect on Y
   gamma_x1 = c(0.5), 
   gamma_x2 = c(0.5), 
@@ -109,30 +109,15 @@ dev_mod_function <- function(dev_data) {
   model_1 <- glm(Y ~ x_1 + x_2 + x_3 + x_4 + x_5, data = dev_data, family = binomial)
   # Note: Y not dependent on U in development model
   
-  # # Obtaining coeff for fi_0, fi_1, fi_2
-  # fi_0 <- coef(model_1)[1]
-  # fi_x1 <- coef(model_1)[2]
-  # fi_x2 <- coef(model_1)[3]
-  # fi_x3 <- coef(model_1)[4]
-  # fi_x4 <- coef(model_1)[5]
-  # fi_x5 <- coef(model_1)[6]
-  
   # Check Convergence
-  if (!all(summary(model_1)$convergence)) {
+  if (!model_1$converged) {
     warning("Model fitting might not have converged. Check coefficients and diagnostics.")
   }
-  
-  # Check Boundary
-  if (any(attr(model_1, "boundary") == TRUE)) {
-    warning("Model encountered separation issues. Consider regularization or alternative models.")
-  }
-  
-  
-  
   
   return(model_1)
 }
 
+ 
 
 
 #1.dev_data function------------
@@ -157,7 +142,9 @@ model <- dev_mod_function(dev_data = dev_data)
   
 #4. Save
   setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data") 
-  save(development_dataset, file = "Development_Dataset.Rdata")
+  # save(development_dataset, file = "Development_Dataset_Yprev_0.1.Rdata")
+  # save(development_dataset, file = "Development_Dataset_Yprev_0.05.Rdata")
+  save(development_dataset, file = "Development_Dataset_Yprev_0.01.Rdata")
   
   
 #5. Check Model 

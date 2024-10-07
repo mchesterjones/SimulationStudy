@@ -1,8 +1,8 @@
 ################################################################################
 ## Combine and Save datasets
 ################################################################################
-## Purpose: Post simulation, combine results from different scenarios to allow graphs to be generated 
-## Created: 28Aug2024
+## Purpose: Post simulation, combine results from different scenarios to allow graphs to be generated with validation no missing
+## Created: 07Oct2024
 ## Author: MCJ
 ################################################################################
 
@@ -21,26 +21,26 @@ library(tidyr)
 setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data") 
 
 ## Load required datasets 
-load("MAR_Results_1_Nval_500_Yprev_0.01_Rprev_0.25_18Sep2024.Rdata")
-simresults_Yprev1Rprev25 <- simulation_results
-load("MAR_Results_2_Nval_500_Yprev_0.01_Rprev_0.5_18Sep2024.Rdata")
-simresults_Yprev1Rprev50 <- simulation_results
-load("MAR_Results_3_Nval_500_Yprev_0.01_Rprev_0.75_18Sep2024.Rdata")
-simresults_Yprev1Rprev75 <- simulation_results
-load("MAR_Results_4_Nval_500_Yprev_0.05_Rprev_0.25_18Sep2024.Rdata")
-simresults_Yprev5Rprev25 <- simulation_results
-load("MAR_Results_5_Nval_500_Yprev_0.05_Rprev_0.5_18Sep2024.Rdata")
-simresults_Yprev5Rprev50 <- simulation_results
-load("MAR_Results_6_Nval_500_Yprev_0.05_Rprev_0.75_18Sep2024.Rdata")
-simresults_Yprev5Rprev75 <- simulation_results
-load("MAR_Results_7_Nval_500_Yprev_0.1_Rprev_0.25_18Sep2024.Rdata")
-simresults_Yprev10Rprev25 <- simulation_results
-load("MAR_Results_8_Nval_500_Yprev_0.1_Rprev_0.5_18Sep2024.Rdata")
-simresults_Yprev10Rprev50 <- simulation_results
-load("MAR_Results_9_Nval_500_Yprev_0.1_Rprev_0.75_18Sep2024.Rdata")
-simresults_Yprev10Rprev75 <- simulation_results
+load("Validation_NoMissingness_Nval_1e+05_Yprev_0.01_07Oct2024.Rdata")
+simresults_Yprev1 <- simulation_results
+load("Validation_NoMissingness_Nval_1e+05_Yprev_0.05_07Oct2024.Rdata")
+simresults_Yprev5 <- simulation_results
+load("Validation_NoMissingness_Nval_1e+05_Yprev_0.1_07Oct2024.Rdata")
+simresults_Yprev10 <- simulation_results
 
-
+# load("Validation_NoMissingness_Nval_10000_Yprev_0.01_07Oct2024.Rdata")
+# simresults_Yprev1 <- simulation_results
+# load("Validation_NoMissingness_Nval_10000_Yprev_0.05_07Oct2024.Rdata")
+# simresults_Yprev5 <- simulation_results
+# load("Validation_NoMissingness_Nval_10000_Yprev_0.1_07Oct2024.Rdata")
+# simresults_Yprev10 <- simulation_results
+# 
+# load("Validation_NoMissingness_Nval_500_Yprev_0.01_07Oct2024.Rdata")
+# simresults_Yprev1 <- simulation_results
+# load("Validation_NoMissingness_Nval_500_Yprev_0.05_07Oct2024.Rdata")
+# simresults_Yprev5 <- simulation_results
+# load("Validation_NoMissingness_Nval_500_Yprev_0.1_07Oct2024.Rdata")
+# simresults_Yprev10 <- simulation_results
 
 # Extract target measures 
 extract_measures_fnc <- function(simresults) {
@@ -57,7 +57,7 @@ extract_measures_fnc <- function(simresults) {
 
 # Combine data for both datasets
 target_measures <- list(
-  simresults_Yprev10Rprev75 = extract_measures_fnc(simresults_Yprev10Rprev75),
+  simresults_nomissingness = extract_measures_fnc(simresults_nomissingness),
   simresults_Yprev10Rprev50 = extract_measures_fnc(simresults_Yprev10Rprev50),
   simresults_Yprev10Rprev25 = extract_measures_fnc(simresults_Yprev10Rprev25),
   simresults_Yprev5Rprev75 = extract_measures_fnc(simresults_Yprev5Rprev75),

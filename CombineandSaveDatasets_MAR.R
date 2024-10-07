@@ -18,26 +18,35 @@ library(purrr)
 ################################################################################
 ## Set working directory 
 setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data") 
-setwd("/Users/maechester-jones/OneDrive - Nexus365/A DPhil/Simulation studies/Programs/Study 1/SimulationStudy1_11Jun2024/SimulationStudy/Data")
+#setwd("/Users/maechester-jones/OneDrive - Nexus365/A DPhil/Simulation studies/Programs/Study 1/SimulationStudy1_11Jun2024/SimulationStudy/Data")
 ## Load required datasets 
-load("MAR_Results_1_Nval_1e+05_Yprev_0.01_Rprev_0.25_19Sep2024.Rdata")
-simresults_Yprev1Rprev25 <- simulation_results
-load("MAR_Results_2_Nval_1e+05_Yprev_0.01_Rprev_0.5_19Sep2024.Rdata")
-simresults_Yprev1Rprev50 <- simulation_results
-load("MAR_Results_3_Nval_1e+05_Yprev_0.01_Rprev_0.75_19Sep2024.Rdata")
-simresults_Yprev1Rprev75 <- simulation_results
-load("MAR_Results_4_Nval_1e+05_Yprev_0.05_Rprev_0.25_19Sep2024.Rdata")
-simresults_Yprev5Rprev25 <- simulation_results
-load("MAR_Results_5_Nval_1e+05_Yprev_0.05_Rprev_0.5_19Sep2024.Rdata")
-simresults_Yprev5Rprev50 <- simulation_results
-load("MAR_Results_6_Nval_1e+05_Yprev_0.05_Rprev_0.75_19Sep2024.Rdata")
-simresults_Yprev5Rprev75 <- simulation_results
-load("MAR_Results_7_Nval_1e+05_Yprev_0.1_Rprev_0.25_19Sep2024.Rdata")
-simresults_Yprev10Rprev25 <- simulation_results
-load("MAR_Results_8_Nval_1e+05_Yprev_0.1_Rprev_0.5_19Sep2024.Rdata")
-simresults_Yprev10Rprev50 <- simulation_results
-load("MAR_Results_9_Nval_1e+05_Yprev_0.1_Rprev_0.75_19Sep2024.Rdata")
-simresults_Yprev10Rprev75 <- simulation_results
+#load("MAR_Results_4_Nval_10000_Yprev_0.01_Rprev_0.25_03Oct2024.Rdata")
+load("MAR_Results_1_Nval_500_Yprev_0.01_Rprev_0.25_03Oct2024.Rdata")
+  simresults_Yprev1Rprev25 <- simulation_results
+#load("MAR_Results_5_Nval_10000_Yprev_0.01_Rprev_0.5_03Oct2024.Rdata")
+load("MAR_Results_2_Nval_500_Yprev_0.01_Rprev_0.5_03Oct2024.Rdata")
+  simresults_Yprev1Rprev50 <- simulation_results
+#load("MAR_Results_6_Nval_10000_Yprev_0.01_Rprev_0.75_03Oct2024.Rdata")
+load("MAR_Results_3_Nval_500_Yprev_0.01_Rprev_0.75_03Oct2024.Rdata")
+  simresults_Yprev1Rprev75 <- simulation_results
+#load("MAR_Results_4_Nval_10000_Yprev_0.05_Rprev_0.25_03Oct2024.Rdata")
+load("MAR_Results_1_Nval_500_Yprev_0.05_Rprev_0.25_03Oct2024.Rdata")
+  simresults_Yprev5Rprev25 <- simulation_results
+#load("MAR_Results_5_Nval_10000_Yprev_0.05_Rprev_0.5_03Oct2024.Rdata")
+load("MAR_Results_2_Nval_500_Yprev_0.05_Rprev_0.5_03Oct2024.Rdata")
+  simresults_Yprev5Rprev50 <- simulation_results
+#load("MAR_Results_6_Nval_10000_Yprev_0.05_Rprev_0.75_03Oct2024.Rdata")
+load("MAR_Results_3_Nval_500_Yprev_0.05_Rprev_0.75_03Oct2024.Rdata")
+  simresults_Yprev5Rprev75 <- simulation_results
+#load("MAR_Results_4_Nval_10000_Yprev_0.1_Rprev_0.25_03Oct2024.Rdata")
+load("MAR_Results_1_Nval_500_Yprev_0.1_Rprev_0.25_03Oct2024.Rdata")
+  simresults_Yprev10Rprev25 <- simulation_results
+#load("MAR_Results_5_Nval_10000_Yprev_0.1_Rprev_0.5_03Oct2024.Rdata")
+load("MAR_Results_2_Nval_500_Yprev_0.1_Rprev_0.5_03Oct2024.Rdata")
+  simresults_Yprev10Rprev50 <- simulation_results
+#load("MAR_Results_6_Nval_10000_Yprev_0.1_Rprev_0.75_03Oct2024.Rdata")
+load("MAR_Results_3_Nval_500_Yprev_0.1_Rprev_0.75_03Oct2024.Rdata")
+  simresults_Yprev10Rprev75 <- simulation_results
 
 
 
@@ -235,13 +244,13 @@ simulation_parameters_long$scale_group <- ifelse(
 
 
 #Save_File
-# save(simulation_parameters_long,file = "MAR_500_Combined_Long_19Sep2024.Rdata")
-# save(simulation_parameters_long,file = "MAR_10000_Combined_Long_19Sep2024.Rdata")
- save(simulation_parameters_long,file = "MAR_100000_Combined_Long_19Sep2024.Rdata")
+ save(simulation_parameters_long,file = "MAR_500_Combined_Long_03Oct2024.Rdata")
+# save(simulation_parameters_long,file = "MAR_10000_Combined_Long_03Oct2024.Rdata")
+# save(simulation_parameters_long,file = "MAR_100000_Combined_Long_03Oct2024.Rdata")
 
 
 # Store all values at each iteraiton 
- #save(combined_df,file = "MAR_500_Combined_19Sep2024.Rdata")
- #save(combined_df,file = "MAR_10000_Combined_19Sep2024.Rdata")
-save(combined_df,file = "MAR_100000_Combined_19Sep2024.Rdata")
+ save(combined_df,file = "MAR_500_Combined_03Oct2024.Rdata")
+# save(combined_df,file = "MAR_10000_Combined_03Oct2024.Rdata")
+#save(combined_df,file = "MAR_100000_Combined_03Oct2024.Rdata")
 # 

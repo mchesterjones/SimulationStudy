@@ -2,7 +2,7 @@
 ## Combine and Save datasets
 ################################################################################
 ## Purpose: Post simulation, combine results from different scenarios to allow graphs to be generated 
-## Created: 28Aug2024
+## Created: 04Oct2024
 ## Author: MCJ
 ################################################################################
 
@@ -14,42 +14,100 @@ library(tidyr)
 library(purrr)
 
 ################################################################################
-## MNAR 500
+## MAR 
 ################################################################################
 ## Set working directory 
 setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data") 
-
+#setwd("/Users/maechester-jones/OneDrive - Nexus365/A DPhil/Simulation studies/Programs/Study 1/SimulationStudy1_11Jun2024/SimulationStudy/Data")
 ## Load required datasets 
-#load("MNAR_Results_1_Nval_10000_Yprev_0.01_Rprev_0.25_03Oct2024.Rdata")
-load("MNAR_Results_1_Nval_500_Yprev_0.01_Rprev_0.25_02Oct2024.Rdata")
-  simresults_Yprev1Rprev25 <- simulation_results
-#load("MNAR_Results_2_Nval_10000_Yprev_0.01_Rprev_0.5_03Oct2024.Rdata")
-load("MNAR_Results_2_Nval_500_Yprev_0.01_Rprev_0.5_02Oct2024.Rdata")
-  simresults_Yprev1Rprev50 <- simulation_results
-#load("MNAR_Results_3_Nval_10000_Yprev_0.01_Rprev_0.75_03Oct2024.Rdata")
-load("MNAR_Results_3_Nval_500_Yprev_0.01_Rprev_0.75_02Oct2024.Rdata")
-  simresults_Yprev1Rprev75 <- simulation_results
-#load("MNAR_Results_4_Nval_10000_Yprev_0.05_Rprev_0.25_18Sep2024.Rdata")
-load("MNAR_Results_4_Nval_500_Yprev_0.05_Rprev_0.25_18Sep2024.Rdata")
-  simresults_Yprev5Rprev25 <- simulation_results
-#load("MNAR_Results_5_Nval_10000_Yprev_0.05_Rprev_0.5_18Sep2024.Rdata")
-load("MNAR_Results_5_Nval_500_Yprev_0.05_Rprev_0.5_18Sep2024.Rdata")
-  simresults_Yprev5Rprev50 <- simulation_results
-#load("MNAR_Results_6_Nval_10000_Yprev_0.05_Rprev_0.75_18Sep2024.Rdata")
-load("MNAR_Results_6_Nval_500_Yprev_0.05_Rprev_0.75_18Sep2024.Rdata")
-  simresults_Yprev5Rprev75 <- simulation_results
-#load("MNAR_Results_1_Nval_10000_Yprev_0.1_Rprev_0.25_03Oct2024.Rdata")
-load("MNAR_Results_1_Nval_500_Yprev_0.1_Rprev_0.25_02Oct2024.Rdata")
-  simresults_Yprev10Rprev25 <- simulation_results
-#load("MNAR_Results_2_Nval_10000_Yprev_0.1_Rprev_0.5_03Oct2024.Rdata")
-load("MNAR_Results_2_Nval_500_Yprev_0.1_Rprev_0.5_02Oct2024.Rdata")
-  simresults_Yprev10Rprev50 <- simulation_results
-#load("MNAR_Results_3_Nval_10000_Yprev_0.1_Rprev_0.75_03Oct2024.Rdata")
-load("MNAR_Results_3_Nval_500_Yprev_0.1_Rprev_0.75_02Oct2024.Rdata")
-  simresults_Yprev10Rprev75 <- simulation_results
 
 
+## Missing at Random
+#---------------------------------------------------------------------
+# load("MAR_Results_1_Nval_1e+05_Yprev_0.01_Rprev_0.25_25Sep2024.Rdata")
+#   simresults_Yprev1Rprev25 <- simulation_results
+# load("MAR_Results_2_Nval_1e+05_Yprev_0.01_Rprev_0.5_25Sep2024.Rdata")
+#   simresults_Yprev1Rprev50 <- simulation_results
+# load("MAR_Results_3_Nval_1e+05_Yprev_0.01_Rprev_0.75_25Sep2024.Rdata")
+#   simresults_Yprev1Rprev75 <- simulation_results
+# load("MAR_Results_1_Nval_1e+05_Yprev_0.1_Rprev_0.25_25Sep2024.Rdata")
+#   simresults_Yprev10Rprev25 <- simulation_results
+# load("MAR_Results_2_Nval_1e+05_Yprev_0.1_Rprev_0.5_25Sep2024.Rdata")
+#   simresults_Yprev10Rprev50 <- simulation_results
+# load("MAR_Results_3_Nval_1e+05_Yprev_0.1_Rprev_0.75_25Sep2024.Rdata")
+#   simresults_Yprev10Rprev75 <- simulation_results
+  
+# # Load MAR datasets with right results for 5%
+# ################################################################################
+# load("MAR_100000_Combined_Long_19Sep2024.Rdata")
+#   MAR_parameters_long_5 <-  simulation_parameters_long %>%
+#     filter(df %in% c("simresults_Yprev5Rprev25", "simresults_Yprev5Rprev50", "simresults_Yprev5Rprev75"))
+#   
+# load("MAR_100000_Combined_19Sep2024.Rdata")
+#   MAR_combined_df_5 <- combined_df %>%
+#     filter(df %in% c("simresults_Yprev5Rprev25", "simresults_Yprev5Rprev50", "simresults_Yprev5Rprev75"))
+#   
+#  
+#   
+# ## Missing Not at Random
+# #---------------------------------------------------------------------
+#   load("MNAR_Results_1_Nval_1e+05_Yprev_0.01_Rprev_0.25_01Oct2024.Rdata")
+#       simresults_Yprev1Rprev25 <- simulation_results
+#   load("MNAR_Results_2_Nval_1e+05_Yprev_0.01_Rprev_0.5_01Oct2024.Rdata")
+#       simresults_Yprev1Rprev50 <- simulation_results
+#   load("MNAR_Results_3_Nval_1e+05_Yprev_0.01_Rprev_0.75_01Oct2024.Rdata")
+#       simresults_Yprev1Rprev75 <- simulation_results
+#   load("MNAR_Results_1_Nval_1e+05_Yprev_0.1_Rprev_0.25_01Oct2024.Rdata")
+#       simresults_Yprev10Rprev25 <- simulation_results
+#   load("MNAR_Results_2_Nval_1e+05_Yprev_0.1_Rprev_0.5_01Oct2024.Rdata")
+#       simresults_Yprev10Rprev50 <- simulation_results
+#   load("MNAR_Results_3_Nval_1e+05_Yprev_0.1_Rprev_0.75_01Oct2024.Rdata")
+#       simresults_Yprev10Rprev75 <- simulation_results
+# 
+#       
+#       
+# # Load MNAR datasets with right results for 5%
+# ################################################################################
+#   load("MNAR_100000_Combined_Long_18Sep2024.Rdata")
+#       parameters_long_5 <-  simulation_parameters_long %>%
+#         filter(df %in% c("simresults_Yprev5Rprev25", "simresults_Yprev5Rprev50", "simresults_Yprev5Rprev75"))
+#       
+#       load("MNAR_100000_Combined_18Sep2024.Rdata")
+#       combined_df_5 <- combined_df %>%
+#         filter(df %in% c("simresults_Yprev5Rprev25", "simresults_Yprev5Rprev50", "simresults_Yprev5Rprev75"))
+#       
+#       
+## Missing Completely at Random
+#---------------------------------------------------------------------
+  load("MCAR_Results_1_Nval_1e+05_Yprev_0.01_Rprev_0.25_25Sep2024.Rdata")
+      simresults_Yprev1Rprev25 <- simulation_results
+  load("MCAR_Results_2_Nval_1e+05_Yprev_0.01_Rprev_0.5_25Sep2024.Rdata")
+      simresults_Yprev1Rprev50 <- simulation_results
+  load("MCAR_Results_3_Nval_1e+05_Yprev_0.01_Rprev_0.75_25Sep2024.Rdata")
+      simresults_Yprev1Rprev75 <- simulation_results
+  load("MCAR_Results_1_Nval_1e+05_Yprev_0.1_Rprev_0.25_24Sep2024.Rdata")
+      simresults_Yprev10Rprev25 <- simulation_results
+  load("MCAR_Results_2_Nval_1e+05_Yprev_0.1_Rprev_0.5_24Sep2024.Rdata")
+      simresults_Yprev10Rprev50 <- simulation_results
+  load("MCAR_Results_3_Nval_1e+05_Yprev_0.1_Rprev_0.75_24Sep2024.Rdata")
+      simresults_Yprev10Rprev75 <- simulation_results
 
+# Load MCAR datasets with right results for 5%
+################################################################################
+  load("MCAR_100000_Combined_Long_22Sep2024.Rdata")
+     parameters_long_5 <-  simulation_parameters_long %>%
+              filter(df %in% c("simresults_Yprev5Rprev25", "simresults_Yprev5Rprev50", "simresults_Yprev5Rprev75"))
+
+  load("MCAR_100000_Combined_22Sep2024.Rdata")
+      combined_df_5 <- combined_df %>%
+              filter(df %in% c("simresults_Yprev5Rprev25", "simresults_Yprev5Rprev50", "simresults_Yprev5Rprev75"))
+            
+      
+  
+  
+###############################################################################
+  ## Combined targemet measures and parameters 
+##############################################################################
 # Extract target measures 
 extract_measures_fnc <- function(simresults) {
   combined_data <- list()
@@ -68,9 +126,6 @@ target_measures <- list(
   simresults_Yprev10Rprev75 = extract_measures_fnc(simresults_Yprev10Rprev75),
   simresults_Yprev10Rprev50 = extract_measures_fnc(simresults_Yprev10Rprev50),
   simresults_Yprev10Rprev25 = extract_measures_fnc(simresults_Yprev10Rprev25),
-  simresults_Yprev5Rprev75 = extract_measures_fnc(simresults_Yprev5Rprev75),
-  simresults_Yprev5Rprev50 = extract_measures_fnc(simresults_Yprev5Rprev50),
-  simresults_Yprev5Rprev25 = extract_measures_fnc(simresults_Yprev5Rprev25),
   simresults_Yprev1Rprev75 = extract_measures_fnc(simresults_Yprev1Rprev75),
   simresults_Yprev1Rprev50 = extract_measures_fnc(simresults_Yprev1Rprev50),
   simresults_Yprev1Rprev25 = extract_measures_fnc(simresults_Yprev1Rprev25)
@@ -87,9 +142,6 @@ bias_summaries <- list(
   simresults_Yprev10Rprev25 = data.frame(),
   simresults_Yprev10Rprev50 = data.frame(),
   simresults_Yprev10Rprev75 = data.frame(),
-  simresults_Yprev5Rprev75 = data.frame(),
-  simresults_Yprev5Rprev50 = data.frame(),
-  simresults_Yprev5Rprev25 = data.frame(),
   simresults_Yprev1Rprev75 = data.frame(),
   simresults_Yprev1Rprev50 = data.frame(),
   simresults_Yprev1Rprev25 = data.frame()
@@ -156,9 +208,6 @@ combined_df <- combined_df %>%
                df == "simresults_Yprev10Rprev25" ~ "Outcome prevalence 10% and Missingness 25%",
                df == "simresults_Yprev10Rprev50" ~ "Outcome prevalence 10% and Missingness 50%",
                df == "simresults_Yprev10Rprev75" ~ "Outcome prevalence 10% and Missingness 75%",
-               df == "simresults_Yprev5Rprev25" ~ "Outcome prevalence 5% and Missingness 25%",
-               df == "simresults_Yprev5Rprev50" ~ "Outcome prevalence 5% and Missingness 50%",
-               df == "simresults_Yprev5Rprev75" ~ "Outcome prevalence 5% and Missingness 75%",
                df == "simresults_Yprev1Rprev25" ~ "Outcome prevalence 1% and Missingness 25%",
                df == "simresults_Yprev1Rprev50" ~ "Outcome prevalence 1% and Missingness 50%",
                df == "simresults_Yprev1Rprev75" ~ "Outcome prevalence 1% and Missingness 75%")) %>%
@@ -166,9 +215,6 @@ combined_df <- combined_df %>%
     "Outcome prevalence 1% and Missingness 25%",
     "Outcome prevalence 1% and Missingness 50%",
     "Outcome prevalence 1% and Missingness 75%",
-    "Outcome prevalence 5% and Missingness 25%",
-    "Outcome prevalence 5% and Missingness 50%",
-    "Outcome prevalence 5% and Missingness 75%",
     "Outcome prevalence 10% and Missingness 25%",
     "Outcome prevalence 10% and Missingness 50%",
     "Outcome prevalence 10% and Missingness 75%")))
@@ -217,23 +263,10 @@ simulation_parameters_long <- simulation_parameters_long %>%
       df == "simresults_Yprev10Rprev25" ~ "Outcome prevalence 10% and Missingness 25%",
       df == "simresults_Yprev10Rprev50" ~ "Outcome prevalence 10% and Missingness 50%",
       df == "simresults_Yprev10Rprev75" ~ "Outcome prevalence 10% and Missingness 75%",
-      df == "simresults_Yprev5Rprev25" ~ "Outcome prevalence 5% and Missingness 25%",
-      df == "simresults_Yprev5Rprev50" ~ "Outcome prevalence 5% and Missingness 50%",
-      df == "simresults_Yprev5Rprev75" ~ "Outcome prevalence 5% and Missingness 75%",
       df == "simresults_Yprev1Rprev25" ~ "Outcome prevalence 1% and Missingness 25%",
       df == "simresults_Yprev1Rprev50" ~ "Outcome prevalence 1% and Missingness 50%",
-      df == "simresults_Yprev1Rprev75" ~ "Outcome prevalence 1% and Missingness 75%")) %>%
-  mutate(Parameter = factor(Parameter, levels = c(
-    "Outcome prevalence 1% and Missingness 25%",
-    "Outcome prevalence 1% and Missingness 50%",
-    "Outcome prevalence 1% and Missingness 75%",
-    "Outcome prevalence 5% and Missingness 25%",
-    "Outcome prevalence 5% and Missingness 50%",
-    "Outcome prevalence 5% and Missingness 75%",
-    "Outcome prevalence 10% and Missingness 25%",
-    "Outcome prevalence 10% and Missingness 50%",
-    "Outcome prevalence 10% and Missingness 75%"
-  )))
+      df == "simresults_Yprev1Rprev75" ~ "Outcome prevalence 1% and Missingness 75%"))
+
 
 # Add Scale Group
 simulation_parameters_long$scale_group <- ifelse(
@@ -243,14 +276,34 @@ simulation_parameters_long$scale_group <- ifelse(
 )
 
 
-#Save_File
- save(simulation_parameters_long,file = "MNAR_500_Combined_Long_03Oct2024.Rdata")
-# save(simulation_parameters_long,file = "MNAR_10000_Combined_Long_03Oct2024.Rdata")
+# Merge with old dataset
+simulation_parameters_long_v2 <- rbind(simulation_parameters_long, parameters_long_5) 
+combined_df_2 <- rbind(combined_df,combined_df_5)
+combined_df <- combined_df_2
+# Create parameters as factors 
+simulation_parameters_long <- simulation_parameters_long_v2 %>%
+          mutate(Parameter = factor(Parameter, levels = c(
+            "Outcome prevalence 1% and Missingness 25%",
+            "Outcome prevalence 1% and Missingness 50%",
+            "Outcome prevalence 1% and Missingness 75%",
+            "Outcome prevalence 5% and Missingness 25%",
+            "Outcome prevalence 5% and Missingness 50%",
+            "Outcome prevalence 5% and Missingness 75%",
+            "Outcome prevalence 10% and Missingness 25%",
+            "Outcome prevalence 10% and Missingness 50%",
+            "Outcome prevalence 10% and Missingness 75%"
+          )))
+
+
+#Save Simulation_parameters Long
+#----------------------
+#save(simulation_parameters_long,file = "MAR_100000_Combined_Long_03Oct2024.Rdata")
 #save(simulation_parameters_long,file = "MNAR_100000_Combined_Long_03Oct2024.Rdata")
+save(simulation_parameters_long,file = "MCAR_100000_Combined_Long_03Oct2024.Rdata")
 
 
-# Store all values at each iteraiton 
- save(combined_df,file = "MNAR_500_Combined_03Oct2024.Rdata")
-#save(combined_df,file = "MNAR_10000_Combined_03Oct2024.Rdata")
+# Store all values at each iteraion 
+#-------------------------------------
+#save(combined_df,file = "MAR_100000_Combined_03Oct2024.Rdata")
 #save(combined_df,file = "MNAR_100000_Combined_03Oct2024.Rdata")
-# 
+save(combined_df,file = "MCAR_100000_Combined_03Oct2024.Rdata")
