@@ -235,12 +235,7 @@ simulation_parameters_long <- simulation_parameters_long %>%
     "Outcome prevalence 10% and Missingness 75%"
   )))
 
-# Add Scale Group
-simulation_parameters_long$scale_group <- ifelse(
-  simulation_parameters_long$Metric %in% c("CalSlope", "AUC"), 
-  "Group1", 
-  "Group2"
-)
+
 
 
 #Save_File
@@ -254,3 +249,174 @@ simulation_parameters_long$scale_group <- ifelse(
 # save(combined_df,file = "MAR_10000_Combined_03Oct2024.Rdata")
 #save(combined_df,file = "MAR_100000_Combined_03Oct2024.Rdata")
 # 
+ 
+ 
+ 
+ 
+ ##############################################################################
+ # Combine with no missingness 
+ ##############################################################################
+ ## Load datasets
+ load("MAR_500_Combined_Long_03Oct2024.Rdata")
+ load("MAR_500_Combined_03Oct2024.Rdata")
+ load("Nomissing_500_Combined_Long_07Oct2024.Rdata")
+ load("Nomissing_500_Combined_07Oct2024.Rdata")
+ 
+# Remove unneeded columns
+ simulation_parameters_long <- simulation_parameters_long %>% select(-"scale_group")
+ ## Combine datasets 
+ combined_df_2 <- rbind(combined_df, no_missing_combined)
+ combined_df_2 <- combined_df_2 %>%
+    mutate(Parameter = factor(Parameter, levels = c(
+   "Outcome prevalence 1%, no missingness",
+   "Outcome prevalence 1% and Missingness 25%",
+   "Outcome prevalence 1% and Missingness 50%",
+   "Outcome prevalence 1% and Missingness 75%",
+   "Outcome prevalence 5%, no missingness",
+   "Outcome prevalence 5% and Missingness 25%",
+   "Outcome prevalence 5% and Missingness 50%",
+   "Outcome prevalence 5% and Missingness 75%",
+   "Outcome prevalence 10%, no missingness",
+   "Outcome prevalence 10% and Missingness 25%",
+   "Outcome prevalence 10% and Missingness 50%",
+   "Outcome prevalence 10% and Missingness 75%"
+ )))
+ 
+ simulation_parameters_long_2 <- rbind(simulation_parameters_long, no_missing_long)
+ simulation_parameters_long_2 <- simulation_parameters_long_2 %>%
+   mutate(Parameter = factor(Parameter, levels = c(
+     "Outcome prevalence 1%, no missingness",
+     "Outcome prevalence 1% and Missingness 25%",
+     "Outcome prevalence 1% and Missingness 50%",
+     "Outcome prevalence 1% and Missingness 75%",
+     "Outcome prevalence 5%, no missingness",
+     "Outcome prevalence 5% and Missingness 25%",
+     "Outcome prevalence 5% and Missingness 50%",
+     "Outcome prevalence 5% and Missingness 75%",
+     "Outcome prevalence 10%, no missingness",
+     "Outcome prevalence 10% and Missingness 25%",
+     "Outcome prevalence 10% and Missingness 50%",
+     "Outcome prevalence 10% and Missingness 75%"
+   )))
+ 
+ 
+ save(simulation_parameters_long_2,file = "MAR_500_Combined_Long_07Oct2024.Rdata")
+ # save(simulation_parameters_long_2,file = "MAR_10000_Combined_Long_07Oct2024.Rdata")
+ # save(simulation_parameters_long_2,file = "MAR_100000_Combined_Long_07Oct2024.Rdata")
+ 
+ 
+ # Store all values at each iteraiton 
+ save(combined_df_2,file = "MAR_500_Combined_07Oct2024.Rdata")
+
+ 
+ 
+ 
+ 
+ ##############################################################################
+ # Combine with no missingness 
+ ##############################################################################
+ ## Load datasets
+ load("MAR_10000_Combined_Long_03Oct2024.Rdata")
+ load("MAR_10000_Combined_03Oct2024.Rdata")
+ load("Nomissing_10000_Combined_Long_07Oct2024.Rdata")
+ load("Nomissing_10000_Combined_07Oct2024.Rdata")
+ 
+ # Remove unneeded columns
+ simulation_parameters_long <- simulation_parameters_long %>% select(-"scale_group")
+ ## Combine datasets 
+ combined_df_2 <- rbind(combined_df, no_missing_combined)
+ combined_df_2 <- combined_df_2 %>%
+   mutate(Parameter = factor(Parameter, levels = c(
+     "Outcome prevalence 1%, no missingness",
+     "Outcome prevalence 1% and Missingness 25%",
+     "Outcome prevalence 1% and Missingness 50%",
+     "Outcome prevalence 1% and Missingness 75%",
+     "Outcome prevalence 5%, no missingness",
+     "Outcome prevalence 5% and Missingness 25%",
+     "Outcome prevalence 5% and Missingness 50%",
+     "Outcome prevalence 5% and Missingness 75%",
+     "Outcome prevalence 10%, no missingness",
+     "Outcome prevalence 10% and Missingness 25%",
+     "Outcome prevalence 10% and Missingness 50%",
+     "Outcome prevalence 10% and Missingness 75%"
+   )))
+ 
+ simulation_parameters_long_2 <- rbind(simulation_parameters_long, no_missing_long)
+ simulation_parameters_long_2 <- simulation_parameters_long_2 %>%
+   mutate(Parameter = factor(Parameter, levels = c(
+     "Outcome prevalence 1%, no missingness",
+     "Outcome prevalence 1% and Missingness 25%",
+     "Outcome prevalence 1% and Missingness 50%",
+     "Outcome prevalence 1% and Missingness 75%",
+     "Outcome prevalence 5%, no missingness",
+     "Outcome prevalence 5% and Missingness 25%",
+     "Outcome prevalence 5% and Missingness 50%",
+     "Outcome prevalence 5% and Missingness 75%",
+     "Outcome prevalence 10%, no missingness",
+     "Outcome prevalence 10% and Missingness 25%",
+     "Outcome prevalence 10% and Missingness 50%",
+     "Outcome prevalence 10% and Missingness 75%"
+   )))
+ 
+ 
+
+ # Store all values at each iteraiton 
+ save(combined_df_2,file = "MAR_10000_Combined_07Oct2024.Rdata")
+ save(simulation_parameters_long_2,file = "MAR_10000_Combined_Long_07Oct2024.Rdata")
+ 
+ 
+ 
+ 
+ ##############################################################################
+ # Combine with no missingness 
+ ##############################################################################
+ ## Load datasets
+ load("MAR_100000_Combined_Long_03Oct2024.Rdata")
+ load("MAR_100000_Combined_03Oct2024.Rdata")
+ load("Nomissing_100000_Combined_Long_07Oct2024.Rdata")
+ load("Nomissing_100000_Combined_07Oct2024.Rdata")
+ 
+ # Remove unneeded columns
+ simulation_parameters_long <- simulation_parameters_long %>% select(-"scale_group")
+ ## Combine datasets 
+ combined_df_2 <- rbind(combined_df, no_missing_combined)
+ combined_df_2 <- combined_df_2 %>%
+   mutate(Parameter = factor(Parameter, levels = c(
+     "Outcome prevalence 1%, no missingness",
+     "Outcome prevalence 1% and Missingness 25%",
+     "Outcome prevalence 1% and Missingness 50%",
+     "Outcome prevalence 1% and Missingness 75%",
+     "Outcome prevalence 5%, no missingness",
+     "Outcome prevalence 5% and Missingness 25%",
+     "Outcome prevalence 5% and Missingness 50%",
+     "Outcome prevalence 5% and Missingness 75%",
+     "Outcome prevalence 10%, no missingness",
+     "Outcome prevalence 10% and Missingness 25%",
+     "Outcome prevalence 10% and Missingness 50%",
+     "Outcome prevalence 10% and Missingness 75%"
+   )))
+ 
+ simulation_parameters_long_2 <- rbind(simulation_parameters_long, no_missing_long)
+ simulation_parameters_long_2 <- simulation_parameters_long_2 %>%
+   mutate(Parameter = factor(Parameter, levels = c(
+     "Outcome prevalence 1%, no missingness",
+     "Outcome prevalence 1% and Missingness 25%",
+     "Outcome prevalence 1% and Missingness 50%",
+     "Outcome prevalence 1% and Missingness 75%",
+     "Outcome prevalence 5%, no missingness",
+     "Outcome prevalence 5% and Missingness 25%",
+     "Outcome prevalence 5% and Missingness 50%",
+     "Outcome prevalence 5% and Missingness 75%",
+     "Outcome prevalence 10%, no missingness",
+     "Outcome prevalence 10% and Missingness 25%",
+     "Outcome prevalence 10% and Missingness 50%",
+     "Outcome prevalence 10% and Missingness 75%"
+   )))
+ 
+ 
+ 
+ # Store all values at each iteraiton 
+ save(simulation_parameters_long_2,file = "MAR_100000_Combined_Long_07Oct2024.Rdata")
+ save(combined_df_2,file = "MAR_100000_Combined_07Oct2024.Rdata")
+ 
+ 
