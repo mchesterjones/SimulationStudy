@@ -547,7 +547,13 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   Brier_individuals <- (Predicted_Risks - Y)^2 ## Predicted risks - true outcome
   Brier <- mean(Brier_individuals) # Average of these sqaured errors
   Brier_var <- var(Brier_individuals)/length(Predicted_Risks) # Variance of the individual Brier Scores 
-
+  # Calculate the baseline Brier score
+  p_baseline <- mean(Y) # Prevalence of the outcome
+  Brier_baseline <- mean((p_baseline - Y)^2)
+  
+  # Scale the Brier score
+  Brier_scaled <- 1 - (Brier / Brier_baseline)
+  
   ## Calibration intercept and Slope 
   ####-------------------------------------------------------------------------------
  ## (i.e. Calibration-in-the-large): Overall Bias in Predictions
@@ -603,7 +609,7 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   }
   
   ## Put Calibration to NAs if outcomes are all the same and variance of predicted risks is 0 
-  if ((sum(Y) == 0) | (variance_PR == 0) | (variance_PR <1e-10)  |   (variance_LP > 8) ){
+  if ((sum(Y) == 0) || (variance_PR == 0) || (variance_PR <1e-10)  ||   (variance_LP > 8) ){
     Cal_Int <- NA
     Cal_Int_var <- NA
     Cal_Slope <- NA
@@ -624,8 +630,8 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
       Cal_Slope_var <- vcov(Cal_Slope_model)[2, 2]
       Cal_Slope_SE <- summary(Cal_Slope_model)$coefficients[, 2][2]
       
-      if (Cal_Slope_SE >10 ) {
-        message("Calibration SE too high and slope cannot be calculated.")
+      if (Cal_Slope_var >10 ) {
+        message("Calibration Variance too high and slope cannot be calculated.")
         
         Cal_Slope <- NA
         Cal_Int <- NA
@@ -644,9 +650,9 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   ## Discrimination (c-statistic?)
   ####------------------------------------------------------------------------
  
-  ## Updated the code 19Aug2024 to handle errors of no positve cases that may occur at small sample sizes
-  if ((sum(Y) == 0) | (variance_PR == 0) | (variance_PR <1e-10)  |   (variance_LP > 9) ){
-    AUC <-NA
+## Updated code 25Nov
+  if ((sum(Y) == 0) || (variance_PR == 0) || (variance_PR < 1e-10) || (variance_LP > 9)) {
+    AUC <- NA
     AUC_var <- NA
   } else {
     AUC <- tryCatch({
@@ -661,12 +667,25 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
       AUC <- NA
       message("AUC is 1, setting AUC to NA.")
     }
-    AUC_var <- if (!is.na(AUC)) {
-      var(roc_obj, method = "delong")
-    } else {
-      NA
+    
+    AUC_var <- tryCatch({
+      if (!is.na(AUC)) {
+        var(roc_obj, method = "delong")
+      } else {
+        NA
+      }
+    }, error = function(e) {
+      message("Error in variance calculation: ", e$message)
+      NA  # Return NA if there's an error in variance calculation
+    })
+    
+    if (is.na(AUC_var) || AUC_var <= 0) {
+      AUC <- NA
+      AUC_var <- NA
+      message("AUC variance cannot be calculated or is invalid. Setting AUC to NA.")
     }
   }
+  
 
     
 
@@ -680,7 +699,7 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
     "AUC" = as.numeric(AUC),
     "AUC_var" = as.numeric(AUC_var),
     "Brier" = as.numeric(Brier),
-    "Brier_var" = as.numeric(Brier_var)
+    "Brier_scaled" = as.numeric(Brier_scaled)
   )
 
 

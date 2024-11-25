@@ -19,10 +19,14 @@ library(pROC)
 #Load development_dataset
 setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
 load("Development_Dataset_Yprev_0.01.Rdata")
-#load("Development_Dataset_Yprev_0.05.Rdata")
-#load("Development_Dataset_Yprev_0.1.Rdata")
+  model_1 <- development_dataset[["model"]]
+load("Development_Dataset_Yprev_0.05.Rdata")
+  model_5 <- development_dataset[["model"]]
+load("Development_Dataset_Yprev_0.1.Rdata")
+  model_10 <- development_dataset[["model"]]
 
-model <- development_dataset[["model"]]
+
+#model <- development_dataset[["model"]]
 # 
 
 ################################################################################
@@ -35,18 +39,18 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 ################################################################################
 
 
-sims_parameters <- crossing(
+combinations_of_parameters <- crossing(
   n_iter = 200, 
   N_val = c(500),
-  Y_prev = c(0.01), 
+  Y_prev = c(0.01,0.05,0.10), 
   R_prev = c(0.25, 0.50, 0.75), 
   ## Beta = affect on Missingness R   
-  beta_x1 = c(0), ## 0 for MAR and 0.5 for MNAR
-  beta_x2 = c(0), ## Affect on missingness  0 for MCAR, 0.5 for MAR and MNAR
+  beta_x1 = c(0,0.5), ## 0 for MAR and MCAR and 0.5 for MNAR
+  beta_x2 = c(0, 0.5), ## Affect on missingness  0 for MCAR, 0.5 for MAR and MNAR
   beta_x3 = c(0), 
   beta_x4 = c(0), 
   beta_x5 = c(0), 
-  beta_U = c(0), # 0 for Mar and  0.5 for MNAR
+  beta_U = c(0, 0.5), # 0 for Mar and  0.5 for MNAR
   # Gamma = affect on Y
   gamma_x1 = c(0.5), 
   gamma_x2 = c(0.5), 
@@ -56,6 +60,28 @@ sims_parameters <- crossing(
   gamma_U = c(0.5) 
   
 )
+  
+  ## Filter out those combinations which we aren't anlaysing
+  ## We want MCAR: (beta_x1, beta_x2, beta_U == 0) 
+  ## MAR: (beta_x2== 0.5)
+  ## MCAR: (beta_x1, beta_x2, beta_U == 0.5) 
+  
+  # Define the specific combinations of beta_x1, beta_x2, and beta_U that you want
+  valid_combinations <- tibble(
+    beta_x1 = c(0, 0, 0.5),
+    beta_x2 = c(0, 0.5, 0.5),
+    beta_U = c(0, 0, 0.5)
+  )
+  
+  # Filter sims_parameters to include only valid combinations of beta_x1, beta_x2, and beta_U
+  sims_parameters <- combinations_of_parameters %>%
+    semi_join(valid_combinations, by = c("beta_x1", "beta_x2", "beta_U"))
+  
+  # Add on label of missing mechanism
+  sims_parameters <- sims_parameters %>% 
+                        mutate(label=case_when(beta_x1==0 & beta_x2 ==0 & beta_U == 0 ~ "MCAR", 
+                                               beta_x1==0 & beta_x2 ==0.5 & beta_U == 0 ~ "MAR",
+                                               beta_x1==0.5 & beta_x2 ==0.5 & beta_U == 0.5 ~ "MNAR"))
 
 
 ###############################################################################
@@ -80,7 +106,12 @@ for (i in 1:nrow(sims_parameters)) {
   gamma_x5 <- sims_parameters$gamma_x5[i]
   gamma_U <- sims_parameters$gamma_U[i]
   
-  
+  # Select the appropriate model based on Y_prev
+  model <- switch(as.character(Y_prev),
+                  "0.01" = model_1,
+                  "0.05" = model_5,
+                  "0.1" = model_10,
+                  stop("Invalid Y_prev value"))
 ################################################################################
 # Store Simulation Results
 ################################################################################
@@ -111,7 +142,7 @@ simulation_results <- simulation_nrun_fnc(
 today <- format(Sys.Date(), "%d%b%Y")  
 
 # Construct the filename with today's date
-filename <- paste0("MCAR_Results_", i, "_Nval_", sims_parameters$N_val[i], "_Yprev_", sims_parameters$Y_prev[i], "_Rprev_", sims_parameters$R_prev[i], "_", today, ".Rdata")
+filename <- paste0( sims_parameters$label[i], "_Nval_", sims_parameters$N_val[i], "_Yprev_", sims_parameters$Y_prev[i], "_Rprev_", sims_parameters$R_prev[i], "_", today, ".Rdata")
 # Save results
 setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
 save(simulation_results, file = filename)

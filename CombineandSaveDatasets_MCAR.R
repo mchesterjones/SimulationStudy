@@ -20,32 +20,32 @@ library(purrr)
 setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data") 
 #setwd("/Users/maechester-jones/OneDrive - Nexus365/A DPhil/Simulation studies/Programs/Study 1/SimulationStudy1_11Jun2024/SimulationStudy/Data")
 ## Load required datasets 
-# load("MCAR_Results_1_Nval_10000_Yprev_0.01_Rprev_0.25_24Sep2024.Rdata")
-  load("MCAR_Results_1_Nval_500_Yprev_0.01_Rprev_0.25_03Oct2024.Rdata")
+# load("MCAR_Results_1_Nval_10000_Yprev_0.01_Rprev_0.25_25Nov2024.Rdata")
+  load("MCAR_Nval_500_Yprev_0.01_Rprev_0.25_25Nov2024.Rdata")
      simresults_Yprev1Rprev25 <- simulation_results
-# load("MCAR_Results_2_Nval_10000_Yprev_0.01_Rprev_0.5_24Sep2024.Rdata")
-  load("MCAR_Results_2_Nval_500_Yprev_0.01_Rprev_0.5_03Oct2024.Rdata")
+# load("MCAR_Results_2_Nval_10000_Yprev_0.01_Rprev_0.5_25Nov2024.Rdata")
+  load("MCAR_Nval_500_Yprev_0.01_Rprev_0.5_25Nov2024.Rdata")
      simresults_Yprev1Rprev50 <- simulation_results
-# load("MCAR_Results_3_Nval_10000_Yprev_0.01_Rprev_0.75_24Sep2024.Rdata")
-  load("MCAR_Results_3_Nval_500_Yprev_0.01_Rprev_0.75_03Oct2024.Rdata")
+# load("MCAR_Results_3_Nval_10000_Yprev_0.01_Rprev_0.75_25Nov2024.Rdata")
+  load("MCAR_Nval_500_Yprev_0.01_Rprev_0.75_25Nov2024.Rdata")
      simresults_Yprev1Rprev75 <- simulation_results
-# load("MCAR_Results_13_Nval_10000_Yprev_0.05_Rprev_0.25_22Sep2024.Rdata")
-  load("MCAR_Results_4_Nval_500_Yprev_0.05_Rprev_0.25_22Sep2024.Rdata")
+# load("MCAR_Results_13_Nval_10000_Yprev_0.05_Rprev_0.25_25Nov2024.Rdata")
+  load("MCAR_Nval_500_Yprev_0.05_Rprev_0.25_25Nov2024.Rdata")
      simresults_Yprev5Rprev25 <- simulation_results
-# load("MCAR_Results_14_Nval_10000_Yprev_0.05_Rprev_0.5_22Sep2024.Rdata")
-  load("MCAR_Results_5_Nval_500_Yprev_0.05_Rprev_0.5_22Sep2024.Rdata")
+# load("MCAR_Results_14_Nval_10000_Yprev_0.05_Rprev_0.5_25Nov2024.Rdata")
+  load("MCAR_Nval_500_Yprev_0.05_Rprev_0.5_25Nov2024.Rdata")
      simresults_Yprev5Rprev50 <- simulation_results
-# load("MCAR_Results_15_Nval_10000_Yprev_0.05_Rprev_0.75_22Sep2024.Rdata")
-  load("MCAR_Results_6_Nval_500_Yprev_0.05_Rprev_0.75_22Sep2024.Rdata")
+# load("MCAR_Results_15_Nval_10000_Yprev_0.05_Rprev_0.75_25Nov2024.Rdata")
+  load("MCAR_Nval_500_Yprev_0.05_Rprev_0.75_25Nov2024.Rdata")
      simresults_Yprev5Rprev75 <- simulation_results
-# load("MCAR_Results_4_Nval_10000_Yprev_0.1_Rprev_0.25_24Sep2024.Rdata")
-  load("MCAR_Results_1_Nval_500_Yprev_0.1_Rprev_0.25_24Sep2024.Rdata")
+# load("MCAR_Results_4_Nval_10000_Yprev_0.1_Rprev_0.25_25Nov2024.Rdata")
+  load("MCAR_Nval_500_Yprev_0.1_Rprev_0.25_25Nov2024.Rdata")
      simresults_Yprev10Rprev25 <- simulation_results
-# load("MCAR_Results_5_Nval_10000_Yprev_0.1_Rprev_0.5_24Sep2024.Rdata")
-  load("MCAR_Results_2_Nval_500_Yprev_0.1_Rprev_0.5_24Sep2024.Rdata")
+# load("MCAR_Results_5_Nval_10000_Yprev_0.1_Rprev_0.5_25Nov2024.Rdata")
+  load("MCAR_Nval_500_Yprev_0.1_Rprev_0.5_25Nov2024.Rdata")
      simresults_Yprev10Rprev50 <- simulation_results
-# load("MCAR_Results_6_Nval_10000_Yprev_0.1_Rprev_0.75_24Sep2024.Rdata")
-  load("MCAR_Results_3_Nval_500_Yprev_0.1_Rprev_0.75_24Sep2024.Rdata")
+# load("MCAR_Results_6_Nval_10000_Yprev_0.1_Rprev_0.75_25Nov2024.Rdata")
+  load("MCAR_Nval_500_Yprev_0.1_Rprev_0.75_25Nov2024.Rdata")
      simresults_Yprev10Rprev75 <- simulation_results
 
 
@@ -244,15 +244,15 @@ simulation_parameters_long$scale_group <- ifelse(
 
 
 #Save_File
- save(simulation_parameters_long,file = "MCAR_500_Combined_Long_03Oct2024.Rdata")
-# save(simulation_parameters_long,file = "MCAR_10000_Combined_Long_03Oct2024.Rdata")
-# save(simulation_parameters_long,file = "MCAR_100000_Combined_Long_03Oct2024.Rdata")
+ save(simulation_parameters_long,file = "MCAR_500_Combined_Long_25Nov2024.Rdata")
+# save(simulation_parameters_long,file = "MCAR_10000_Combined_Long_25Nov2024.Rdata")
+# save(simulation_parameters_long,file = "MCAR_100000_Combined_Long_25Nov2024.Rdata")
 
 
 # Store all values at each iteraiton 
-save(combined_df,file = "MCAR_500_Combined_03Oct2024.Rdata")
-# save(combined_df,file = "MCAR_10000_Combined_03Oct2024.Rdata")
-#save(combined_df,file = "MCAR_100000_Combined_03Oct2024.Rdata")
+save(combined_df,file = "MCAR_500_Combined_25Nov2024.Rdata")
+# save(combined_df,file = "MCAR_10000_Combined_25Nov2024.Rdata")
+#save(combined_df,file = "MCAR_100000_Combined_25Nov2024.Rdata")
 # 
 
 
@@ -260,8 +260,8 @@ save(combined_df,file = "MCAR_500_Combined_03Oct2024.Rdata")
 # Combine with no missingness 
 ##############################################################################
 ## Load datasets
-load("MCAR_500_Combined_Long_03Oct2024.Rdata")
-load("MCAR_500_Combined_03Oct2024.Rdata")
+load("MCAR_500_Combined_Long_25Nov2024.Rdata")
+load("MCAR_500_Combined_25Nov2024.Rdata")
 load("Nomissing_500_Combined_Long_07Oct2024.Rdata")
 load("Nomissing_500_Combined_07Oct2024.Rdata")
 
@@ -280,8 +280,8 @@ save(simulation_parameters_long,file = "MCAR_500_Combined_Long_07Oct2024.Rdata")
 # Combine with no missingness 
 ##############################################################################
 ## Load datasets
-load("MCAR_10000_Combined_Long_03Oct2024.Rdata")
-load("MCAR_10000_Combined_03Oct2024.Rdata")
+load("MCAR_10000_Combined_Long_25Nov2024.Rdata")
+load("MCAR_10000_Combined_25Nov2024.Rdata")
 load("Nomissing_10000_Combined_Long_08Oct2024.Rdata")
 load("Nomissing_10000_Combined_08Oct2024.Rdata")
 
@@ -292,16 +292,16 @@ simulation_parameters_long <- rbind(simulation_parameters_long, no_missing_long)
 
 
 # Store all values at each iteraiton 
-save(combined_df,file = "MCAR_10000_Combined_03Oct2024.Rdata")
-save(simulation_parameters_long,file = "MCAR_10000_Combined_Long_03Oct2024.Rdata")
+save(combined_df,file = "MCAR_10000_Combined_25Nov2024.Rdata")
+save(simulation_parameters_long,file = "MCAR_10000_Combined_Long_25Nov2024.Rdata")
 
 
 ##############################################################################
 # Combine with no missingness 
 ##############################################################################
 ## Load datasets
-load("MCAR_100000_Combined_Long_03Oct2024.Rdata")
-load("MCAR_100000_Combined_03Oct2024.Rdata")
+load("MCAR_100000_Combined_Long_25Nov2024.Rdata")
+load("MCAR_100000_Combined_25Nov2024.Rdata")
 load("Nomissing_100000_Combined_Long_08Oct2024.Rdata")
 load("Nomissing_100000_Combined_08Oct2024.Rdata")
 
@@ -312,5 +312,5 @@ simulation_parameters_long <- rbind(simulation_parameters_long, no_missing_long)
 
 
 # Store all values at each iteraiton 
-save(combined_df,file = "MCAR_100000_Combined_03Oct2024.Rdata")
-save(simulation_parameters_long,file = "MCAR_100000_Combined_Long_03Oct2024.Rdata")
+save(combined_df,file = "MCAR_100000_Combined_25Nov2024.Rdata")
+save(simulation_parameters_long,file = "MCAR_100000_Combined_Long_25Nov2024.Rdata")
