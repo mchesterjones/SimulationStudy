@@ -18,16 +18,16 @@ library(pROC)
 ################################################################################
 #Load development_dataset
 setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
-#load("Development_Dataset_Yprev_0.01.Rdata")
-#load("Development_Dataset_Yprev_0.05.Rdata")
-load("Development_Dataset_Yprev_0.1.Rdata")
+load("Development_Dataset_Yprev_0.01.Rdata")
+# load("Development_Dataset_Yprev_0.05.Rdata")
+# load("Development_Dataset_Yprev_0.1.Rdata")
 
 model <- development_dataset[["model"]]
 
 ################################################################################
 # Dependent Code
 ################################################################################
-source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Programs//Study 1//SimulationStudy1_11Jun2024//SimulationStudy//00_SimulateValidationDataNoMissingness.R") 
+source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Programs//Study 1//SimulationStudy1_11Jun2024//SimulationStudy//01a_Function_SimulateValidationDataNoMissingness.R") 
 
 ################################################################################
 # Simulation Parameters
@@ -37,7 +37,7 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 sims_parameters <- crossing(
   n_iter = 200, 
   N_val = c(500,10000,100000),
-  Y_prev = c(0.1), 
+  Y_prev = c(0.01), 
   # Gamma = affect on Y
   gamma_x1 = c(0.5), 
   gamma_x2 = c(0.5), 

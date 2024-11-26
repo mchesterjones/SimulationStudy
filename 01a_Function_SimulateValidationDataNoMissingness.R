@@ -289,49 +289,55 @@ val_imp_mod_function <- function(val_data, model) {
 ## 7. Function to calculate the predictive performance of the models
 ####---------------------------------------------------------------
 predictive.performance.function <- function(Y, Predicted_Risks) {
-
+  
   library(pROC)
-
+  
   #Input:
   # Y = a binary variable of observed outcomes
   # Predicted_Risks = a vector of predicted risks for each dataset
   # Within a given dataset, we want a table with the target measures (use dataframe from above)
-
+  
   ## Calculate Brier Score (mean square error of predictions; the lower, the better)
   ####------------------------------------------------------------------
   # What is the accuracy of the probalistic predictions? 
   Brier_individuals <- (Predicted_Risks - Y)^2 ## Predicted risks - true outcome
   Brier <- mean(Brier_individuals) # Average of these sqaured errors
   Brier_var <- var(Brier_individuals)/length(Predicted_Risks) # Variance of the individual Brier Scores 
-
+  # Calculate the baseline Brier score
+  p_baseline <- mean(Y) # Prevalence of the outcome
+  Brier_baseline <- mean((p_baseline - Y)^2)
+  
+  # Scale the Brier score
+  Brier_scaled <- 1 - (Brier / Brier_baseline)
+  
   ## Calibration intercept and Slope 
   ####-------------------------------------------------------------------------------
- ## (i.e. Calibration-in-the-large): Overall Bias in Predictions
-    ## Why this measure? 
-    ## We want to understand whether what we are predicting is systematically too high or too low compared to true OUTCOMES
-    ## Does the average predicted probability match the average observed outcome 
-    ## Named intercept because that's where regression line crosses y-axis
-    ## Therefore if intercept is significantly different from zero, model's predictions are systematically biased
-
+  ## (i.e. Calibration-in-the-large): Overall Bias in Predictions
+  ## Why this measure? 
+  ## We want to understand whether what we are predicting is systematically too high or too low compared to true OUTCOMES
+  ## Does the average predicted probability match the average observed outcome 
+  ## Named intercept because that's where regression line crosses y-axis
+  ## Therefore if intercept is significantly different from zero, model's predictions are systematically biased
+  
   ## Calibration slope: Spread or dispersion of predictions
   ####--------------------------------------------------------------------------
-    ## Why this measure? 
-    ## This measures the spread of predictions over entire range 
-    ## Measures the agreements between observed and actual
-    # 1 = perfect calibration
-    # Slope < 1: Indicates that the model’s predictions are too extreme.  High probabilities are overestimated, and low probabilities are underestimated.
-    # Slope > 1: Indicates that the model’s predictions are too conservative. High probabilities are underestimated, and low probabilities are overestimated.
+  ## Why this measure? 
+  ## This measures the spread of predictions over entire range 
+  ## Measures the agreements between observed and actual
+  # 1 = perfect calibration
+  # Slope < 1: Indicates that the model’s predictions are too extreme.  High probabilities are overestimated, and low probabilities are underestimated.
+  # Slope > 1: Indicates that the model’s predictions are too conservative. High probabilities are underestimated, and low probabilities are overestimated.
   
   # Calculate log of predicted risks 
-   LP <- log(Predicted_Risks/ (1 - Predicted_Risks))
-
+  LP <- log(Predicted_Risks/ (1 - Predicted_Risks))
+  
   # Calculate variance of log of PRs
   variance_LP <- var(LP)
- # print(variance_LP)
+  # print(variance_LP)
   
   # Calculate variance of predicted risks
   variance_PR <- var(Predicted_Risks)
- # print(variance_PR)
+  # print(variance_PR)
   
   # Check if variance is zero
   if (variance_PR == 0) {
@@ -342,16 +348,16 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
     message("All predicted risks are very similar and variance is very small")
   }
   
- 
+  
   # Check if variance of Log Odds is very large 
   if (variance_LP >= 8 ) {
     message("Log  risks variance is too high indicating extremes")
   }
   
   # Check if variance of Log Odds is very large 
- # if (variance_LP > 6 & variance_LP <9 ) {
-#    message("Does this exist and is not an error?")
-#  }
+  # if (variance_LP > 6 & variance_LP <9 ) {
+  #    message("Does this exist and is not an error?")
+  #  }
   
   # Check if all outcomes are zero 
   if (sum(Y) == 0) { 
@@ -359,7 +365,7 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   }
   
   ## Put Calibration to NAs if outcomes are all the same and variance of predicted risks is 0 
-  if ((sum(Y) == 0) | (variance_PR == 0) | (variance_PR <1e-10)  |   (variance_LP > 8) ){
+  if ((sum(Y) == 0) || (variance_PR == 0) || (variance_PR <1e-10)  ||   (variance_LP > 8) ){
     Cal_Int <- NA
     Cal_Int_var <- NA
     Cal_Slope <- NA
@@ -369,40 +375,40 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
     message("Calibration intercept and slope cannot be calculated.")
     
   } else {
-      ## Calibration in the Large
-      Cal_Int_model <- glm(Y ~ offset(LP), family = binomial(link = "logit"))
-      Cal_Int_var <- vcov(Cal_Int_model)[1, 1]
-      Cal_Int <- as.numeric(coef(Cal_Int_model))
-     # print(Cal_Int)
-      
-      ## Calibration Model
-      Cal_Slope_model <- glm(Y ~ LP, family = binomial(link = "logit"))
-      Cal_Slope_var <- vcov(Cal_Slope_model)[2, 2]
-      Cal_Slope_SE <- summary(Cal_Slope_model)$coefficients[, 2][2]
-      
-      if (Cal_Slope_SE >10 ) {
-        message("Calibration SE too high and slope cannot be calculated.")
-        
-        Cal_Slope <- NA
-        Cal_Int <- NA
-        Cal_Int_var <- NA
-        Cal_Slope_var <- NA
-      } else {
-        Cal_Slope <- as.numeric(coef(Cal_Slope_model)[2])
-        
-        
-      }
-      #print(Cal_Slope)
-  }
+    ## Calibration in the Large
+    Cal_Int_model <- glm(Y ~ offset(LP), family = binomial(link = "logit"))
+    Cal_Int_var <- vcov(Cal_Int_model)[1, 1]
+    Cal_Int <- as.numeric(coef(Cal_Int_model))
+    # print(Cal_Int)
     
+    ## Calibration Model
+    Cal_Slope_model <- glm(Y ~ LP, family = binomial(link = "logit"))
+    Cal_Slope_var <- vcov(Cal_Slope_model)[2, 2]
+    Cal_Slope_SE <- summary(Cal_Slope_model)$coefficients[, 2][2]
+    
+    if (Cal_Slope_var >10 ) {
+      message("Calibration Variance too high and slope cannot be calculated.")
+      
+      Cal_Slope <- NA
+      Cal_Int <- NA
+      Cal_Int_var <- NA
+      Cal_Slope_var <- NA
+    } else {
+      Cal_Slope <- as.numeric(coef(Cal_Slope_model)[2])
+      
+      
+    }
+    #print(Cal_Slope)
+  }
   
-
+  
+  
   ## Discrimination (c-statistic?)
   ####------------------------------------------------------------------------
- 
-  ## Updated the code 19Aug2024 to handle errors of no positve cases that may occur at small sample sizes
-  if ((sum(Y) == 0) | (variance_PR == 0) | (variance_PR <1e-10)  |   (variance_LP > 9) ){
-    AUC <-NA
+  
+  ## Updated code 25Nov
+  if ((sum(Y) == 0) || (variance_PR == 0) || (variance_PR < 1e-10) || (variance_LP > 9)) {
+    AUC <- NA
     AUC_var <- NA
   } else {
     AUC <- tryCatch({
@@ -417,15 +423,28 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
       AUC <- NA
       message("AUC is 1, setting AUC to NA.")
     }
-    AUC_var <- if (!is.na(AUC)) {
-      var(roc_obj, method = "delong")
-    } else {
-      NA
+    
+    AUC_var <- tryCatch({
+      if (!is.na(AUC)) {
+        var(roc_obj, method = "delong")
+      } else {
+        NA
+      }
+    }, error = function(e) {
+      message("Error in variance calculation: ", e$message)
+      NA  # Return NA if there's an error in variance calculation
+    })
+    
+    if (is.na(AUC_var) || AUC_var <= 0) {
+      AUC <- NA
+      AUC_var <- NA
+      message("AUC variance cannot be calculated or is invalid. Setting AUC to NA.")
     }
   }
-
-    
-
+  
+  
+  
+  
   ## Store performance results in a data.frame and return
   ####------------------------------------------------------------------------
   Target_measures <- data.frame(
@@ -436,13 +455,11 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
     "AUC" = as.numeric(AUC),
     "AUC_var" = as.numeric(AUC_var),
     "Brier" = as.numeric(Brier),
-    "Brier_var" = as.numeric(Brier_var)
+    "Brier_scaled" = as.numeric(Brier_scaled)
   )
-
-
+  
+  
   return(Target_measures)
-
+  
 }
-
-
 
