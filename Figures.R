@@ -7,21 +7,21 @@
 ################################################################################
 # 
 # ## library
-# library(dplyr)
-# library(ggplot2)
-# library(tidyr)
-# library(flextable)
-# library(rlang)
-# 
-# ## Set working directory
-# setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
-# 
-# ## Load required datasets
-# ########################
-# load("MCAR_500_Combined_Long_07Oct2024.Rdata")
-# load("MCAR_500_Combined_07Oct2024.Rdata")
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(flextable)
+library(rlang)
 
-# 
+## Set working directory
+setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
+
+## Load required datasets
+########################
+load("MCAR_500_Combined_Long_07Oct2024.Rdata")
+load("MCAR_500_Combined_07Oct2024.Rdata")
+
+#
 # 
 # ## Create missingness and prevalance groups
 # ###############################################
@@ -479,14 +479,6 @@ for (i in seq_along(auc_params)) {
   auc_plots[[i]] <- plot
 }
 
-## auc 
-auc_patchwork <- label_blank + label_25 + label_50 + label_75 + 
-  label_1 + label_5 + label_10 +
-  auc_plots[1] + auc_plots[4] + auc_plots[7] +
-  auc_plots[2] + auc_plots[5] + auc_plots[8] +  
-  auc_plots[4] + auc_plots[6] + auc_plots[9] +  
-  plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(2,10,10,10), heights=c(1,6,6,6))
 
 
 ###############################################################################
@@ -609,6 +601,7 @@ for (i in seq_along(plot_params)) {
   plot <- plot_fnc(
     df = simulation_parameters_long,
     measure = "Brier Score",
+    combinedmeasure = "Brier",
     parameter = params$parameter,
     x_scale_limits = params$x_limits,
     x_scale_breaks = params$x_breaks,
@@ -656,10 +649,32 @@ for (i in seq_along(rmse_params)) {
 # Combine
 ##########################################################
 library(patchwork)
+## Labels
+###Labels - missingness
+label_mar <- ggplot() +
+  theme_void() + # Remove axes and grid
+  geom_text(aes(x = 0.5, y = 0.5, label = "MAR"), size = 5, hjust = 0.5, vjust = 0.5, fontface="bold")
 
+label_mnar <- ggplot() +
+  theme_void() + # Remove axes and grid
+  geom_text(aes(x = 0.5, y = 0.5, label = "MNAR"), size = 5, hjust = 0.5, vjust = 0.5, fontface="bold")
+
+label_mcar <- ggplot() +
+  theme_void() + # Remove axes and grid
+  geom_text(aes(x = 0.5, y = 0.5, label = "MCAR"), size = 5, hjust = 0.5, vjust = 0.5, fontface="bold")
+
+### Axis labels
 label_blank <- ggplot() +
   theme_void() + # Remove axes and grid
   geom_text(aes(x = 0.5, y = 0.5, label = ""), size = 5, hjust = 0.5, vjust = 0.5)
+
+label_top <-  ggplot() +
+  theme_void() + # Remove axes and grid
+  geom_text(aes(x = 0.5, y = 0.5, label = "Missingness in X1 (%)"), size = 5, hjust = 0.5, vjust = 0.5, fontface="bold")
+
+label_left <-  ggplot() +
+  theme_void() + # Remove axes and grid
+  geom_text(aes(x = 0.5, y = 0.5, label = "Outcome Prevalence"), size = 5, hjust = 0.5, vjust = 0.5, angle=90, fontface="bold")
 
 label_25 <- ggplot() +
   theme_void() + # Remove axes and grid
@@ -696,26 +711,60 @@ label_10 <- ggplot() +
 
 ## Layout of the graphs
 design <- c(
-  area(1, 1, 1, 1), # Top-left for blank
-  area(1, 2, 1, 2), # Top-center for 25%
-  area(1, 3, 1, 3), # Top-right for 50%
-  area(1, 4, 1, 4), # Top-right for 75%
-  area(2, 1, 2, 1), # 1%
-  area(3, 1, 3, 1), # 5%
-  area(4, 1, 4, 1), # 10%
-  area(2, 2, 2, 2), # outcome1_missingness25
-  area(3, 2, 3, 2), # outcome5_missingness25
-  area(4, 2, 4, 2), # outcome10_missingness25
-  area(2, 3, 2, 3), # outcome1_missingness50
-  area(3, 3, 3, 3), # outcome5_missingness50
-  area(4, 3, 4, 3), # outcome10_missingness50
-  area(2, 4, 2, 4), # outcome1_missingness75
-  area(3, 4, 3, 4), # outcome5_missingness75
-  area(4, 4, 4, 4) # outcome10_missingness75
+  area(1, 1, 1, 1),
+  area(1, 2, 1, 2),
+  area(1, 3, 1, 3), 
+  area(1, 4, 1, 4),
+  area(1, 5, 1, 5),
+  ## 2nd row
+  area(2, 1, 2, 1), # Top-left for blank
+  area(2, 2, 2, 2), # Top-center for 25%
+  area(2, 3, 2, 3), # Top-right for 50%
+  area(2, 4, 2, 4), # Top-right for 75%
+  area(2, 5, 2, 5), # Top-right for 75%
+  
+  ## 1st column (labels)
+  area(3, 1, 3, 1), # 
+  area(4, 1, 4, 1), # 
+  area(5, 1, 5, 1), # 
+  ## 2nd Column
+  area(3, 2, 3, 2), # 1% 
+  area(4, 2, 4, 2), # 5% 
+  area(5, 2, 5, 2), # 10%
+  ## 3rd column
+  area(3, 3, 3, 3), #  outcome1_missingness25
+  area(4, 3, 4, 3), # outcome5_missingness25
+  area(5, 3, 5, 3), # outcome10_missingness25
+  ## 4th Column
+  area(3, 4, 3, 4), # outcome1_missingness50  
+  area(4, 4, 4, 4), # outcome5_missingness50 
+  area(5, 4, 5, 4), # outcome10_missingness50
+  ## 5th Column
+  area(3, 5, 3, 5), # outcome1_missingness75  
+  area(4, 5, 4, 5), # outcome5_missingness75 
+  area(5, 5, 5, 5) # outcome10_missingness75
 )
 
 
 ## Plot 
+## auc
+auc_patchwork <- label_blank + label_blank + label_blank +label_top + label_blank +  
+  ## 2nd row
+  label_blank + label_blank + label_25 + label_50 + label_75 +
+  ## 1st column
+  label_blank + label_left + label_blank +
+  ## 2nd column
+  label_1 + label_5 + label_10 +
+  ## 3rd column 
+  auc_plots[1] + auc_plots[4] + auc_plots[7] +
+  ## 4th column 
+  auc_plots[2] + auc_plots[5] + auc_plots[8] +
+  ## 5th column 
+  auc_plots[3] + auc_plots[6] + auc_plots[9] +
+  plot_layout(design=design, guides = "collect", axes = "collect_x",
+              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6))
+
+
 ## Bias
 bias_patchwork <- label_blank + label_25 + label_50 + label_75 + 
   label_1 + label_5 + label_10 +
@@ -723,7 +772,7 @@ bias_patchwork <- label_blank + label_25 + label_50 + label_75 +
   bias_plots[2] + bias_plots[5] + bias_plots[8] +  
   bias_plots[3] + bias_plots[6] + bias_plots[9] +  
   plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(2,10,10,10), heights=c(1,6,6,6))
+              widths=c(2,10,10,10), heights=c(1,1,6,6,6))
 
 
 ## Calibration in the Large 
