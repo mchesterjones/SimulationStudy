@@ -218,20 +218,18 @@ simulation_parameters_long <- simulation_parameters_long %>%
     "Outcome prevalence 10% and Missingness 75%"
   )))
 
-# Add Scale Group
-simulation_parameters_long$scale_group <- ifelse(
-  simulation_parameters_long$Metric %in% c("CalSlope", "AUC"), 
-  "Group1", 
-  "Group2"
-)
+# Add Sample Size
+simulation_parameters_long$samplesize <- "N=100,000" 
+combined_df$samplesize <- "N=100,000" 
+
 
 ## Save 100000
 #----------------------------------------------
 no_missing_long <- simulation_parameters_long
 no_missing_combined <- combined_df
 
-save(no_missing_long ,file = "Nomissing_100000_Combined_Long_26Nov2024.Rdata")
-save(no_missing_combined ,file = "Nomissing_100000_Combined_26Nov2024.Rdata")
+save(no_missing_long ,file = "Nomissing_100000_Combined_Long.Rdata")
+save(no_missing_combined ,file = "Nomissing_100000_Combined.Rdata")
 
 
 
@@ -438,19 +436,17 @@ simulation_parameters_long <- simulation_parameters_long %>%
     "Outcome prevalence 10% and Missingness 75%"
   )))
 
-# Add Scale Group
-simulation_parameters_long$scale_group <- ifelse(
-  simulation_parameters_long$Metric %in% c("CalSlope", "AUC"), 
-  "Group1", 
-  "Group2"
-)
+## Add Sample Size 
+simulation_parameters_long$samplesize <- "N=10,000" 
+combined_df$samplesize <- "N=10,000" 
+
 ## Save 10000
 #----------------------------------------------
 no_missing_long <- simulation_parameters_long
 no_missing_combined <- combined_df
 
-save(no_missing_long ,file = "Nomissing_10000_Combined_Long_26Nov2024.Rdata")
-save(no_missing_combined ,file = "Nomissing_10000_Combined_26Nov2024.Rdata")
+save(no_missing_long ,file = "Nomissing_10000_Combined_Long.Rdata")
+save(no_missing_combined ,file = "Nomissing_10000_Combined.Rdata")
 
 
 
@@ -658,17 +654,16 @@ simulation_parameters_long <- simulation_parameters_long %>%
     "Outcome prevalence 10% and Missingness 75%"
   )))
 
-# Add Scale Group
-simulation_parameters_long$scale_group <- ifelse(
-  simulation_parameters_long$Metric %in% c("CalSlope", "AUC"), 
-  "Group1", 
-  "Group2"
-)
+
+# Add Sample Size 
+simulation_parameters_long$samplesize <- "N=500"
+combined_df$samplesize <- "N=500" 
+
 ## Save 500
 #----------------------------------------------
 no_missing_long <- simulation_parameters_long
 no_missing_combined <- combined_df
 
-save(no_missing_long ,file = "Nomissing_500_Combined_Long_26Nov2024.Rdata")
-save(no_missing_combined ,file = "Nomissing_500_Combined_26Nov2024.Rdata")
+save(no_missing_long ,file = "Nomissing_500_Combined_Long.Rdata")
+save(no_missing_combined ,file = "Nomissing_500_Combined.Rdata")
 
