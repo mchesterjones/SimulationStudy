@@ -18,8 +18,8 @@ setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Progr
 
 ## Load required datasets
 ########################
-load("MCAR_500_Combined_Long_26Nov2024.Rdata")
-load("MCAR_500_Combined_26Nov2024.Rdata")
+load("MCAR_Combined_Long.Rdata")
+load("MCAR_Combined.Rdata")
 
 
 ### Graph Loop ###
@@ -77,29 +77,8 @@ auc_params <- list(
   list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(0,1), x_breaks = seq(0, 1, by = 0.25), width=0.001),
   list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(0,1), x_breaks = seq(0, 1, by = 0.25), width=0.001))
 
-
-## Generate and save plots
-auc_plots <- list()
-for (i in seq_along(auc_params)) {
-  params <- auc_params[[i]]
-  plot <- plot_fnc(
-    df = simulation_parameters_long,
-    measure = "AUC",
-    combinedmeasure = "AUC", 
-    parameter = params$parameter,
-    x_scale_limits = params$x_limits,
-    x_scale_breaks = params$x_breaks,
-    width = params$width
-  )
-  auc_plots[[i]] <- plot
-}
-
-
-
-###############################################################################
-## Bias 
-########################################
-## Set parameters for the plot for Brier
+### Bias
+####################
 bias_params <- list(
   list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(-0.1, 0.11), x_breaks = seq(-0.1, 0.1, by = 0.05), width=0.0001),
   list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(-0.1, 0.11), x_breaks = seq(-0.1, 0.1, by = 0.05), width=0.0001),
@@ -111,27 +90,8 @@ bias_params <- list(
   list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(-0.1, 0.11), x_breaks = seq(-0.1, 0.1, by = 0.05), width=0.0001),
   list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(-0.1, 0.11), x_breaks = seq(-0.1, 0.1, by = 0.05), width=0.0001)
 )
-
-## Generate and save plots
-bias_plots <- list()
-for (i in seq_along(bias_params)) {
-  params <- bias_params[[i]]
-  plot <- plot_fnc(
-    df = simulation_parameters_long,
-    measure = "Bias",
-    combinedmeasure = "bias",
-    parameter = params$parameter,
-    x_scale_limits = params$x_limits,
-    x_scale_breaks = params$x_breaks,
-    width = params$width
-  )
-  bias_plots[[i]] <- plot
-}
-
-###############################################################################
-## calibratio in the large/ calibration Intercept
-########################################
-## Set parameters for the plot for Brier
+## Calibration in the large
+############################
 citl_params <- list(
   list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(-2.1, 2), x_breaks = seq(-2, 2, by = 0.5), width=0.05),
   list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(-2.1, 2), x_breaks = seq(-2, 2, by = 0.5), width=0.05),
@@ -144,27 +104,8 @@ citl_params <- list(
   list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(-2.1, 2), x_breaks = seq(-2, 2, by = 0.5), width=0.05)
 )
 
-## Generate and save plots
-citl_plots <- list()
-for (i in seq_along(citl_params)) {
-  params <- citl_params[[i]]
-  plot <- plot_fnc(
-    df = simulation_parameters_long,
-    measure = "Calibration in the Large",
-    combinedmeasure = "Cal_Int",
-    parameter = params$parameter,
-    x_scale_limits = params$x_limits,
-    x_scale_breaks = params$x_breaks,
-    width = params$width
-  )
-  citl_plots[[i]] <- plot
-}
-
-
-###############################################################################
 ## Calibration Slope
-########################################
-## Set parameters for the plot for Calibration Slope 
+###########################
 calslope_params <- list(
   list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(-1.5, 5), x_breaks = seq(-1.5, 5, by = 0.5), width=0.0001),
   list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(-1.5, 5), x_breaks = seq(-1.5, 5, by = 0.5), width=0.0001),
@@ -177,27 +118,9 @@ calslope_params <- list(
   list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(-1.5, 5), x_breaks = seq(-1.5, 5, by = 0.5), width=0.0001)
 )
 
-## Generate and save plots
-calslope_plots <- list()
-for (i in seq_along(calslope_params)) {
-  params <- calslope_params[[i]]
-  plot <- plot_fnc(
-    df = simulation_parameters_long,
-    measure = "Calibration Slope",
-    combinedmeasure = "Cal_Slope",
-    parameter = params$parameter,
-    x_scale_limits = params$x_limits,
-    x_scale_breaks = params$x_breaks,
-    width = params$width
-  )
-  calslope_plots[[i]] <- plot
-}
-
-###############################################################################
-## Brier 
-########################################
-## Set parameters for the plot for Brier
-plot_params <- list(
+## Scaled Brier
+##########################
+brierscl_params <- list(
   list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
   list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
   list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
@@ -209,60 +132,8 @@ plot_params <- list(
   list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001)
 )
 
-## Generate and save plots
-brier_plots <- list()
-for (i in seq_along(plot_params)) {
-  params <- plot_params[[i]]
-  plot <- plot_fnc(
-    df = simulation_parameters_long,
-    measure = "Brier Score",
-    combinedmeasure = "Brier",
-    parameter = params$parameter,
-    x_scale_limits = params$x_limits,
-    x_scale_breaks = params$x_breaks,
-    width = params$width
-  )
-  brier_plots[[i]] <- plot
-}
-
-###############################################################################
-## Scaled Brier 
-########################################
-## Set parameters for the plot for Brier
-plot_params <- list(
-  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001)
-)
-
-## Generate and save plots
-brierscaled_plots <- list()
-for (i in seq_along(plot_params)) {
-  params <- plot_params[[i]]
-  plot <- plot_fnc(
-    df = simulation_parameters_long,
-    measure = "Brier Score Scaled",
-    combinedmeasure = "Brier_scaled",
-    parameter = params$parameter,
-    x_scale_limits = params$x_limits,
-    x_scale_breaks = params$x_breaks,
-    width = params$width
-  )
-  brierscaled_plots[[i]] <- plot
-}
-
-
-
-###############################################################################
-## RMSE 
-########################################
-## Set parameters for the plot for RMSE
+## RMSE
+##########################
 rmse_params <- list(
   list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(0, 0.4), x_breaks = seq(0, 0.40, by = 0.1), width=0.0001),
   list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(0, 0.4), x_breaks = seq(0, 0.4, by = 0.1), width=0.0001),
@@ -275,44 +146,71 @@ rmse_params <- list(
   list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(0, 0.4), x_breaks = seq(0, 0.4, by = 0.1), width=0.0001)
 )
 
+
+################################################################################
+## Set Measures and Sample Sizes
+################################################################################
+# Define measures 
+measures <- list(
+  AUC = list(measure = "AUC", combinedmeasure = "AUC", params=auc_params),
+  Bias = list(measure = "Bias", combinedmeasure = "bias", params=bias_params), 
+  CalInt = list(measure = "Calibration in the Large", combinedmeasure = "Cal_Int", params=citl_params),
+  CalSlope = list( measure = "Calibration Slope", combinedmeasure = "Cal_Slope", params=calslope_params),
+  Brier_scaled = list(measure = "Brier Score Scaled", combinedmeasure = "Brier_scaled", params=brierscl_params ),
+  RMSE = list(measure = "Root Mean Square Error", combinedmeasure = "rmse", params=rmse_params )
+)
+
 ## Generate and save plots
-rmse_plots <- list()
-for (i in seq_along(rmse_params)) {
-  params <- rmse_params[[i]]
-  plot <- plot_fnc(
-    df = simulation_parameters_long,
-    measure = "Root Mean Square Error",
-    combinedmeasure = "rmse",
-    parameter = params$parameter,
-    x_scale_limits = params$x_limits,
-    x_scale_breaks = params$x_breaks,
-    width = params$width
-  )
-  rmse_plots[[i]] <- plot
+# Define sample sizes
+sample_sizes <- c("N=500", "N=10,000", "N=100,000")
+
+################################################################################
+## Create Plots 
+################################################################################
+# Initialize lists to store plots
+plot_storage <- list()
+
+# Nested loop for measures and sample sizes
+for (measure_name in names(measures)) {
+  # Initialize a list for the current measure
+  plot_storage[[measure_name]] <- list()
+  
+  for (sample_size in sample_sizes) {
+    # Filter data by sample size
+    df_filtered <- simulation_parameters_long %>%
+      filter(samplesize == sample_size)
+    
+    combined_df_filtered <- combined_df %>%
+      filter(samplesize == sample_size)
+    
+    # Create plots for the current measure and sample size
+    plots <- list()
+    for (i in seq_along(measures[[measure_name]]$params)) {
+      params <- measures[[measure_name]]$params[[i]]
+      plot <- plot_fnc(
+        df = df_filtered,
+        measure = measures[[measure_name]]$measure,
+        combinedmeasure = measures[[measure_name]]$combinedmeasure,
+        parameter = params$parameter,
+        x_scale_limits = params$x_limits,
+        x_scale_breaks = params$x_breaks,
+        width = params$width
+      )
+      plots[[i]] <- plot
+    }
+    
+    # Store plots in the appropriate sublist
+    plot_storage[[measure_name]][[sample_size]] <- plots
+  }
 }
 
-
-
-
-
-# Combine
-##########################################################
+###############################################################################
+## Creat Patchwork 
+###############################################################################
 library(patchwork)
-## Labels
-###Labels - missingness
-label_mar <- ggplot() +
-  theme_void() + # Remove axes and grid
-  geom_text(aes(x = 0.5, y = 0.5, label = "MAR"), size = 5, hjust = 0.5, vjust = 0.5, fontface="bold")
 
-label_mnar <- ggplot() +
-  theme_void() + # Remove axes and grid
-  geom_text(aes(x = 0.5, y = 0.5, label = "MNAR"), size = 5, hjust = 0.5, vjust = 0.5, fontface="bold")
-
-label_mcar <- ggplot() +
-  theme_void() + # Remove axes and grid
-  geom_text(aes(x = 0.5, y = 0.5, label = "MCAR"), size = 5, hjust = 0.5, vjust = 0.5, fontface="bold")
-
-### Axis labels
+## Set labels
+##########################################################
 label_blank <- ggplot() +
   theme_void() + # Remove axes and grid
   geom_text(aes(x = 0.5, y = 0.5, label = ""), size = 5, hjust = 0.5, vjust = 0.5)
@@ -349,6 +247,9 @@ label_10 <- ggplot() +
   theme_void() + # Remove axes and grid
   geom_text(aes(x = 0.5, y = 0.5, label = "10%"), size = 5, hjust = 0.5, vjust = 0.5)
 
+
+### Design Patchwork
+###############################################
 # Combine the two plots using patchwork
 #         area(start_row, start_col, end_row, end_col)
 #       Each number means the following:
@@ -357,6 +258,7 @@ label_10 <- ggplot() +
 #           start_col: The starting column number where the plot begins.
 #           end_row: The ending row number where the plot ends.
 #           end_col: The ending column number where the plot ends.
+
 
 ## Layout of the graphs
 design <- c(
@@ -394,147 +296,95 @@ design <- c(
   area(5, 5, 5, 5) # outcome10_missingness75
 )
 
+## Function to create patchwork
+#######################################
+# Define a function to create patchwork layouts dynamically
+create_patchwork <- function(plots, sample_size, title) {
+  
+  # Construct the patchwork layout
+  patchwork <- label_blank + label_blank + label_blank + label_top + label_blank +
+    # 2nd row
+    label_blank + label_blank + label_25 + label_50 + label_75 +
+    # 1st column
+    label_blank + label_left + label_blank +
+    # 2nd column
+    label_1 + label_5 + label_10 +
+    # 3rd column
+    plots[[1]] + plots[[4]] + plots[[7]] +
+    # 4th column
+    plots[[2]] + plots[[5]] + plots[[8]] +
+    # 5th column
+    plots[[3]] + plots[[6]] + plots[[9]] +
+    plot_layout(design = design, guides = "collect", axes = "collect_x",
+                widths = c(1, 2, 10, 10, 10), heights = c(1, 1, 6, 6, 6)) +
+    plot_annotation(
+      title = title,
+      subtitle = "Higher scores indicate better discrimination with 0.5 indicating the model is no better than chance"
+    )
+  return(patchwork)
+}
 
-## Plot 
-## auc
-auc_patchwork <- label_blank + label_blank + label_blank +label_top + label_blank +  
-  ## 2nd row
-  label_blank + label_blank + label_25 + label_50 + label_75 +
-  ## 1st column
-  label_blank + label_left + label_blank +
-  ## 2nd column
-  label_1 + label_5 + label_10 +
-  ## 3rd column 
-  auc_plots[1] + auc_plots[4] + auc_plots[7] +
-  ## 4th column 
-  auc_plots[2] + auc_plots[5] + auc_plots[8] +
-  ## 5th column 
-  auc_plots[3] + auc_plots[6] + auc_plots[9] +
-  plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
-   plot_annotation(
-    title = 'Discrimination (AUC) at n=500 under MCAR',
-    subtitle = 'Higher scores indicate better discrimination with 0.5 indicating the model is no better than chance'
-  #  caption = 'Disclaimer: None of these plots are insightful'
-  )
-
-
-## Bias
-bias_patchwork <- label_blank + label_blank + label_blank +label_top + label_blank +  
-  ## 2nd row
-  label_blank + label_blank + label_25 + label_50 + label_75 +
-  ## 1st column
-  label_blank + label_left + label_blank +
-  ## 2nd column
-  label_1 + label_5 + label_10 +
-  ## 3rd column 
-  bias_plots[1] + bias_plots[4] + bias_plots[7] +
-  ## 4th column 
-  bias_plots[2] + bias_plots[5] + bias_plots[8] +
-  ## 5th column 
-  bias_plots[3] + bias_plots[6] + bias_plots[9] +
-  plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
-  plot_annotation(
-    title = 'Bias at n=500 under MCAR',
-    subtitle = 'Where 0 indicates no bias and the model estimates are on average equal to the true values'
-  )
-
+### Measures and Subtitles 
+###############################
+measure_titles <- list(
+  AUC = list(title= "Discrimination (AUC)",
+             subtitle ="Higher scores indicate better discrimination with 0.5 indicating the model is no better than chance"),
+  Bias = list(title = "Bias",
+              subtitle = "Bias indicates the difference between observed and true outcomes, lower values are better"),
+  CalInt = list(title="Calibration in the Large",
+                subtitle="Where 0 indicates perfect calibration, positive values indicate risk underestimation and negative values indicate overestimation"),
+  CalSlope = list(title="Calibration Slope",
+                  subtitle="Where 1 indicates perfect calibration, >1 indicates underfitting and <1 indicate overfitting"),
+  Brier_scaled = list(title="Scaled Brier Score",
+                      subtitle="Score of 1 indicates perfect prediction, 0 or less than 0 indicates no better than baseline model"), 
+  RMSe = list(title="Root Mean Square Error",
+              subtitle="Lower RMSE indicates better model performance")
+)
 
 
-## Calibration in the Large 
-citl_patchwork <-  label_blank + label_blank + label_blank +label_top + label_blank +  
-  ## 2nd row
-  label_blank + label_blank + label_25 + label_50 + label_75 +
-  ## 1st column
-  label_blank + label_left + label_blank +
-  ## 2nd column
-  label_1 + label_5 + label_10 +
-  ## 3rd column 
-    citl_plots[1] + citl_plots[4] + citl_plots[7] +
-      ## 4th column 
-      citl_plots[2] + citl_plots[5] + citl_plots[8] +
-      ## 5th column 
-      citl_plots[3] + citl_plots[6] + citl_plots[9] +
-      plot_layout(design=design, guides = "collect", axes = "collect_x",
-                  widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
-      plot_annotation(
-        title = 'Calibration in the Large at n=500 under MCAR',
-        subtitle = 'Where 0 indicates perfect calibration, positive values indicate risk underestimation and negative values indicate overestimation'
-        #  caption = 'Disclaimer: None of these plots are insightful'
-      )
+## Create patchwork of graphs
+###################################
+setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Plots")
+patchwork_storage <- list()
+
+for (measure_name in names(plot_storage)) {
+  # Initialize a list for the current measure
+  patchwork_storage[[measure_name]] <- list()
+  
+  for (sample_size in c("N=500", "N=10,000", "N=100,000")) {
+    # Get the plots for the current measure and sample size
+    measure_plots <- plot_storage[[measure_name]][[sample_size]]
+    
+    # Define the title and subtitle dynamically
+    title <- paste(measure_titles[[measure_name]][["title"]], " at", sample_size, " under MCAR", sep = "")
+    subtitle <- measure_titles[[measure_name]][["subtitle"]]
+    
+    # Create the patchwork
+    patchwork <- create_patchwork(measure_plots, sample_size, title)
+    patchwork <- patchwork + plot_annotation(subtitle = subtitle)
+    
+    # Store the patchwork
+    patchwork_storage[[measure_name]][[sample_size]] <- patchwork
+    
+    # Save the patchwork as a PDF
+    output_file <- paste0("MCAR Patchwork_", measure_name, "_", sample_size, ".pdf")
+    
+    # Save the patchwork as a PDF (you can adjust the width and height as needed)
+    ggsave(output_file, plot = patchwork, device = "pdf", width = 14, height = 8)
+  }
+}
 
 
 
-## Calibration Slope
-calslope_patchwork <-  label_blank + label_blank + label_blank +label_top + label_blank +  
-  ## 2nd row
-  label_blank + label_blank + label_25 + label_50 + label_75 +
-  ## 1st column
-  label_blank + label_left + label_blank +
-  ## 2nd column
-  label_1 + label_5 + label_10 +
-  calslope_plots[1] + calslope_plots[4] + calslope_plots[7] +
-  calslope_plots[2] + calslope_plots[5] + calslope_plots[8] +  
-  calslope_plots[3] + calslope_plots[6] + calslope_plots[9] +  
-  plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
-  plot_annotation(
-    title = 'Calibration Slope at n=500 under MCAR',
-    subtitle = 'Where 1 indicates perfect calibration, >1 indicates underfitting and <1 indicate overfitting'
-  )
-
-## Brier
-brier_patchwork <- label_blank + label_blank + label_blank +label_top + label_blank +  
-  ## 2nd row
-  label_blank + label_blank + label_25 + label_50 + label_75 +
-  ## 1st column
-  label_blank + label_left + label_blank +
-  ## 2nd column
-  label_1 + label_5 + label_10 +
-  brier_plots[1] + brier_plots[4] + brier_plots[7] +
-  brier_plots[2] + brier_plots[5] + brier_plots[8] +  
-  brier_plots[3] + brier_plots[6] + brier_plots[9] +  
-  plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
-  plot_annotation(
-    title = 'Calibration Slope at n=500 under MCAR',
-    subtitle = 'Where 0 indicates perfect calibration, positive values indicate risk underestimation and negative values indicate overestimation'
-  )
-
-## Brier
-brierscaled_patchwork <- label_blank + label_blank + label_blank +label_top + label_blank +  
-  ## 2nd row
-  label_blank + label_blank + label_25 + label_50 + label_75 +
-  ## 1st column
-  label_blank + label_left + label_blank +
-  ## 2nd column
-  label_1 + label_5 + label_10 +
-  brierscaled_plots[1] + brierscaled_plots[4] + brierscaled_plots[7] +
-  brierscaled_plots[2] + brierscaled_plots[5] + brierscaled_plots[8] +  
-  brierscaled_plots[3] + brierscaled_plots[6] + brierscaled_plots[9] +  
-  plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
-  plot_annotation(
-    title = 'Scaled Brier Score at n=500 under MCAR',
-    subtitle = 'Where 0 indicates perfect calibration, positive values indicate risk underestimation and negative values indicate overestimation'
-  )
 
 
-## RMSE 
-rmse_patchwork <-label_blank + label_blank + label_blank +label_top + label_blank +  
-  ## 2nd row
-  label_blank + label_blank + label_25 + label_50 + label_75 +
-  ## 1st column
-  label_blank + label_left + label_blank +
-  ## 2nd column
-  label_1 + label_5 + label_10 +
-  rmse_plots[1] + rmse_plots[4] + rmse_plots[7] +
-  rmse_plots[2] + rmse_plots[5] + rmse_plots[8] +  
-  rmse_plots[3] + rmse_plots[6] + rmse_plots[9] +  
-  plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
-  plot_annotation(
-    title = 'Root Mean Square Error at n=500 under MCAR',
-    subtitle = 'Where'
-  )
+
+
+
+
+
+
+
+
+
+

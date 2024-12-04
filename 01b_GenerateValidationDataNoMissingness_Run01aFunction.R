@@ -36,8 +36,8 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 
 sims_parameters <- crossing(
   n_iter = 200, 
-  N_val = c(500,10000,100000),
-  Y_prev = c(0.01), 
+  N_val = c(500, 10000, 100000),
+  Y_prev = c(0.01,0.05,0.1), 
   # Gamma = affect on Y
   gamma_x1 = c(0.5), 
   gamma_x2 = c(0.5), 
