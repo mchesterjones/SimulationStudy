@@ -18,393 +18,8 @@ setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Progr
 
 ## Load required datasets
 ########################
-load("MCAR_500_Combined_Long_07Oct2024.Rdata")
-load("MCAR_500_Combined_07Oct2024.Rdata")
-
-#
-# 
-# ## Create missingness and prevalance groups
-# ###############################################
-# simulation_parameters_long <- simulation_parameters_long %>%
-#   mutate(Prevalence = case_when(grepl("Outcome prevalence 1%", Parameter) ~ "1%",
-#                                 grepl("Outcome prevalence 5%", Parameter) ~ "5%",
-#                                 grepl("Outcome prevalence 10%", Parameter) ~ "10%"),
-#          Missingness =  case_when(grepl("25%", Parameter) ~ "25%",
-#                                   grepl("50%", Parameter) ~ "50%",
-#                                   grepl("75%", Parameter) ~ "75%"))
-
-################################################################################
-# ## Brier Score 
-# ################################################################################
-# ggplot(simulation_parameters_long %>% filter(Measure=="Brier Score"),
-#        aes(x=AVG, y=Method, colour=Method)) + 
-#   geom_point(size=3) +
-#   geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.8 ) +   
-#   geom_point(data = combined_df, aes(x = Brier, y = Method),               
-#              shape =4, position = position_jitter(width = 0.0001), alpha = 0.5) + 
-#   labs(y = NULL,
-#        x = NULL,
-#        colour = "Missing Data Method\n(Mean, 95% CI)") +
-#   theme_minimal() + 
-#   facet_grid( Prevalance~Missingness , scales = "fixed", switch="both", labeller = labeller(
-#     Missingness = label_both,
-#     Prevalance = label_both
-#   )) +   
-#   ## Add X scale 
-#   scale_x_continuous(limits = c(0, 0.15), breaks = seq(0, 0.15, by = 0.025)) +     
-#   ## Add Colour Scale
-#   scale_colour_manual(values = c("Validation data, no missingness" = "grey",
-#                                  "Complete Case Analysis" = "blue", 
-#                                  "Mean Imputation" = "red", 
-#                                  "Multiple Imputation with Outcome" = "green",
-#                                  "Multiple Imputation without Outcome" = "purple")) +
-#   labs(#caption = "Brier score ranges between 0 (perfect accuracy) and 1 (perfect inaccuracy). This x scale runs from 0 to 0.15.") + 
-#   theme(legend.position = "right",
-#         strip.text = element_text(size = 14),  # Customize strip text size
-#         strip.placement = "outside",  # Place strip labels outside the plot area
-#         strip.background = element_blank(),  # Remove strip background
-#         axis.title.x = element_text(size = 14), 
-#         axis.title.y = element_text(size = 14), 
-#         axis.text.x = element_text(size = 12), 
-#         axis.text.y = element_blank(),  # Remove y-axis text
-#         axis.ticks.y = element_blank())  # Remove y-axis tick      
-
-
-# ## Create the 9 graphs 
-# ###############################################################################
-# outcome1_missingness25 <- ggplot(simulation_parameters_long %>%
-#                                    filter(Measure == "Brier Score",
-#                                           Parameter == "Outcome prevalence 1% and Missingness 25%"),
-#                                  aes(x = AVG, y = Method, colour = Method)) +
-#   geom_point(size = 3) +
-#   geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.8) +
-#   geom_point(data = combined_df %>%
-#                filter(Parameter == "Outcome prevalence 1% and Missingness 25%"),
-#              aes(x = Brier, y = Method),
-#              shape = 4, position = position_jitter(width = 0.0001), alpha = 0.5) +
-#   labs(
-#     y = NULL,
-#     x = NULL,
-#     ##caption = "Brier score ranges between 0 (perfect accuracy) and 1 (perfect inaccuracy). This x scale runs from 0 to 0.15."
-#     colour = "Missing Data Method\n(Mean, 95% CI)",
-#   ) +
-#   theme_minimal() +
-#   scale_x_continuous(limits = c(0, 0.15), breaks = seq(0, 0.15, by = 0.05)) +  # Customize x-axis scale
-#   scale_colour_manual(
-#     values = c(
-#       "Validation data, no missingness" = "grey",
-#       "Complete Case Analysis" = "blue",
-#       "Mean Imputation" = "red",
-#       "Multiple Imputation with Outcome" = "green",
-#       "Multiple Imputation without Outcome" = "purple"
-#     )
-#   ) +
-#   theme(
-#     legend.position = "right",
-#     axis.title.x = element_text(size = 14),
-#     axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1),
-#     axis.text.y=element_blank(),  #remove y axis labels
-#     axis.ticks.y=element_blank()  #remove y axis ticks
-#   )
-# 
-# # Outcome 1% missingness 50%
-# outcome1_missingness50 <- ggplot(simulation_parameters_long %>%
-#                                    filter(Measure == "Brier Score",
-#                                           Prevalence == "1%",
-#                                           Missingness == "50%"),
-#                                  aes(x = AVG, y = Method, colour = Method)) +
-#   geom_point(size = 3) +
-#   geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.8) +
-#   geom_point(data = combined_df %>%
-#                filter(Parameter == "Outcome prevalence 1% and Missingness 50%"),
-#              aes(x = Brier, y = Method),
-#              shape = 4, position = position_jitter(width = 0.0001), alpha = 0.5) +
-#   labs(
-#     y = NULL,
-#     x = NULL,
-#     colour = "Missing Data Method\n(Mean, 95% CI)",
-#     #caption = "Brier score ranges between 0 (perfect accuracy) and 1 (perfect inaccuracy). This x scale runs from 0 to 0.15."
-#   ) +
-#   theme_minimal() +
-#   scale_x_continuous(limits = c(0, 0.15), breaks = seq(0, 0.15, by = 0.05)) +  # Customize x-axis scale
-#   scale_colour_manual(
-#     values = c(
-#       "Validation data, no missingness" = "grey",
-#       "Complete Case Analysis" = "blue",
-#       "Mean Imputation" = "red",
-#       "Multiple Imputation with Outcome" = "green",
-#       "Multiple Imputation without Outcome" = "purple"
-#     )
-#   ) +
-#   theme(
-#     legend.position = "right",
-#     axis.title.x = element_text(size = 14),
-#     axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1),
-#     axis.text.y=element_blank(),  #remove y axis labels
-#     axis.ticks.y=element_blank()  #remove y axis ticks
-#   )
-# 
-# # Outcome 1% Missingness 75%
-# 
-# outcome1_missingness75 <- ggplot(simulation_parameters_long %>%
-#                                    filter(Measure == "Brier Score",
-#                                           Prevalence == "1%",
-#                                           Missingness == "75%"),
-#                                  aes(x = AVG, y = Method, colour = Method)) +
-#   geom_point(size = 3) +
-#   geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.8) +
-#   geom_point(data = combined_df %>%
-#                filter(Parameter == "Outcome prevalence 1% and Missingness 75%"),
-#              aes(x = Brier, y = Method),
-#              shape = 4, position = position_jitter(width = 0.0001), alpha = 0.5) +
-#   labs(
-#     y = NULL,
-#     x = NULL,
-#     colour = "Missing Data Method\n(Mean, 95% CI)",
-#     #caption = "Brier score ranges between 0 (perfect accuracy) and 1 (perfect inaccuracy). This x scale runs from 0 to 0.15."
-#   ) +
-#   theme_minimal() +
-#   scale_x_continuous(limits = c(0, 0.15), breaks = seq(0, 0.15, by = 0.05)) +  # Customize x-axis scale
-#   scale_colour_manual(
-#     values = c(
-#       "Validation data, no missingness" = "grey",
-#       "Complete Case Analysis" = "blue",
-#       "Mean Imputation" = "red",
-#       "Multiple Imputation with Outcome" = "green",
-#       "Multiple Imputation without Outcome" = "purple"
-#     )
-#   ) +
-#   theme(
-#     legend.position = "right",
-#     axis.title.x = element_text(size = 14),
-#     axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1),
-#     axis.text.y=element_blank(),  #remove y axis labels
-#     axis.ticks.y=element_blank()  #remove y axis ticks
-#   )
-# 
-# 
-# ## Outcome 5%, Missingness 25% 
-# outcome5_missingness25 <- ggplot(simulation_parameters_long %>%
-#                                    filter(Measure == "Brier Score",
-#                                           Prevalence == "5%",
-#                                           Missingness == "25%"),
-#                                  aes(x = AVG, y = Method, colour = Method)) +
-#   geom_point(size = 3) +
-#   geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.8) +
-#   geom_point(data = combined_df %>%
-#                filter(Parameter == "Outcome prevalence 5% and Missingness 25%"),
-#              aes(x = Brier, y = Method),
-#              shape = 4, position = position_jitter(width = 0.0001), alpha = 0.5) +
-#   labs(
-#     y = NULL,
-#     x = NULL,
-#     colour = "Missing Data Method\n(Mean, 95% CI)",
-#     #caption = "Brier score ranges between 0 (perfect accuracy) and 1 (perfect inaccuracy). This x scale runs from 0 to 0.15."
-#   ) +
-#   theme_minimal() +
-#   scale_x_continuous(limits = c(0, 0.15), breaks = seq(0, 0.15, by = 0.05)) +  # Customize x-axis scale
-#   scale_colour_manual(
-#     values = c(
-#       "Validation data, no missingness" = "grey",
-#       "Complete Case Analysis" = "blue",
-#       "Mean Imputation" = "red",
-#       "Multiple Imputation with Outcome" = "green",
-#       "Multiple Imputation without Outcome" = "purple"
-#     )
-#   ) +
-#   theme(
-#     legend.position = "right",
-#     axis.title.x = element_text(size = 14),
-#     axis.text.x =element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1),
-#     axis.text.y=element_blank(),  #remove y axis labels
-#     axis.ticks.y=element_blank()  #remove y axis ticks
-#   )
-# 
-# # Outcome 5% missingness 50%
-# outcome5_missingness50 <- ggplot(simulation_parameters_long %>%
-#                                    filter(Measure == "Brier Score",
-#                                           Prevalence == "5%",
-#                                           Missingness == "50%"),
-#                                  aes(x = AVG, y = Method, colour = Method)) +
-#   geom_point(size = 3) +
-#   geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.8) +
-#   geom_point(data = combined_df %>%
-#                filter(Parameter == "Outcome prevalence 5% and Missingness 50%"),
-#              aes(x = Brier, y = Method),
-#              shape = 4, position = position_jitter(width = 0.0001), alpha = 0.5) +
-#   labs(
-#     y = NULL,
-#     x = NULL,
-#     colour = "Missing Data Method\n(Mean, 95% CI)",
-#     #caption = "Brier score ranges between 0 (perfect accuracy) and 1 (perfect inaccuracy). This x scale runs from 0 to 0.15."
-#   ) +
-#   theme_minimal() +
-#   scale_x_continuous(limits = c(0, 0.15), breaks = seq(0, 0.15, by = 0.05)) +  # Customize x-axis scale
-#   scale_colour_manual(
-#     values = c(
-#       "Validation data, no missingness" = "grey",
-#       "Complete Case Analysis" = "blue",
-#       "Mean Imputation" = "red",
-#       "Multiple Imputation with Outcome" = "green",
-#       "Multiple Imputation without Outcome" = "purple"
-#     )
-#   ) +
-#   theme(
-#     legend.position = "right",
-#     axis.title.x = element_text(size = 14),
-#     axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1),
-#     axis.text.y=element_blank(),  #remove y axis labels
-#     axis.ticks.y=element_blank()  #remove y axis ticks
-#   )
-# 
-# # Outcome 5% Missingness 75%
-# outcome5_missingness75 <- ggplot(simulation_parameters_long %>%
-#                                    filter(Measure == "Brier Score",
-#                                           Prevalence == "5%",
-#                                           Missingness == "75%"),
-#                                  aes(x = AVG, y = Method, colour = Method)) +
-#   geom_point(size = 3) +
-#   geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.8) +
-#   geom_point(data = combined_df %>%
-#                filter(Parameter == "Outcome prevalence 5% and Missingness 75%"),
-#              aes(x = Brier, y = Method),
-#              shape = 4, position = position_jitter(width = 0.0001), alpha = 0.5) +
-#   labs(
-#     y = NULL,
-#     x = NULL,
-#     colour = "Missing Data Method\n(Mean, 95% CI)",
-#     #caption = "Brier score ranges between 0 (perfect accuracy) and 1 (perfect inaccuracy). This x scale runs from 0 to 0.15."
-#   ) +
-#   theme_minimal() +
-#   scale_x_continuous(limits = c(0, 0.15), breaks = seq(0, 0.15, by = 0.05)) +  # Customize x-axis scale
-#   scale_colour_manual(
-#     values = c(
-#       "Validation data, no missingness" = "grey",
-#       "Complete Case Analysis" = "blue",
-#       "Mean Imputation" = "red",
-#       "Multiple Imputation with Outcome" = "green",
-#       "Multiple Imputation without Outcome" = "purple"
-#     )
-#   ) +
-#   theme(
-#     legend.position = "right",
-#     axis.title.x = element_text(size = 14),
-#     axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1),
-#     axis.text.y=element_blank(),  #remove y axis labels
-#     axis.ticks.y=element_blank()  #remove y axis ticks
-#   )
-# 
-# 
-# outcome10_missingness25 <- ggplot(simulation_parameters_long %>%
-#                                    filter(Measure == "Brier Score",
-#                                           Prevalence == "10%",
-#                                           Missingness == "25%"),
-#                                  aes(x = AVG, y = Method, colour = Method)) +
-#   geom_point(size = 3) +
-#   geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.8) +
-#   geom_point(data = combined_df %>%
-#                filter(Parameter == "Outcome prevalence 10% and Missingness 25%"),
-#              aes(x = Brier, y = Method),
-#              shape = 4, position = position_jitter(width = 0.0001), alpha = 0.5) +
-#   labs(
-#     y = NULL,
-#     x = NULL,
-#     colour = "Missing Data Method\n(Mean, 95% CI)",
-#     #caption = "Brier score ranges between 0 (perfect accuracy) and 1 (perfect inaccuracy). This x scale runs from 0 to 0.15."
-#   ) +
-#   theme_minimal() +
-#   scale_x_continuous(limits = c(0, 0.15), breaks = seq(0, 0.15, by = 0.05)) +  # Customize x-axis scale
-#   scale_colour_manual(
-#     values = c(
-#       "Validation data, no missingness" = "grey",
-#       "Complete Case Analysis" = "blue",
-#       "Mean Imputation" = "red",
-#       "Multiple Imputation with Outcome" = "green",
-#       "Multiple Imputation without Outcome" = "purple"
-#     )
-#   ) +
-#   theme(
-#     legend.position = "right",
-#     axis.title.x = element_text(size = 14),
-#     axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1),
-#     axis.text.y=element_blank(),  #remove y axis labels
-#     axis.ticks.y=element_blank()  #remove y axis ticks
-#   )
-# 
-# # Outcome 10% missingness 50%
-# outcome10_missingness50 <- ggplot(simulation_parameters_long %>%
-#                                    filter(Measure == "Brier Score",
-#                                           Prevalence == "10%",
-#                                           Missingness == "50%"),
-#                                  aes(x = AVG, y = Method, colour = Method)) +
-#   geom_point(size = 3) +
-#   geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.8) +
-#   geom_point(data = combined_df %>%
-#                filter(Parameter == "Outcome prevalence 10% and Missingness 50%"),
-#              aes(x = Brier, y = Method),
-#              shape = 4, position = position_jitter(width = 0.0001), alpha = 0.5) +
-#   labs(
-#     y = NULL,
-#     x = NULL,
-#     colour = "Missing Data Method\n(Mean, 95% CI)",
-#     #caption = "Brier score ranges between 0 (perfect accuracy) and 1 (perfect inaccuracy). This x scale runs from 0 to 0.15."
-#   ) +
-#   theme_minimal() +
-#   scale_x_continuous(limits = c(0, 0.15), breaks = seq(0, 0.15, by = 0.05)) +  # Customize x-axis scale
-#   scale_colour_manual(
-#     values = c(
-#       "Validation data, no missingness" = "grey",
-#       "Complete Case Analysis" = "blue",
-#       "Mean Imputation" = "red",
-#       "Multiple Imputation with Outcome" = "green",
-#       "Multiple Imputation without Outcome" = "purple"
-#     )
-#   ) +
-#   theme(
-#     legend.position = "right",
-#     axis.title.x = element_text(size = 14),
-#     axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1),
-#     axis.text.y=element_blank(),  #remove y axis labels
-#     axis.ticks.y=element_blank()  #remove y axis ticks
-#   )
-# 
-# # Outcome 10% Missingness 75%
-# outcome10_missingness75 <- ggplot(simulation_parameters_long %>%
-#                                    filter(Measure == "Brier Score",
-#                                           Prevalence == "10%",
-#                                           Missingness == "75%"),
-#                                  aes(x = AVG, y = Method, colour = Method)) +
-#   geom_point(size = 3) +
-#   geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.8) +
-#   geom_point(data = combined_df %>%
-#                filter(Parameter == "Outcome prevalence 10% and Missingness 75%"),
-#              aes(x = Brier, y = Method),
-#              shape = 4, position = position_jitter(width = 0.0001), alpha = 0.5) +
-#   labs(
-#     y = NULL,
-#     x = NULL,
-#     colour = "Missing Data Method\n(Mean, 95% CI)",
-#     #caption = "Brier score ranges between 0 (perfect accuracy) and 1 (perfect inaccuracy). This x scale runs from 0 to 0.15."
-#   ) +
-#   theme_minimal() +
-#   scale_x_continuous(limits = c(0, 0.15), breaks = seq(0, 0.15, by = 0.05)) +  # Customize x-axis scale
-#   scale_colour_manual(
-#     values = c(
-#       "Validation data, no missingness" = "grey",
-#       "Complete Case Analysis" = "blue",
-#       "Mean Imputation" = "red",
-#       "Multiple Imputation with Outcome" = "green",
-#       "Multiple Imputation without Outcome" = "purple"
-#     )
-#   ) +
-#   theme(
-#     legend.position = "right",
-#     axis.title.x = element_text(size = 14),
-#     axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1),
-#     axis.text.y=element_blank(),  #remove y axis labels
-#     axis.ticks.y=element_blank()  #remove y axis ticks
-#   )
-
+load("MCAR_500_Combined_Long_26Nov2024.Rdata")
+load("MCAR_500_Combined_26Nov2024.Rdata")
 
 
 ### Graph Loop ###
@@ -611,6 +226,40 @@ for (i in seq_along(plot_params)) {
 }
 
 ###############################################################################
+## Scaled Brier 
+########################################
+## Set parameters for the plot for Brier
+plot_params <- list(
+  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001)
+)
+
+## Generate and save plots
+brierscaled_plots <- list()
+for (i in seq_along(plot_params)) {
+  params <- plot_params[[i]]
+  plot <- plot_fnc(
+    df = simulation_parameters_long,
+    measure = "Brier Score Scaled",
+    combinedmeasure = "Brier_scaled",
+    parameter = params$parameter,
+    x_scale_limits = params$x_limits,
+    x_scale_breaks = params$x_breaks,
+    width = params$width
+  )
+  brierscaled_plots[[i]] <- plot
+}
+
+
+
+###############################################################################
 ## RMSE 
 ########################################
 ## Set parameters for the plot for RMSE
@@ -762,52 +411,130 @@ auc_patchwork <- label_blank + label_blank + label_blank +label_top + label_blan
   ## 5th column 
   auc_plots[3] + auc_plots[6] + auc_plots[9] +
   plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6))
+              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
+   plot_annotation(
+    title = 'Discrimination (AUC) at n=500 under MCAR',
+    subtitle = 'Higher scores indicate better discrimination with 0.5 indicating the model is no better than chance'
+  #  caption = 'Disclaimer: None of these plots are insightful'
+  )
 
 
 ## Bias
-bias_patchwork <- label_blank + label_25 + label_50 + label_75 + 
+bias_patchwork <- label_blank + label_blank + label_blank +label_top + label_blank +  
+  ## 2nd row
+  label_blank + label_blank + label_25 + label_50 + label_75 +
+  ## 1st column
+  label_blank + label_left + label_blank +
+  ## 2nd column
   label_1 + label_5 + label_10 +
+  ## 3rd column 
   bias_plots[1] + bias_plots[4] + bias_plots[7] +
-  bias_plots[2] + bias_plots[5] + bias_plots[8] +  
-  bias_plots[3] + bias_plots[6] + bias_plots[9] +  
+  ## 4th column 
+  bias_plots[2] + bias_plots[5] + bias_plots[8] +
+  ## 5th column 
+  bias_plots[3] + bias_plots[6] + bias_plots[9] +
   plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(2,10,10,10), heights=c(1,1,6,6,6))
+              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
+  plot_annotation(
+    title = 'Bias at n=500 under MCAR',
+    subtitle = 'Where 0 indicates no bias and the model estimates are on average equal to the true values'
+  )
+
 
 
 ## Calibration in the Large 
-citl_patchwork <-  label_blank + label_25 + label_50 + label_75 + 
+citl_patchwork <-  label_blank + label_blank + label_blank +label_top + label_blank +  
+  ## 2nd row
+  label_blank + label_blank + label_25 + label_50 + label_75 +
+  ## 1st column
+  label_blank + label_left + label_blank +
+  ## 2nd column
   label_1 + label_5 + label_10 +
-  citl_plots[1] + citl_plots[4] + citl_plots[7] +
-  citl_plots[2] + citl_plots[5] + citl_plots[8] +  
-  citl_plots[3] + citl_plots[6] + citl_plots[9] +  
-  plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(2,10,10,10), heights=c(1,6,6,6))
+  ## 3rd column 
+    citl_plots[1] + citl_plots[4] + citl_plots[7] +
+      ## 4th column 
+      citl_plots[2] + citl_plots[5] + citl_plots[8] +
+      ## 5th column 
+      citl_plots[3] + citl_plots[6] + citl_plots[9] +
+      plot_layout(design=design, guides = "collect", axes = "collect_x",
+                  widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
+      plot_annotation(
+        title = 'Calibration in the Large at n=500 under MCAR',
+        subtitle = 'Where 0 indicates perfect calibration, positive values indicate risk underestimation and negative values indicate overestimation'
+        #  caption = 'Disclaimer: None of these plots are insightful'
+      )
+
+
 
 ## Calibration Slope
-calslope_patchwork <-  label_blank + label_25 + label_50 + label_75 + 
+calslope_patchwork <-  label_blank + label_blank + label_blank +label_top + label_blank +  
+  ## 2nd row
+  label_blank + label_blank + label_25 + label_50 + label_75 +
+  ## 1st column
+  label_blank + label_left + label_blank +
+  ## 2nd column
   label_1 + label_5 + label_10 +
   calslope_plots[1] + calslope_plots[4] + calslope_plots[7] +
   calslope_plots[2] + calslope_plots[5] + calslope_plots[8] +  
   calslope_plots[3] + calslope_plots[6] + calslope_plots[9] +  
   plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(2,10,10,10), heights=c(1,6,6,6))
-
+              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
+  plot_annotation(
+    title = 'Calibration Slope at n=500 under MCAR',
+    subtitle = 'Where 1 indicates perfect calibration, >1 indicates underfitting and <1 indicate overfitting'
+  )
 
 ## Brier
-brier_patchwork <- label_blank + label_25 + label_50 + label_75 + 
+brier_patchwork <- label_blank + label_blank + label_blank +label_top + label_blank +  
+  ## 2nd row
+  label_blank + label_blank + label_25 + label_50 + label_75 +
+  ## 1st column
+  label_blank + label_left + label_blank +
+  ## 2nd column
   label_1 + label_5 + label_10 +
   brier_plots[1] + brier_plots[4] + brier_plots[7] +
   brier_plots[2] + brier_plots[5] + brier_plots[8] +  
   brier_plots[3] + brier_plots[6] + brier_plots[9] +  
   plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(2,10,10,10), heights=c(1,6,6,6))
+              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
+  plot_annotation(
+    title = 'Calibration Slope at n=500 under MCAR',
+    subtitle = 'Where 0 indicates perfect calibration, positive values indicate risk underestimation and negative values indicate overestimation'
+  )
+
+## Brier
+brierscaled_patchwork <- label_blank + label_blank + label_blank +label_top + label_blank +  
+  ## 2nd row
+  label_blank + label_blank + label_25 + label_50 + label_75 +
+  ## 1st column
+  label_blank + label_left + label_blank +
+  ## 2nd column
+  label_1 + label_5 + label_10 +
+  brierscaled_plots[1] + brierscaled_plots[4] + brierscaled_plots[7] +
+  brierscaled_plots[2] + brierscaled_plots[5] + brierscaled_plots[8] +  
+  brierscaled_plots[3] + brierscaled_plots[6] + brierscaled_plots[9] +  
+  plot_layout(design=design, guides = "collect", axes = "collect_x",
+              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
+  plot_annotation(
+    title = 'Scaled Brier Score at n=500 under MCAR',
+    subtitle = 'Where 0 indicates perfect calibration, positive values indicate risk underestimation and negative values indicate overestimation'
+  )
+
 
 ## RMSE 
-rmse_patchwork <- label_blank + label_25 + label_50 + label_75 + 
+rmse_patchwork <-label_blank + label_blank + label_blank +label_top + label_blank +  
+  ## 2nd row
+  label_blank + label_blank + label_25 + label_50 + label_75 +
+  ## 1st column
+  label_blank + label_left + label_blank +
+  ## 2nd column
   label_1 + label_5 + label_10 +
   rmse_plots[1] + rmse_plots[4] + rmse_plots[7] +
   rmse_plots[2] + rmse_plots[5] + rmse_plots[8] +  
   rmse_plots[3] + rmse_plots[6] + rmse_plots[9] +  
   plot_layout(design=design, guides = "collect", axes = "collect_x",
-              widths=c(2,10,10,10), heights=c(1,6,6,6))
+              widths=c(1, 2,10,10,10), heights=c(1,1, 6,6,6)) + 
+  plot_annotation(
+    title = 'Root Mean Square Error at n=500 under MCAR',
+    subtitle = 'Where'
+  )

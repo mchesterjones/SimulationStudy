@@ -552,7 +552,13 @@ predictive.performance.function <- function(Y, Predicted_Risks) {
   Brier_baseline <- mean((p_baseline - Y)^2)
   
   # Scale the Brier score
-  Brier_scaled <- 1 - (Brier / Brier_baseline)
+  if (mean(Y) == 0 || mean(Y) == 1) {
+    Brier_scaled <- NA # Or another placeholder to indicate undefined
+  } else {
+    Brier_scaled <- 1 - (Brier / Brier_baseline)
+  }
+
+
   
   ## Calibration intercept and Slope 
   ####-------------------------------------------------------------------------------
