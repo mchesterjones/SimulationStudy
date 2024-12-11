@@ -57,7 +57,8 @@ verbatimTextOutput("summary"),
 # ## 2. Specify behaviour of the app by defining a server
 ## This is a type of reactive programming (recipe vs sandwich)
 server <- function(input,output, session) {
-
+  output$plot <- renderPlot({
+    
 #  Select the appropriate dataset based on input parameters
   if (input$missingness_mech == "MCAR") {
     simulation_parameters_long <- MCAR_Long
@@ -72,7 +73,7 @@ server <- function(input,output, session) {
     
   }
   
-            output$plot <- renderPlot({
+            
               if (input$measure == "AUC") {
                 measure_col <- "AUC"
                 x_limits <- c(0, 1)
@@ -146,80 +147,11 @@ server <- function(input,output, session) {
   
 }
   
-  
-#   output$plot_auc <- renderPlot({
-#     ggplot(simulation_parameters_long %>%
-#              filter(Measure=="AUC" & samplesize == input$samplesize),
-#             aes(x = AVG, y = Method, colour = Method)) +
-#        geom_point(size = 3) +
-#     geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.8 ) +
-#     geom_point(data = (combined_df  %>% filter(samplesize == input$samplesize)),
-#                aes(x = AUC, y = Method),
-#                shape =4, position = position_jitter(width = 0.05), alpha = 0.5) +
-#     labs(y = NULL,
-#          x = NULL,
-#          colour = "Missing Data Method\n(Mean, 95% CI)") +
-#     theme_minimal() +
-#     facet_grid( Prevalence~Missingness , scales = "fixed", switch="both") +
-#     scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.25)) +
-#     ## Add Colour Scale
-#     scale_colour_manual(values = c("Validation data, no missingness" = "grey",
-#                                    "Complete Case Analysis" = "blue",
-#                                    "Mean Imputation" = "red",
-#                                    "Multiple Imputation with Outcome" = "green",
-#                                    "Multiple Imputation without Outcome" = "purple")) +
-#     labs(caption = "The discrimination was calculated as the Area Under the Curve (AUC). Higher scores indicate better discrimination with 0.5 indicating the model is no better than chance.") +
-#     theme(legend.position = "right",
-#           strip.text = element_text(size = 14),  # Customize strip text size
-#           strip.placement = "outside",  # Place strip labels outside the plot area
-#           strip.background = element_blank(),  # Remove strip background
-#           axis.title.x = element_text(size = 14),
-#           axis.title.y = element_text(size = 14),
-#           axis.text.x =  element_text(size = 14, angle = 90, hjust = 1),
-#           axis.text.y = element_blank(),  # Remove y-axis text
-#           axis.ticks.y = element_blank())  # Remove y-axis tick
-# 
-#     
-# })
-#   
-#   output$plot2 <- renderPlot({
-#     ggplot(simulation_parameters_long %>%
-#              filter(Measure=="Brier Score Scaled" & samplesize == input$samplesize),
-#            aes(x=AVG, y=Method, colour=Method)) +
-#       geom_point(size=3) +
-#       geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.8 ) +
-#       geom_point(data = (combined_df %>% filter(samplesize == input$samplesize)), aes(x = Brier_scaled, y = Method),
-#                  shape =4, position = position_jitter(width = 0.01), alpha = 0.5) +
-#       labs(y = NULL,
-#            x = NULL,
-#            colour = "Missing Data Method\n(Mean, 95% CI)") +
-#       theme_minimal() +
-#       facet_grid( Prevalence~Missingness , scales = "fixed", switch="both") +
-#       ## Add X scale
-#       scale_x_continuous(limits = c(-0.1, 0.6), breaks = seq(-0.1, 0.6, by = 0.1)) +
-#       ## Add Colour Scale
-#       scale_colour_manual(values = c("Validation data, no missingness" = "grey",
-#                                      "Complete Case Analysis" = "blue",
-#                                      "Mean Imputation" = "red",
-#                                      "Multiple Imputation with Outcome" = "green",
-#                                      "Multiple Imputation without Outcome" = "purple")) +
-#       labs(caption = "Brier score Scaled. The scale scale runs from 0 to 0.15.") +
-#       theme(legend.position = "right",
-#             strip.text = element_text(size = 14),  # Customize strip text size
-#             strip.placement = "outside",  # Place strip labels outside the plot area
-#             strip.background = element_blank(),  # Remove strip background
-#             axis.title.x = element_text(size = 12),
-#             axis.title.y = element_text(size = 14),
-#             axis.text.x =  element_text(size = 14, angle = 90, hjust = 1),
-#             axis.text.y  = element_blank(),  # Remove y-axis text
-#             axis.ticks.y = element_blank())  # Remove y-axis tick
-# 
-# 
-# })
-#   
-#   
-#   
-#   
-# }
 # Executes and contructs a Shiny application from UI and server
 shinyApp(ui,server)
+
+
+# library(rsconnect)
+rsconnect::deployApp(appName = "Graph_App", 
+                     appDir = "C:/Users/maecj/OneDrive - Nexus365/A DPhil/Simulation studies/Programs/Study 1/SimulationStudy1_11Jun2024/SimulationStudy/App/Graph_App.R")
+# rsconnect::deployApp('/Graph_App')
