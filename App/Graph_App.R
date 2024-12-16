@@ -152,6 +152,7 @@ shinyApp(ui,server)
 
 
 # library(rsconnect)
-rsconnect::deployApp(appName = "Graph_App", 
+
+#rsconnect::deployApp(appName = "Graph_App", 
                      appDir = "C:/Users/maecj/OneDrive - Nexus365/A DPhil/Simulation studies/Programs/Study 1/SimulationStudy1_11Jun2024/SimulationStudy/App/Graph_App.R")
 # rsconnect::deployApp('/Graph_App')

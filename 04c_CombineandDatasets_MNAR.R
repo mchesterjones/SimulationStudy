@@ -288,9 +288,9 @@ simulation_parameters_long <- simulation_parameters_long %>%
 # simulation_parameters_long$samplesize <- "N=500" 
 # combined_df$samplesize <- "N=500" 
 # 
-# simulation_parameters_long$samplesize <- "N=10,000" 
-# combined_df$samplesize <- "N=10,000" 
-# 
+simulation_parameters_long$samplesize <- "N=10,000"
+combined_df$samplesize <- "N=10,000"
+
 simulation_parameters_long$samplesize <- "N=100,000"
 combined_df$samplesize <- "N=100,000"
 
@@ -364,10 +364,15 @@ setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Progr
  sim_param_long_100000 <- simulation_parameters_long
  sim_combined_100000 <- combined_df
  
- load("MNAR_10000_Combined.Rdata")
- load("MNAR_10000_Combined_Long.Rdata")
- sim_param_long_10000 <- simulation_parameters_long
+ load("MNAR_10000_Combined_26Nov2024.Rdata")
+ load("MNAR_10000_Combined_Long_26Nov2024.Rdata")
+ simulation_parameters_long$samplesize <- "N=10,000"
+ combined_df$samplesize <- "N=10,000"
+ 
+ sim_param_long_10000 <- sim_param_long_10000 %>%
+   select(-scale_group)
  sim_combined_10000 <- combined_df
+ 
  
  load("MNAR_500_Combined.Rdata")
  load("MNAR_500_Combined_Long.Rdata")

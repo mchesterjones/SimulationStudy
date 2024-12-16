@@ -23,27 +23,27 @@ library(purrr)
 ## MCAR 500 Datasets 
 ################################################################################
 # ## Set working directory
-setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
-#setwd("/Users/maechester-jones/OneDrive - Nexus365/A DPhil/Simulation studies/Programs/Study 1/SimulationStudy1_11Jun2024/SimulationStudy/Data")
-## Load required datasets
-load("MCAR_Nval_500_Yprev_0.01_Rprev_0.25_03Dec2024.Rdata")
-   simresults_Yprev1Rprev25 <- simulation_results
-load("MCAR_Nval_500_Yprev_0.01_Rprev_0.5_03Dec2024.Rdata")
-   simresults_Yprev1Rprev50 <- simulation_results
-load("MCAR_Nval_500_Yprev_0.01_Rprev_0.75_03Dec2024.Rdata")
-   simresults_Yprev1Rprev75 <- simulation_results
-load("MCAR_Nval_500_Yprev_0.05_Rprev_0.25_03Dec2024.Rdata")
-   simresults_Yprev5Rprev25 <- simulation_results
-load("MCAR_Nval_500_Yprev_0.05_Rprev_0.5_03Dec2024.Rdata")
-   simresults_Yprev5Rprev50 <- simulation_results
-load("MCAR_Nval_500_Yprev_0.05_Rprev_0.75_03Dec2024.Rdata")
-   simresults_Yprev5Rprev75 <- simulation_results
-load("MCAR_Nval_500_Yprev_0.1_Rprev_0.25_03Dec2024.Rdata")
-   simresults_Yprev10Rprev25 <- simulation_results
-load("MCAR_Nval_500_Yprev_0.1_Rprev_0.5_03Dec2024.Rdata")
-   simresults_Yprev10Rprev50 <- simulation_results
-load("MCAR_Nval_500_Yprev_0.1_Rprev_0.75_03Dec2024.Rdata")
-   simresults_Yprev10Rprev75 <- simulation_results
+# setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
+# #setwd("/Users/maechester-jones/OneDrive - Nexus365/A DPhil/Simulation studies/Programs/Study 1/SimulationStudy1_11Jun2024/SimulationStudy/Data")
+# ## Load required datasets
+# load("MCAR_Nval_500_Yprev_0.01_Rprev_0.25_03Dec2024.Rdata")
+#    simresults_Yprev1Rprev25 <- simulation_results
+# load("MCAR_Nval_500_Yprev_0.01_Rprev_0.5_03Dec2024.Rdata")
+#    simresults_Yprev1Rprev50 <- simulation_results
+# load("MCAR_Nval_500_Yprev_0.01_Rprev_0.75_03Dec2024.Rdata")
+#    simresults_Yprev1Rprev75 <- simulation_results
+# load("MCAR_Nval_500_Yprev_0.05_Rprev_0.25_03Dec2024.Rdata")
+#    simresults_Yprev5Rprev25 <- simulation_results
+# load("MCAR_Nval_500_Yprev_0.05_Rprev_0.5_03Dec2024.Rdata")
+#    simresults_Yprev5Rprev50 <- simulation_results
+# load("MCAR_Nval_500_Yprev_0.05_Rprev_0.75_03Dec2024.Rdata")
+#    simresults_Yprev5Rprev75 <- simulation_results
+# load("MCAR_Nval_500_Yprev_0.1_Rprev_0.25_03Dec2024.Rdata")
+#    simresults_Yprev10Rprev25 <- simulation_results
+# load("MCAR_Nval_500_Yprev_0.1_Rprev_0.5_03Dec2024.Rdata")
+#    simresults_Yprev10Rprev50 <- simulation_results
+# load("MCAR_Nval_500_Yprev_0.1_Rprev_0.75_03Dec2024.Rdata")
+#    simresults_Yprev10Rprev75 <- simulation_results
 # 
 # ################################################################################
 #      ## MCAR 10000 Datasets 
@@ -398,8 +398,16 @@ simulation_parameters_long <- simulation_parameters_long %>%
       grepl("25%", Parameter) ~ "25%",
       grepl("50%", Parameter) ~ "50%",
       grepl("75%", Parameter) ~ "75%"
-    ), levels = c("25%", "50%", "75%"))
-  )
+    ), levels = c("25%", "50%", "75%")),
+    Method = factor(Method, 
+       levels = c("Validation data, no missingness", 
+                  "Complete Case Analysis", 
+                  "Mean Imputation", 
+                  "Multiple Imputation with Outcome",
+                  "Multiple Imputation without Outcome")),
+    samplesize =factor(samplesize,
+                       levels=c("N=500", "N=10,000", "N=100,000")))
+  
 
 combined_df <- combined_df %>%
   mutate(
@@ -412,10 +420,15 @@ combined_df <- combined_df %>%
       grepl("25%", Parameter) ~ "25%",
       grepl("50%", Parameter) ~ "50%",
       grepl("75%", Parameter) ~ "75%"
-    ), levels = c("25%", "50%", "75%"))
-  )
-
-
+    ), levels = c("25%", "50%", "75%")),
+    Method = factor(Method, 
+                    levels = c("Validation data, no missingness", 
+                               "Complete Case Analysis", 
+                               "Mean Imputation", 
+                               "Multiple Imputation with Outcome",
+                               "Multiple Imputation without Outcome")),
+    samplesize =factor(samplesize,
+                       levels=c("N=500", "N=10,000", "N=100,000")))
 # Store all sample sizes
 save(combined_df,file = "MCAR_Combined.Rdata")
 save(simulation_parameters_long,file = "MCAR_Combined_Long.Rdata")
