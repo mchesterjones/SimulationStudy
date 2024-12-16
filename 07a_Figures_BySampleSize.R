@@ -125,23 +125,23 @@ auc_params <- list(
 ### Bias
 ####################
 bias_params <- list(
-  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(-0.02, 0.003), x_breaks = seq(-0.02, 0.003, by = 0.01), width=0.0001, 
+  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(-0.02, 0.03), x_breaks = seq(-0.02, 0.03, by = 0.01), width=0.0001, 
        intercept =no_missing_long$AVG[no_missing_long$Metric == "bias"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
-  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(-0.02, 0.003), x_breaks = seq(-0.02, 0.003, by = 0.01), width=0.0001, 
+  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(-0.02, 0.03), x_breaks = seq(-0.02, 0.03, by = 0.01), width=0.0001, 
        intercept =no_missing_long$AVG[no_missing_long$Metric == "bias"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
-  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(-0.02, 0.003), x_breaks = seq(-0.02, 0.003, by = 0.01), width=0.0001, 
+  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(-0.02, 0.03), x_breaks = seq(-0.02, 0.03, by = 0.01), width=0.0001, 
        intercept =no_missing_long$AVG[no_missing_long$Metric == "bias"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
-  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(-0.02, 0.003), x_breaks = seq(-0.02, 0.003, by = 0.01), width=0.0001, 
+  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(-0.02, 0.03), x_breaks = seq(-0.02, 0.03, by = 0.01), width=0.0001, 
        intercept =no_missing_long$AVG[no_missing_long$Metric == "bias"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
-  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(-0.02, 0.003), x_breaks = seq(-0.02, 0.003, by = 0.01), width=0.0001, 
+  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(-0.02, 0.03), x_breaks = seq(-0.02, 0.003, by = 0.01), width=0.0001, 
        intercept =no_missing_long$AVG[no_missing_long$Metric == "bias"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
-  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(-0.02, 0.003), x_breaks = seq(-0.02, 0.003, by = 0.01), width=0.0001,  
+  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(-0.02, 0.03), x_breaks = seq(-0.02, 0.03, by = 0.01), width=0.0001,  
        intercept =no_missing_long$AVG[no_missing_long$Metric == "bias"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
-  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(-0.02, 0.003), x_breaks = seq(-0.02, 0.003, by = 0.01), width=0.0001,  
+  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(-0.02, 0.03), x_breaks = seq(-0.02, 0.03, by = 0.01), width=0.0001,  
        intercept =no_missing_long$AVG[no_missing_long$Metric == "bias"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
-  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(-0.02, 0.003), x_breaks = seq(-0.02, 0.003, by = 0.01), width=0.0001, 
+  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(-0.02, 0.03), x_breaks = seq(-0.02, 0.03, by = 0.01), width=0.0001, 
        intercept =no_missing_long$AVG[no_missing_long$Metric == "bias"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
-  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(-0.02, 0.003), x_breaks = seq(-0.02, 0.003, by = 0.01), width=0.0001,  
+  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(-0.02, 0.03), x_breaks = seq(-0.02, 0.03, by = 0.01), width=0.0001,  
        intercept =no_missing_long$AVG[no_missing_long$Metric == "bias"& no_missing_long$df=="simresults_Yprev10Rprev75"]))
 
 ## Calibration in the large
@@ -171,11 +171,11 @@ citl_params <- list(
 ###########################
 calslope_params <- list(
   list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(0.7, 1.2), x_breaks = seq(0.7, 1.2, by = 0.1),width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
   list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(0.7, 1.2), x_breaks = seq(0.7, 1.2, by = 0.1),width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
   list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(0.7, 1.2), x_breaks = seq(0.7, 1.2, by = 0.1),width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
   list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(0.7, 1.2), x_breaks = seq(0.7, 1.2, by = 0.1),width=0.0001,
        intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
   list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(0.7, 1.2), x_breaks = seq(0.7, 1.2, by = 0.1),width=0.0001,
@@ -183,21 +183,21 @@ calslope_params <- list(
   list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(0.7, 1.2), x_breaks = seq(0.7, 1.2, by = 0.1),width=0.0001,
        intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
   list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(0.7, 1.2), x_breaks = seq(0.7, 1.2, by = 0.1),width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
   list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(0.7, 1.2), x_breaks = seq(0.7, 1.2, by = 0.1),width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
   list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(0.7, 1.2), x_breaks = seq(0.7, 1.2, by = 0.1), width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev1Rprev75"]))
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev10Rprev75"]))
 
 ## Scaled Brier
 ##########################
 brierscl_params <- list(
   list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05),width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
   list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05),width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
   list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05),width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
   list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05),width=0.0001,
        intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
   list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05),width=0.0001,
@@ -205,11 +205,11 @@ brierscl_params <- list(
   list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05),width=0.0001,
        intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
   list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05),width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
   list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05),width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
   list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(0, 0.15), x_breaks = seq(0, 0.15, by = 0.05), width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev1Rprev75"]))
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Brier_scaled"& no_missing_long$df=="simresults_Yprev10Rprev75"]))
 
 
 ## RMSE
@@ -228,11 +228,11 @@ rmse_params <- list(
   list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(0.002, 0.3), x_breaks = seq(0, 0.4, by = 0.1), width=0.0001,
         intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
   list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(0.002, 0.3), x_breaks = seq(0, 0.4, by = 0.1), width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
   list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(0.002, 0.3), x_breaks = seq(0, 0.4, by = 0.1), width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
   list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(0.002, 0.3), x_breaks = seq(0, 0.4, by = 0.1), width=0.0001,
-       intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev1Rprev75"]))
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev10Rprev75"]))
 
 
 
