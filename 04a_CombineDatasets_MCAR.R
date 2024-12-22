@@ -15,14 +15,14 @@ library(purrr)
 
 
 ################################################################################
-## Notes on Loading Datasets 
-## I load the datasets for each sample size and use the code to merge them rather 
+## Notes on Loading Datasets
+## I load the datasets for each sample size and use the code to merge them rather
 ## than automating this in a loop so it's a bit clunky
 
 ################################################################################
-## MCAR 500 Datasets 
+## MCAR 500 Datasets
 ################################################################################
-# ## Set working directory
+## Set working directory
 # setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
 # #setwd("/Users/maechester-jones/OneDrive - Nexus365/A DPhil/Simulation studies/Programs/Study 1/SimulationStudy1_11Jun2024/SimulationStudy/Data")
 # ## Load required datasets
@@ -44,31 +44,31 @@ library(purrr)
 #    simresults_Yprev10Rprev50 <- simulation_results
 # load("MCAR_Nval_500_Yprev_0.1_Rprev_0.75_03Dec2024.Rdata")
 #    simresults_Yprev10Rprev75 <- simulation_results
-# 
+
 # ################################################################################
 #      ## MCAR 10000 Datasets 
-# ################################################################################
-# # ## Set working directory
-#   setwd("H:\\SimulationStudyHDrive\\Data\\")
-#      ## Load required datasets
-# load("MCAR_Nval_10000_Yprev_0.01_Rprev_0.25_25Nov2024.Rdata")
-#      simresults_Yprev1Rprev25 <- simulation_results
-# load("MCAR_Nval_10000_Yprev_0.01_Rprev_0.5_25Nov2024.Rdata")
-#      simresults_Yprev1Rprev50 <- simulation_results
-# load("MCAR_Nval_10000_Yprev_0.01_Rprev_0.75_25Nov2024.Rdata")
-#      simresults_Yprev1Rprev75 <- simulation_results
-# load("MCAR_Nval_10000_Yprev_0.05_Rprev_0.25_25Nov2024.Rdata")
-#      simresults_Yprev5Rprev25 <- simulation_results
-# load("MCAR_Nval_10000_Yprev_0.05_Rprev_0.5_25Nov2024.Rdata")
-#      simresults_Yprev5Rprev50 <- simulation_results
-# load("MCAR_Nval_10000_Yprev_0.05_Rprev_0.75_25Nov2024.Rdata")
-#      simresults_Yprev5Rprev75 <- simulation_results
-# load("MCAR_Nval_10000_Yprev_0.1_Rprev_0.25_25Nov2024.Rdata")
-#      simresults_Yprev10Rprev25 <- simulation_results
-# load("MCAR_Nval_10000_Yprev_0.1_Rprev_0.5_25Nov2024.Rdata")
-#      simresults_Yprev10Rprev50 <- simulation_results
-# load("MCAR_Nval_10000_Yprev_0.1_Rprev_0.75_25Nov2024.Rdata")
-#      simresults_Yprev10Rprev75 <- simulation_results
+################################################################################
+# ## Set working directory
+  setwd("H:\\SimulationStudyHDrive\\Data\\")
+     ## Load required datasets
+load("MCAR_Nval_10000_Yprev_0.01_Rprev_0.25_25Nov2024.Rdata")
+     simresults_Yprev1Rprev25 <- simulation_results
+load("MCAR_Nval_10000_Yprev_0.01_Rprev_0.5_25Nov2024.Rdata")
+     simresults_Yprev1Rprev50 <- simulation_results
+load("MCAR_Nval_10000_Yprev_0.01_Rprev_0.75_25Nov2024.Rdata")
+     simresults_Yprev1Rprev75 <- simulation_results
+load("MCAR_Nval_10000_Yprev_0.05_Rprev_0.25_25Nov2024.Rdata")
+     simresults_Yprev5Rprev25 <- simulation_results
+load("MCAR_Nval_10000_Yprev_0.05_Rprev_0.5_25Nov2024.Rdata")
+     simresults_Yprev5Rprev50 <- simulation_results
+load("MCAR_Nval_10000_Yprev_0.05_Rprev_0.75_25Nov2024.Rdata")
+     simresults_Yprev5Rprev75 <- simulation_results
+load("MCAR_Nval_10000_Yprev_0.1_Rprev_0.25_25Nov2024.Rdata")
+     simresults_Yprev10Rprev25 <- simulation_results
+load("MCAR_Nval_10000_Yprev_0.1_Rprev_0.5_25Nov2024.Rdata")
+     simresults_Yprev10Rprev50 <- simulation_results
+load("MCAR_Nval_10000_Yprev_0.1_Rprev_0.75_25Nov2024.Rdata")
+     simresults_Yprev10Rprev75 <- simulation_results
 #      
 # ################################################################################
 #      ## MCAR 100000 Datasets 
@@ -289,10 +289,10 @@ simulation_parameters_long <- simulation_parameters_long %>%
 # # # Add Sample Size
 # simulation_parameters_long$samplesize <- "N=500"
 # combined_df$samplesize <- "N=500"
-# 
-# simulation_parameters_long$samplesize <- "N=10,000"
-# combined_df$samplesize <- "N=10,000"
-# # # 
+# # 
+simulation_parameters_long$samplesize <- "N=10,000"
+combined_df$samplesize <- "N=10,000"
+# #
 # simulation_parameters_long$samplesize <- "N=100,000"
 # combined_df$samplesize <- "N=100,000"
 
@@ -304,22 +304,22 @@ simulation_parameters_long <- simulation_parameters_long %>%
 #Save_File
 # Notes: We store back here rather than H drive
 # Notes: You have to manually select which one you want it saved as
-setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
-
-## Load datasets
-load("Nomissing_500_Combined_Long.Rdata")
-load("Nomissing_500_Combined.Rdata")
-
-
-## Combine datasets
-combined_df <- rbind(combined_df, no_missing_combined)
-
-simulation_parameters_long <- rbind(simulation_parameters_long, no_missing_long)
-
-
-# Store all values at each iteraiton
-save(combined_df,file = "MCAR_500_Combined.Rdata")
-save(simulation_parameters_long,file = "MCAR_500_Combined_Long.Rdata")
+# setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
+# 
+# ## Load datasets
+# load("Nomissing_500_Combined_Long.Rdata")
+# load("Nomissing_500_Combined.Rdata")
+# 
+# 
+# ## Combine datasets
+# combined_df <- rbind(combined_df, no_missing_combined)
+# 
+# simulation_parameters_long <- rbind(simulation_parameters_long, no_missing_long)
+# 
+# 
+# # Store all values at each iteraiton
+# save(combined_df,file = "MCAR_500_Combined.Rdata")
+# save(simulation_parameters_long,file = "MCAR_500_Combined_Long.Rdata")
 
 # 
 ##############################################################################
@@ -355,7 +355,7 @@ save(simulation_parameters_long,file = "MCAR_10000_Combined_Long.Rdata")
 # simulation_parameters_long <- rbind(simulation_parameters_long, no_missing_long)
 # 
 # 
-# # Store all values at each iteraiton
+# # Store all values at each iteration
 # save(combined_df,file = "MCAR_100000_Combined.Rdata")
 # save(simulation_parameters_long,file = "MCAR_100000_Combined_Long.Rdata")
 

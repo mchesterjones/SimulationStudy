@@ -19,12 +19,9 @@ setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Progr
 
 ## Load required datasets
 ########################
-load("MCAR_Combined_Long.Rdata")
-load("MCAR_Combined.Rdata")
+load("MNAR_Combined_Long.Rdata")
+load("MNAR_Combined.Rdata")
 
-########################
-load("MAR_Combined_Long.Rdata")
-load("MAR_Combined.Rdata")
 
 ### Graph Loop ###
 ##########################################################
@@ -35,7 +32,7 @@ plot_fnc <- function(df, measure, combinedmeasure, parameter, x_scale_limits, x_
            filter(Measure == measure,
                   Parameter == parameter),
          aes(x = AVG, y = samplesize, shape = Method)) +
-    geom_point(size = 2) +
+    geom_point(size = 1) +
     geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.4) +
     labs(
       y = NULL,
@@ -47,7 +44,7 @@ plot_fnc <- function(df, measure, combinedmeasure, parameter, x_scale_limits, x_
     scale_x_continuous(limits = x_scale_limits, breaks = x_scale_breaks) +
     theme_minimal() +
     theme(
-      legend.position = "right",
+      legend.position = "bottom",
       axis.title.x = element_text(size = 14),
       axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1),
       axis.text.y = element_blank(),
@@ -196,6 +193,8 @@ library(patchwork)
 
 ## Set labels
 ##########################################################
+
+
 label_blank <- ggplot() +
   theme_void() + # Remove axes and grid
   geom_text(aes(x = 0.5, y = 0.5, label = ""), size = 5, hjust = 0.5, vjust = 0.5)
@@ -341,18 +340,19 @@ for (measure_name in names(plot_storage)) {
     measure_plots <- plot_storage[[measure_name]]
     
     # Define the title and subtitle dynamically
-    title <- paste(measure_titles[[measure_name]][["title"]], " under MAR", sep = "")
+    title <- paste(measure_titles[[measure_name]][["title"]], " under MNAR", sep = "")
     subtitle <- measure_titles[[measure_name]][["subtitle"]]
     
     # Create the patchwork
     patchwork <- create_patchwork(measure_plots, sample_size, title)
     patchwork <- patchwork + plot_annotation(subtitle = subtitle)
+    patchwork <- patchwork & theme(legend.position = "bottom")
     
     # Store the patchwork
     patchwork_storage[[measure_name]][[sample_size]] <- patchwork
     
     # Save the patchwork as a PDF
-    output_file <- paste0("MAR Patchwork_", measure_name, ".pdf")
+    output_file <- paste0("MNAR Patchwork_", measure_name, ".pdf")
     
     # Save the patchwork as a PDF (you can adjust the width and height as needed)
     ggsave(output_file, plot = patchwork, device = "pdf", width = 14, height = 8)

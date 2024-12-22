@@ -23,27 +23,27 @@ library(purrr)
 ## MAR 500 Datasets 
 ################################################################################
 # ## Set working directory
-# setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
-# #setwd("/Users/maechester-jones/OneDrive - Nexus365/A DPhil/Simulation studies/Programs/Study 1/SimulationStudy1_11Jun2024/SimulationStudy/Data")
-# ## Load required datasets
-# load("MAR_Nval_500_Yprev_0.01_Rprev_0.25_03Dec2024.Rdata")
-# simresults_Yprev1Rprev25 <- simulation_results
-# load("MAR_Nval_500_Yprev_0.01_Rprev_0.5_03Dec2024.Rdata")
-# simresults_Yprev1Rprev50 <- simulation_results
-# load("MAR_Nval_500_Yprev_0.01_Rprev_0.75_03Dec2024.Rdata")
-# simresults_Yprev1Rprev75 <- simulation_results
-# load("MAR_Nval_500_Yprev_0.05_Rprev_0.25_03Dec2024.Rdata")
-# simresults_Yprev5Rprev25 <- simulation_results
-# load("MAR_Nval_500_Yprev_0.05_Rprev_0.5_03Dec2024.Rdata")
-# simresults_Yprev5Rprev50 <- simulation_results
-# load("MAR_Nval_500_Yprev_0.05_Rprev_0.75_03Dec2024.Rdata")
-# simresults_Yprev5Rprev75 <- simulation_results
-# load("MAR_Nval_500_Yprev_0.1_Rprev_0.25_03Dec2024.Rdata")
-# simresults_Yprev10Rprev25 <- simulation_results
-# load("MAR_Nval_500_Yprev_0.1_Rprev_0.5_03Dec2024.Rdata")
-# simresults_Yprev10Rprev50 <- simulation_results
-# load("MAR_Nval_500_Yprev_0.1_Rprev_0.75_03Dec2024.Rdata")
-# simresults_Yprev10Rprev75 <- simulation_results
+setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
+#setwd("/Users/maechester-jones/OneDrive - Nexus365/A DPhil/Simulation studies/Programs/Study 1/SimulationStudy1_11Jun2024/SimulationStudy/Data")
+## Load required datasets
+load("MAR_Nval_500_Yprev_0.01_Rprev_0.25_03Dec2024.Rdata")
+simresults_Yprev1Rprev25 <- simulation_results
+load("MAR_Nval_500_Yprev_0.01_Rprev_0.5_03Dec2024.Rdata")
+simresults_Yprev1Rprev50 <- simulation_results
+load("MAR_Nval_500_Yprev_0.01_Rprev_0.75_03Dec2024.Rdata")
+simresults_Yprev1Rprev75 <- simulation_results
+load("MAR_Nval_500_Yprev_0.05_Rprev_0.25_03Dec2024.Rdata")
+simresults_Yprev5Rprev25 <- simulation_results
+load("MAR_Nval_500_Yprev_0.05_Rprev_0.5_03Dec2024.Rdata")
+simresults_Yprev5Rprev50 <- simulation_results
+load("MAR_Nval_500_Yprev_0.05_Rprev_0.75_03Dec2024.Rdata")
+simresults_Yprev5Rprev75 <- simulation_results
+load("MAR_Nval_500_Yprev_0.1_Rprev_0.25_03Dec2024.Rdata")
+simresults_Yprev10Rprev25 <- simulation_results
+load("MAR_Nval_500_Yprev_0.1_Rprev_0.5_03Dec2024.Rdata")
+simresults_Yprev10Rprev50 <- simulation_results
+load("MAR_Nval_500_Yprev_0.1_Rprev_0.75_03Dec2024.Rdata")
+simresults_Yprev10Rprev75 <- simulation_results
 
 ################################################################################
 ## MAR 10000 Datasets 
@@ -73,26 +73,26 @@ library(purrr)
 ################################################################################
 ## MAR 100000 Datasets 
 ################################################################################
-## Set working directory
-setwd("C:\\Users\\maecj\\Documents\\Simulation_Data")
-load("MAR_Nval_1e+05_Yprev_0.01_Rprev_0.25_25Nov2024.Rdata")
-simresults_Yprev1Rprev25 <- simulation_results
-load("MAR_Nval_1e+05_Yprev_0.01_Rprev_0.5_27Nov2024.Rdata")
-simresults_Yprev1Rprev50 <- simulation_results
-load("MAR_Nval_1e+05_Yprev_0.01_Rprev_0.75_27Nov2024.Rdata")
-simresults_Yprev1Rprev75 <- simulation_results
-load("MAR_Nval_1e+05_Yprev_0.05_Rprev_0.25_27Nov2024.Rdata")
-simresults_Yprev5Rprev25 <- simulation_results
-load("MAR_Nval_1e+05_Yprev_0.05_Rprev_0.5_27Nov2024.Rdata")
-simresults_Yprev5Rprev50 <- simulation_results
-load("MAR_Nval_1e+05_Yprev_0.05_Rprev_0.75_03Dec2024.Rdata")
-simresults_Yprev5Rprev75 <- simulation_results
-load("MAR_Nval_1e+05_Yprev_0.1_Rprev_0.25_03Dec2024.Rdata")
-simresults_Yprev10Rprev25 <- simulation_results
-load("MAR_Nval_1e+05_Yprev_0.1_Rprev_0.5_03Dec2024.Rdata")
-simresults_Yprev10Rprev50 <- simulation_results
-load("MAR_Nval_1e+05_Yprev_0.1_Rprev_0.75_04Dec2024.Rdata")
-simresults_Yprev10Rprev75 <- simulation_results
+# ## Set working directory
+# setwd("C:\\Users\\maecj\\Documents\\Simulation_Data")
+# load("MAR_Nval_1e+05_Yprev_0.01_Rprev_0.25_25Nov2024.Rdata")
+# simresults_Yprev1Rprev25 <- simulation_results
+# load("MAR_Nval_1e+05_Yprev_0.01_Rprev_0.5_27Nov2024.Rdata")
+# simresults_Yprev1Rprev50 <- simulation_results
+# load("MAR_Nval_1e+05_Yprev_0.01_Rprev_0.75_27Nov2024.Rdata")
+# simresults_Yprev1Rprev75 <- simulation_results
+# load("MAR_Nval_1e+05_Yprev_0.05_Rprev_0.25_27Nov2024.Rdata")
+# simresults_Yprev5Rprev25 <- simulation_results
+# load("MAR_Nval_1e+05_Yprev_0.05_Rprev_0.5_27Nov2024.Rdata")
+# simresults_Yprev5Rprev50 <- simulation_results
+# load("MAR_Nval_1e+05_Yprev_0.05_Rprev_0.75_03Dec2024.Rdata")
+# simresults_Yprev5Rprev75 <- simulation_results
+# load("MAR_Nval_1e+05_Yprev_0.1_Rprev_0.25_03Dec2024.Rdata")
+# simresults_Yprev10Rprev25 <- simulation_results
+# load("MAR_Nval_1e+05_Yprev_0.1_Rprev_0.5_03Dec2024.Rdata")
+# simresults_Yprev10Rprev50 <- simulation_results
+# load("MAR_Nval_1e+05_Yprev_0.1_Rprev_0.75_04Dec2024.Rdata")
+# simresults_Yprev10Rprev75 <- simulation_results
 
 ################################################################################
 ### This code here is the function
@@ -286,35 +286,35 @@ simulation_parameters_long <- simulation_parameters_long %>%
     "Outcome prevalence 10% and Missingness 75%"
   )))
 
-# Add Sample Size
-# simulation_parameters_long$samplesize <- "N=500" 
-# combined_df$samplesize <- "N=500" 
+#Add Sample Size
+simulation_parameters_long$samplesize <- "N=500"
+combined_df$samplesize <- "N=500"
 # 
 # simulation_parameters_long$samplesize <- "N=10,000"
 # combined_df$samplesize <- "N=10,000"
 
-simulation_parameters_long$samplesize <- "N=100,000"
-combined_df$samplesize <- "N=100,000"
+# simulation_parameters_long$samplesize <- "N=100,000"
+# combined_df$samplesize <- "N=100,000"
 
  
 
  ##############################################################################
  # Combine with no missingness 
  ##############################################################################
- # # Load datasets
- # load("Nomissing_500_Combined_Long.Rdata")
- # load("Nomissing_500_Combined.Rdata")
- # 
- # ## Combine datasets
- # combined_df <- rbind(combined_df, no_missing_combined)
- # 
- # simulation_parameters_long <- rbind(simulation_parameters_long, no_missing_long)
- # 
- # 
- # # Store all values at each iteraiton
- # save(combined_df,file = "MAR_500_Combined.Rdata")
- # save(simulation_parameters_long,file = "MAR_500_Combined_Long.Rdata")
- # 
+ # Load datasets
+ load("Nomissing_500_Combined_Long.Rdata")
+ load("Nomissing_500_Combined.Rdata")
+
+ ## Combine datasets
+ combined_df <- rbind(combined_df, no_missing_combined)
+
+ simulation_parameters_long <- rbind(simulation_parameters_long, no_missing_long)
+
+
+ # Store all values at each iteraiton
+ save(combined_df,file = "MAR_500_Combined.Rdata")
+ save(simulation_parameters_long,file = "MAR_500_Combined_Long.Rdata")
+
  # # 
  ##############################################################################
  # Combine with no missingness 
@@ -338,20 +338,20 @@ combined_df$samplesize <- "N=100,000"
  ##############################################################################
  # Combine with no missingness 
  ##############################################################################
-setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
-## Load datasets
- load("Nomissing_100000_Combined_Long.Rdata")
- load("Nomissing_100000_Combined.Rdata")
- 
- ## Combine datasets 
- combined_df <- rbind(combined_df, no_missing_combined)
- 
- simulation_parameters_long <- rbind(simulation_parameters_long, no_missing_long)
- 
- 
- # Store all values at each iteraiton 
- save(combined_df,file = "MAR_100000_Combined.Rdata")
- save(simulation_parameters_long,file = "MAR_100000_Combined_Long.Rdata")
+# setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
+# ## Load datasets
+#  load("Nomissing_100000_Combined_Long.Rdata")
+#  load("Nomissing_100000_Combined.Rdata")
+#  
+#  ## Combine datasets 
+#  combined_df <- rbind(combined_df, no_missing_combined)
+#  
+#  simulation_parameters_long <- rbind(simulation_parameters_long, no_missing_long)
+#  
+#  
+#  # Store all values at each iteraiton 
+#  save(combined_df,file = "MAR_100000_Combined.Rdata")
+#  save(simulation_parameters_long,file = "MAR_100000_Combined_Long.Rdata")
  
  
  
@@ -395,7 +395,8 @@ setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Progr
        grepl("25%", Parameter) ~ "25%",
        grepl("50%", Parameter) ~ "50%",
        grepl("75%", Parameter) ~ "75%"
-     ), levels = c("25%", "50%", "75%"))
+     ), levels = c("25%", "50%", "75%")),
+     samplesize = factor(samplesize, levels = c("N=500", "N=10,000", "N=100,000"))
    )
  
  combined_df <- combined_df %>%
@@ -409,8 +410,9 @@ setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Progr
        grepl("25%", Parameter) ~ "25%",
        grepl("50%", Parameter) ~ "50%",
        grepl("75%", Parameter) ~ "75%"
-     ), levels = c("25%", "50%", "75%"))
-   )
+     ), levels = c("25%", "50%", "75%")),
+     samplesize = factor(samplesize, levels = c("N=500", "N=10,000", "N=100,000"))
+     )
  
  
  

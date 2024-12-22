@@ -18,9 +18,14 @@ library(pROC)
 ################################################################################
 #Load development_dataset
 setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
+
 load("Development_Dataset_Yprev_0.01.Rdata")
-# load("Development_Dataset_Yprev_0.05.Rdata")
-# load("Development_Dataset_Yprev_0.1.Rdata")
+model_1 <- development_dataset[["model"]]
+load("Development_Dataset_Yprev_0.05.Rdata")
+model_5 <- development_dataset[["model"]]
+load("Development_Dataset_Yprev_0.1.Rdata")
+model_10 <- development_dataset[["model"]]
+
 
 model <- development_dataset[["model"]]
 
@@ -36,7 +41,7 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 
 sims_parameters <- crossing(
   n_iter = 200, 
-  N_val = c(500, 10000, 100000),
+  N_val = c(500, 10000, 100000), # 
   Y_prev = c(0.01,0.05,0.1), 
   # Gamma = affect on Y
   gamma_x1 = c(0.5), 
@@ -64,7 +69,16 @@ for (i in 1:nrow(sims_parameters)) {
   gamma_x5 <- sims_parameters$gamma_x5[i]
   gamma_U <- sims_parameters$gamma_U[i]
   
-  
+ 
+###############################################################################
+  ## Model selection depending on prevalance
+##############################################################################
+  # Select the appropriate model based on Y_prev
+  model <- switch(as.character(Y_prev),
+                  "0.01" = model_1,
+                  "0.05" = model_5,
+                  "0.1" = model_10,
+                  stop("Invalid Y_prev value"))
 ################################################################################
 # Store Simulation Results
 ################################################################################
