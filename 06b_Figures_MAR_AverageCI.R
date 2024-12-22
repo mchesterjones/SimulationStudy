@@ -204,35 +204,35 @@ label_blank <- ggplot() +
 
 label_top <-  ggplot() +
   theme_void() + # Remove axes and grid
-  geom_text(aes(x = 0.5, y = 0.5, label = "Missingness in X1 (%)"), size = 5, hjust = 0.5, vjust = 0.5, fontface="bold")
+  geom_text(aes(x = 0.5, y = 0.5, label = "Missingness in X1 (%)"), size = 4, hjust = 0.5, vjust = 0.5, fontface="bold")
 
 label_left <-  ggplot() +
   theme_void() + # Remove axes and grid
-  geom_text(aes(x = 0.5, y = 0.5, label = "Outcome Prevalence"), size = 5, hjust = 0.5, vjust = 0.5, angle=90, fontface="bold")
+  geom_text(aes(x = 0.5, y = 0.5, label = "Outcome Prevalence"), size = 4, hjust = 0.5, vjust = 0.5, angle=90, fontface="bold")
 
 label_25 <- ggplot() +
   theme_void() + # Remove axes and grid
-  geom_text(aes(x = 0.5, y = 0.5, label = "25%"), size = 5, hjust = 0.5, vjust = 0.5)
+  geom_text(aes(x = 0.5, y = 0.5, label = "25%"), size = 4, hjust = 0.5, vjust = 0.5)
 
 label_50 <- ggplot() +
   theme_void() + # Remove axes and grid
-  geom_text(aes(x = 0.5, y = 0.5, label = "50%"), size = 5, hjust = 0.5, vjust = 0.5)
+  geom_text(aes(x = 0.5, y = 0.5, label = "50%"), size = 4, hjust = 0.5, vjust = 0.5)
 
 label_75 <- ggplot() +
   theme_void() + # Remove axes and grid
-  geom_text(aes(x = 0.5, y = 0.5, label = "75%"), size = 5, hjust = 0.5, vjust = 0.5)
+  geom_text(aes(x = 0.5, y = 0.5, label = "75%"), size = 4, hjust = 0.5, vjust = 0.5)
 
 label_1 <- ggplot() +
   theme_void() + # Remove axes and grid
-  geom_text(aes(x = 0.5, y = 0.5, label = "1%"), size = 5, hjust = 0.5, vjust = 0.5)
+  geom_text(aes(x = 0.5, y = 0.5, label = "1%"), size = 4, hjust = 0.5, vjust = 0.5)
 
 label_5 <- ggplot() +
   theme_void() + # Remove axes and grid
-  geom_text(aes(x = 0.5, y = 0.5, label = "5%"), size = 5, hjust = 0.5, vjust = 0.5)
+  geom_text(aes(x = 0.5, y = 0.5, label = "5%"), size = 4, hjust = 0.5, vjust = 0.5)
 
 label_10 <- ggplot() +
   theme_void() + # Remove axes and grid
-  geom_text(aes(x = 0.5, y = 0.5, label = "10%"), size = 5, hjust = 0.5, vjust = 0.5)
+  geom_text(aes(x = 0.5, y = 0.5, label = "10%"), size = 4, hjust = 0.5, vjust = 0.5)
 
 
 ### Design Patchwork
@@ -303,7 +303,7 @@ create_patchwork <- function(plots, sample_size, title) {
     # 5th column
     plots[[3]] + plots[[6]] + plots[[9]] +
     plot_layout(design = design, guides = "collect", axes = "collect_x",
-                widths = c(1, 2, 10, 10, 10), heights = c(1, 1, 6, 6, 6)) +
+                widths = c(1, 2, 10, 10, 10), heights = c(1, 1, 7, 7, 7)) +
     plot_annotation(
       title = title,
       subtitle = "Higher scores indicate better discrimination with 0.5 indicating the model is no better than chance"
@@ -324,7 +324,7 @@ measure_titles <- list(
                   subtitle="Where 1 indicates perfect calibration, >1 indicates underfitting and <1 indicate overfitting"),
   Brier_scaled = list(title="Scaled Brier Score",
                       subtitle="Score of 1 indicates perfect prediction, 0 or less than 0 indicates no better than baseline model"), 
-  RMSe = list(title="Root Mean Square Error",
+  RMSE = list(title="Root Mean Square Error",
               subtitle="Lower RMSE indicates better model performance")
 )
 
