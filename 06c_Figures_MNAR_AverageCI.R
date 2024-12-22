@@ -59,15 +59,15 @@ plot_fnc <- function(df, measure, combinedmeasure, parameter, x_scale_limits, x_
 ## AUC
 ################
 auc_params <- list(
-  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(0.30, 1), x_breaks = seq(0.35, 1, by = 0.05), width=0.001),
-  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(0.30, 1), x_breaks = seq(0.35, 1, by = 0.05), width=0.001),
-  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(0.30, 1), x_breaks = seq(0.35, 1, by = 0.05), width=0.001),
-  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(0.30, 1), x_breaks = seq(0.35, 1, by = 0.05), width=0.001),
-  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(0.30, 1), x_breaks = seq(0.35, 1, by = 0.05), width=0.001),
-  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(0.30, 1), x_breaks = seq(0.35, 1, by = 0.05), width=0.001),
-  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(0.30, 1), x_breaks = seq(0.35, 1, by = 0.05), width=0.001),
-  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(0.30, 1), x_breaks = seq(0.35, 1, by = 0.05), width=0.001),
-  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(0.30, 1), x_breaks = seq(0.35, 1, by = 0.05), width=0.001))
+  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001))
 
 ### Bias
 ####################

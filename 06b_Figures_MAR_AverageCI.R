@@ -62,69 +62,69 @@ plot_fnc <- function(df, measure, combinedmeasure, parameter, x_scale_limits, x_
 ## AUC
 ################
 auc_params <- list(
-  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(0.37, 1), x_breaks = seq(0.37, 1, by = 0.25), width=0.001),
-  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(0.37, 1), x_breaks = seq(0.37, 1, by = 0.25), width=0.001),
-  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(0.37, 1), x_breaks = seq(0.37, 1, by = 0.25), width=0.001),
-  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(0.37, 1), x_breaks = seq(0.37, 1, by = 0.25), width=0.001),
-  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(0.37, 1), x_breaks = seq(0.37, 1, by = 0.25), width=0.001),
-  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(0.37, 1), x_breaks = seq(0.37, 1, by = 0.25), width=0.001),
-  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(0.37, 1), x_breaks = seq(0.37, 1, by = 0.25), width=0.001),
-  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(0.37, 1), x_breaks = seq(0.37, 1, by = 0.25), width=0.001),
-  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(0.37, 1), x_breaks = seq(0.37, 1, by = 0.25), width=0.001))
+  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001),
+  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(0.30, 1), x_breaks = seq(0.3, 1, by = 0.05), width=0.001))
 
 ### Bias
 ####################
 bias_params <- list(
-  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.05), width=0.0001)
+  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.025), width=0.0001),
+  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.025), width=0.0001),
+  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.025), width=0.0001),
+  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.025), width=0.0001),
+  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.025), width=0.0001),
+  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.025), width=0.0001),
+  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.025), width=0.0001),
+  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.025), width=0.0001),
+  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(-0.05, 0.05), x_breaks = seq(-0.1, 0.1, by = 0.025), width=0.0001)
 )
 ## Calibration in the large
 ############################
 citl_params <- list(
-  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(-1.5, 1.2), x_breaks = seq(-1.5,1, by = 0.5), width=0.05),
-  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(-1.5, 1.2), x_breaks = seq(-1.5,1, by = 0.5), width=0.05),
-  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(-1.5, 1.2), x_breaks = seq(-1.5,1, by = 0.5), width=0.05),
-  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(-1.5, 1.2), x_breaks = seq(-1.5,1, by = 0.5), width=0.05),
-  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(-1.5, 1.2), x_breaks = seq(-1.5,1, by = 0.5), width=0.05),
-  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(-1.5, 1.2), x_breaks = seq(-1.5,1, by = 0.5), width=0.05),
-  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(-1.5, 1.2), x_breaks = seq(-1.5,1, by = 0.5), width=0.05),
-  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(-1.5, 1.2), x_breaks = seq(-1.5,1, by = 0.5), width=0.05),
-  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(-1.5, 1.2), x_breaks = seq(-1.5,1, by = 0.5), width=0.05)
+  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(-2, 1.2), x_breaks = seq(-2, 2, by = 0.5), width=0.05),
+  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(-2, 1.2), x_breaks = seq(-2, 2, by = 0.5), width=0.05),
+  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(-2, 1.2), x_breaks = seq(-2, 2, by = 0.5), width=0.05),
+  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(-2, 1.2), x_breaks = seq(-2, 2, by = 0.5), width=0.05),
+  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(-2, 1.2), x_breaks = seq(-2, 2, by = 0.5), width=0.05),
+  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(-2, 1.2), x_breaks = seq(-2, 2, by = 0.5), width=0.05),
+  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(-2, 1.2), x_breaks = seq(-2, 2, by = 0.5), width=0.05),
+  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(-2, 1.2), x_breaks = seq(-2, 2, by = 0.5), width=0.05),
+  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(-2, 1.2), x_breaks = seq(-2, 2, by = 0.5), width=0.05)
 )
 
 ## Calibration Slope
 ###########################
 calslope_params <- list(
-  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(-0.05, 3.4), x_breaks = seq(-0.05, 3.4, by = 0.5), width=0.0001),
-  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(-0.05, 3.4), x_breaks = seq(-0.05, 3.4, by = 0.5), width=0.0001),
-  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(-0.05, 3.4), x_breaks = seq(-0.05, 3.4, by = 0.5), width=0.0001),
-  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(-0.05, 3.4), x_breaks = seq(-0.05, 3.4, by = 0.5), width=0.0001),
-  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(-0.05, 3.4), x_breaks = seq(-0.05, 3.4, by = 0.5), width=0.0001),
-  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(-0.05, 3.4), x_breaks = seq(-0.05, 3.4, by = 0.5), width=0.0001),
-  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(-0.05, 3.4), x_breaks = seq(-0.05, 3.4, by = 0.5), width=0.0001),
-  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(-0.05, 3.4), x_breaks = seq(-0.05, 3.4, by = 0.5), width=0.0001),
-  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(-0.05, 3.4), x_breaks = seq(-0.05, 3.4, by = 0.5), width=0.0001)
+  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(-0.5, 3.5), x_breaks = seq(-0.5, 3.5, by = 0.5), width=0.0001),
+  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(-0.5, 3.5), x_breaks = seq(-0.5, 3.5, by = 0.5), width=0.0001),
+  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(-0.5, 3.5), x_breaks = seq(-0.5, 3.5, by = 0.5), width=0.0001),
+  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(-0.5, 3.5), x_breaks = seq(-0.5, 3.5, by = 0.5), width=0.0001),
+  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(-0.5, 3.5), x_breaks = seq(-0.5, 3.5, by = 0.5), width=0.0001),
+  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(-0.5, 3.5), x_breaks = seq(-0.5, 3.5, by = 0.5), width=0.0001),
+  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(-0.5, 3.5), x_breaks = seq(-0.5, 3.5, by = 0.5), width=0.0001),
+  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(-0.5, 3.5), x_breaks = seq(-0.5, 3.5, by = 0.5), width=0.0001),
+  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(-0.5, 3.5), x_breaks = seq(-0.5, 3.5, by = 0.5), width=0.0001)
 )
 
 ## Scaled Brier
 ##########################
 brierscl_params <- list(
-  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(-0.2, 0.24), x_breaks = seq(-0.2, 0.24, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(-0.2, 0.24), x_breaks = seq(-0.2, 0.24, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(-0.2, 0.24), x_breaks = seq(-0.2, 0.24, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(-0.2, 0.24), x_breaks = seq(-0.2, 0.24, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(-0.2, 0.24), x_breaks = seq(-0.2, 0.24, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(-0.2, 0.24), x_breaks = seq(-0.2, 0.24, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(-0.2, 0.24), x_breaks = seq(-0.2, 0.24, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(-0.2, 0.24), x_breaks = seq(-0.2, 0.24, by = 0.05), width=0.0001),
-  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(-0.2, 0.24), x_breaks = seq(-0.2, 0.24, by = 0.05), width=0.0001)
+  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = c(-0.2, 0.25), x_breaks = seq(-0.2, 0.25, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits = c(-0.2, 0.25), x_breaks = seq(-0.2, 0.25, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits = c(-0.2, 0.25), x_breaks = seq(-0.2, 0.25, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits = c(-0.2, 0.25), x_breaks = seq(-0.2, 0.25, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits = c(-0.2, 0.25), x_breaks = seq(-0.2, 0.25, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits = c(-0.2, 0.25), x_breaks = seq(-0.2, 0.25, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits = c(-0.2, 0.25), x_breaks = seq(-0.2, 0.25, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits = c(-0.2, 0.25), x_breaks = seq(-0.2, 0.25, by = 0.05), width=0.0001),
+  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits = c(-0.2, 0.25), x_breaks = seq(-0.2, 0.25, by = 0.05), width=0.0001)
 )
 
 ## RMSE
