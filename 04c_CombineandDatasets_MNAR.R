@@ -395,7 +395,12 @@ save(simulation_parameters_long,file = "MNAR_500_Combined_Long.Rdata")
        grepl("50%", Parameter) ~ "50%",
        grepl("75%", Parameter) ~ "75%"
      ), levels = c("25%", "50%", "75%")),
-     samplesize = factor(samplesize, levels = c("N=500", "N=10,000", "N=100,000"))
+     samplesize = factor(samplesize, levels = c("N=500", "N=10,000", "N=100,000")),
+     Method = factor(Method, levels =c("Validation data, no missingness", 
+                     "Complete Case Analysis", 
+                     "Mean Imputation",
+                     "Multiple Imputation without Outcome",
+                     "Multiple Imputation with Outcome"))
      )
  
  combined_df <- combined_df %>%
@@ -410,8 +415,15 @@ save(simulation_parameters_long,file = "MNAR_500_Combined_Long.Rdata")
        grepl("50%", Parameter) ~ "50%",
        grepl("75%", Parameter) ~ "75%"
      ), levels = c("25%", "50%", "75%")),
-     samplesize = factor(samplesize, levels = c("N=500", "N=10,000", "N=100,000"))
-)
+     samplesize = factor(samplesize, levels = c("N=500", "N=10,000", "N=100,000")),
+     Method = factor(Method, levels =c("Validation data, no missingness", 
+                                       "Complete Case Analysis", 
+                                       "Mean Imputation",
+                                       "Multiple Imputation without Outcome",
+                                       "Multiple Imputation with Outcome"))
+   )
+ 
+
    
  
  
