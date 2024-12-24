@@ -4,7 +4,7 @@
 ################################################################################
 ## Created: 16Dec2024
 ## AUthor: Mae CHester-Jones
-## Purpose: Create graphs summarising the Simulatino Study Results
+## Purpose: Create graphs comparing mechanisms directly filtering on sample size 
 ################################################################################
 # 
 # ## library
@@ -39,6 +39,8 @@ load("Nomissing_100000_Combined_Long.Rdata")
 load("Nomissing_100000_Combined.Rdata")
 
 ## Join by sample size 
+##########################################################################
+## N=100,000
 data_mcar_100000 <- MCAR_Long %>% filter(samplesize=="N=100,000") %>%
   mutate(mechanism = "MCAR")
 ## %>%
@@ -52,6 +54,23 @@ data_mnar_100000 <- MNAR_Long %>% filter(samplesize=="N=100,000") %>%
 
 data_100000 <- rbind(data_mar_100000,data_mcar_100000)
 data_100000 <- rbind(data_100000,data_mnar_100000) %>%
+  filter(Method != "Validation data, no missingness")
+
+## N=500 
+## Join by sample size 
+data_mcar_500 <- MCAR_Long %>% filter(samplesize=="N=500") %>%
+  mutate(mechanism = "MCAR")
+## %>%
+##  filter(Method != "Validation data, no missingness")
+data_mar_500 <- MAR_Long %>% filter(samplesize=="N=500") %>%
+  mutate(mechanism = "MAR") 
+## %>%
+##  filter(Method != "Validation data, no missingness")
+data_mnar_500 <- MNAR_Long %>% filter(samplesize=="N=500") %>%
+  mutate(mechanism = "MNAR") 
+
+data_500 <- rbind(data_mar_500,data_mcar_500)
+data_500 <- rbind(data_500,data_mnar_500) %>%
   filter(Method != "Validation data, no missingness")
 
 ## Create factors for plotting
