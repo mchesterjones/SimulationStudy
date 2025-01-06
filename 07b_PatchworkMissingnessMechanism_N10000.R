@@ -35,21 +35,21 @@ MNAR_Combined_data <- combined_df
 
 #Load nonmissing
 setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
-load("Nomissing_100000_Combined_Long.Rdata")
-load("Nomissing_100000_Combined.Rdata")
+load("Nomissing_10000_Combined_Long.Rdata")
+load("Nomissing_10000_Combined.Rdata")
 
 ## Join by sample size 
 ##########################################################################
 ## Join by sample size 
-data_mcar <- MCAR_Long %>% filter(samplesize=="N=100,000") %>%
+data_mcar <- MCAR_Long %>% filter(samplesize=="N=10,000") %>%
   mutate(mechanism = "MCAR")
 ## %>%
 ##  filter(Method != "Validation data, no missingness")
-data_mar <- MAR_Long %>% filter(samplesize=="N=100,000") %>%
+data_mar <- MAR_Long %>% filter(samplesize=="N=10,000") %>%
   mutate(mechanism = "MAR") 
 ## %>%
 ##  filter(Method != "Validation data, no missingness")
-data_mnar <- MNAR_Long %>% filter(samplesize=="N=100,000") %>%
+data_mnar <- MNAR_Long %>% filter(samplesize=="N=10,000") %>%
   mutate(mechanism = "MNAR") 
 
 data <- rbind(data_mar,data_mcar)
@@ -76,10 +76,10 @@ data <- data %>%
 ##########################################################
 plot_fnc <- function(df, measure, combinedmeasure, parameter, x_scale_limits, x_scale_breaks, intercept, width) {
   ggplot( 
-           data %>%
-           filter(Measure == measure,
-                  Parameter == parameter),
-         aes(x = AVG, y = mechanism, shape = Method, colour=mechanism )) +
+    data %>%
+      filter(Measure == measure,
+             Parameter == parameter),
+    aes(x = AVG, y = mechanism, shape = Method, colour=mechanism )) +
     geom_point(size = 2) +
     geom_errorbar(aes(xmin = LCI, xmax = UCI), width = 0.4) +
     labs(
@@ -106,8 +106,8 @@ plot_fnc <- function(df, measure, combinedmeasure, parameter, x_scale_limits, x_
 ## Set Parameters for each plot type 
 ################################################################################
 ################
-auc_x_limits <- c(0.25, 1)
-auc_x_breaks <- seq(0, 1, by = 0.25)
+auc_x_limits <- c(0.6, 0.90)
+auc_x_breaks <- seq(0, 1, by = 0.1)
 
 auc_params <- list(
   list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits = auc_x_limits, x_breaks = auc_x_breaks, width=0.001,
@@ -131,7 +131,7 @@ auc_params <- list(
 
 ### Bias
 ####################
-bias_x_limits <- c(-0.02,0.025)
+bias_x_limits <- c(-0.03,0.025)
 bias_x_breaks <- seq(-1,1,by=0.01)
 
 bias_params <- list(
@@ -156,7 +156,7 @@ bias_params <- list(
 
 ## Calibration in the large
 ############################
-cal_int_x_limits <- c(-2,1.5)
+cal_int_x_limits <- c(-1,0.5)
 cal_int_x_breaks <- seq(-2, 2, by = 0.5)
 
 citl_params <- list(
@@ -182,32 +182,32 @@ citl_params <- list(
 
 ## Calibration Slope
 ###########################
-  cal_slope_x_limits=c(0.7,1.2)
-  cal_slope_x_breaks=seq(-1,4,by=0.1)
+cal_slope_x_limits=c(0.4,2.0)
+cal_slope_x_breaks=seq(-1,4,by=0.25)
 
 calslope_params <- list(
-list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05,
-     intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
-list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05,
-     intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
-list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05,
-     intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
-list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05, 
-     intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
-list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05,
-     intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
-list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05, 
-     intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
-list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05, 
-     intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
-list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05, 
-     intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
-list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05, 
-     intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev10Rprev75"]))
+  list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05,
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
+  list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05,
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
+  list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05,
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
+  list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05, 
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
+  list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05,
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
+  list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05, 
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
+  list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05, 
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
+  list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05, 
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
+  list(parameter ="Outcome prevalence 10% and Missingness 75%", x_limits =cal_slope_x_limits, x_breaks = cal_slope_x_breaks, width=0.05, 
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "Cal_Slope"& no_missing_long$df=="simresults_Yprev10Rprev75"]))
 
 ## Scaled Brier
 ##########################
-brierscl_x_limits <- c(-0.3,0.3)
+brierscl_x_limits <- c(-0.05,0.3)
 brierscl_x_breaks <- seq(-0.5,0.5, by=0.1)
 
 brierscl_params <- list(
@@ -233,14 +233,14 @@ brierscl_params <- list(
 
 ## RMSE
 ##########################
-rmse_x_limits <- c(0,0.4)
+rmse_x_limits <- c(0,0.35)
 rmse_x_breaks <- seq(0,0.5,by=0.1)
 
 rmse_params <- list(
   list(parameter ="Outcome prevalence 1% and Missingness 25%", x_limits =rmse_x_limits, x_breaks = rmse_x_breaks, width=0.0001,
        intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
   list(parameter ="Outcome prevalence 1% and Missingness 50%", x_limits =rmse_x_limits, x_breaks = rmse_x_breaks, width=0.0001,
-  intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
   list(parameter ="Outcome prevalence 1% and Missingness 75%", x_limits =rmse_x_limits, x_breaks = rmse_x_breaks, width=0.0001,
        intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev1Rprev75"]),
   list(parameter ="Outcome prevalence 5% and Missingness 25%", x_limits =rmse_x_limits, x_breaks = rmse_x_breaks, width=0.0001,
@@ -248,7 +248,7 @@ rmse_params <- list(
   list(parameter ="Outcome prevalence 5% and Missingness 50%", x_limits =rmse_x_limits, x_breaks = rmse_x_breaks, width=0.0001,
        intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
   list(parameter ="Outcome prevalence 5% and Missingness 75%", x_limits =rmse_x_limits, x_breaks = rmse_x_breaks, width=0.0001,
-        intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
+       intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev5Rprev75"]),
   list(parameter ="Outcome prevalence 10% and Missingness 25%", x_limits =rmse_x_limits, x_breaks = rmse_x_breaks, width=0.0001,
        intercept =no_missing_long$AVG[no_missing_long$Metric == "rmse"& no_missing_long$df=="simresults_Yprev10Rprev75"]),
   list(parameter ="Outcome prevalence 10% and Missingness 50%", x_limits =rmse_x_limits, x_breaks = rmse_x_breaks, width=0.0001,
@@ -453,24 +453,24 @@ for (measure_name in names(plot_storage)) {
   # Initialize a list for the current measure
   patchwork_storage[[measure_name]] <- list()
   
-    # Get the plots for the current measure and sample size
-    measure_plots <- plot_storage[[measure_name]]
-    
-    # Define the title and subtitle dynamically
-    title <- paste(measure_titles[[measure_name]][["title"]], " across Missingness Mechanisms", sep = "")
-    subtitle <- measure_titles[[measure_name]][["subtitle"]]
-    
-    # Create the patchwork
-    patchwork <- create_patchwork(measure_plots, title)
-    patchwork <- patchwork + plot_annotation(subtitle = subtitle)
-    
-    # Store the patchwork
-    patchwork_storage[[measure_name]] <- patchwork
-    
-    # Save the patchwork as a PDF
-    output_file <- paste0("Patchwork_MissingnessMechanism_100000_", measure_name, ".pdf")
-    
-    # Save the patchwork as a PDF (you can adjust the width and height as needed)
-   ggsave(output_file, plot = patchwork, device = "pdf", width = 14, height = 8)
-  }
+  # Get the plots for the current measure and sample size
+  measure_plots <- plot_storage[[measure_name]]
+  
+  # Define the title and subtitle dynamically
+  title <- paste(measure_titles[[measure_name]][["title"]], " across Missingness Mechanisms", sep = "")
+  subtitle <- measure_titles[[measure_name]][["subtitle"]]
+  
+  # Create the patchwork
+  patchwork <- create_patchwork(measure_plots, title)
+  patchwork <- patchwork + plot_annotation(subtitle = subtitle)
+  
+  # Store the patchwork
+  patchwork_storage[[measure_name]] <- patchwork
+  
+  # Save the patchwork as a PDF
+  output_file <- paste0("Patchwork_MissingnessMechanism_10000_", measure_name, ".pdf")
+  
+  # Save the patchwork as a PDF (you can adjust the width and height as needed)
+  ggsave(output_file, plot = patchwork, device = "pdf", width = 14, height = 8)
+}
 
