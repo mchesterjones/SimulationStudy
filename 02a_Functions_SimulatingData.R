@@ -234,7 +234,7 @@ simulation_function <- function(N_val,
   gamma_0 <- as.numeric(coef(glm(rbinom(N_val, 1, prob = Y_prev) ~
                                    offset(gamma_x1*x_1 +
                                             gamma_x2*x_2 +
-                                            gamma_x2*x_3 +
+                                            gamma_x3*x_3 +
                                             gamma_x4*x_4 +
                                             gamma_x5*x_5 + 
                                             gamma_U*U),
