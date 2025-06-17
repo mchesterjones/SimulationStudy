@@ -13,6 +13,7 @@ library(tidyverse)
 library(mice)
 library(broom)
 library(pROC)
+library(MASS)
 
 ###############################################################################
 ## Functions for running iterations
@@ -22,7 +23,7 @@ set.seed(189)
 
 sims_parameters <- crossing(
   N_dev = 100000,
-  Y_prev = c(0.01), 
+  Y_prev = c(0.1), # Change manually 
   # Gamma = affect on Y
   gamma_x1 = c(0.5), 
   gamma_x2 = c(0.5), 
@@ -63,17 +64,34 @@ dev_data_simulation_function <- function(
   
 {
   
+  # Updated correlation structure between predictors on 17Jun2025
+  # Define relationships between predictions 
+      ## All have mean 0 
+  mu = c(0, 0 ,0, 0, 0) 
+      ## Corr structure 
+  ##(X1X1, X1X2, X1X3, X1X4,X1X5,
+  ## X2X1, X2X2, X2X3, X2X4, X2X5
+  ## X3X1, X3X2, X3X3, X3X4, X3X5
+  ## X4X1, X4X2, X4X3,X 4X4, X4X5
+  ## X5X1,X5X2, X5X3, X5X4, X5X5 
   
-  dev_data_IPD <- tibble("x_1" = rnorm(N_dev, mean = 0, sd = 1),
-                         "x_2" = rnorm(N_dev, mean = 0, sd = 1),
-                         "x_3" = rnorm(N_dev, mean = 0, sd = 1),
-                         "x_4" = rnorm(N_dev, mean = 0, sd = 1),
-                         "x_5" = rnorm(N_dev, mean = 0, sd = 1),
-                         "U" = rnorm(N_dev, mean = 0, sd = 1),  ## Added 28Aug2024 for MNAR 
-                         "ID" = 1:N_dev
-  )
+  covar_mat = matrix(c(1.0, 0.6, 0.6, 0.6, 0.6, 
+                       0.6, 1.0, 0.2, 0.2, 0.2, 
+                       0.6, 0.2, 1.0, 0.2, 0.2, 
+                       0.6, 0.2, 0.2, 1.0, 0.2, 
+                       0.6, 0.2, 0.2, 0.2, 1.0), nrow=5)
+  # Create X1,X4,X5
+  correlated_distributions <- mvrnorm(n=N_dev, mu = mu, Sigma = covar_mat)
   
-  
+  # Create Development Data
+  #---------------------------------------------
+  dev_data_IPD <- tibble("x_1" = correlated_distributions[,1],
+                 "x_2" = correlated_distributions[,2],
+                 "x_3" = correlated_distributions[,3],
+                 "x_4" = correlated_distributions[,4],
+                 "x_5" = correlated_distributions[,5], 
+                 "U" = rnorm(N_dev, mean = 0, sd = 1),
+                 "ID" = 1:N_dev)
   
   #determine the prevalence of the outcome based on the gamma_0
   gamma_0 <- as.numeric(coef(glm(rbinom(N_dev, 1, prob = Y_prev) ~
@@ -141,11 +159,11 @@ model <- dev_mod_function(dev_data = dev_data)
                       "model" = model)
   
 #4. Save
-  setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data") 
-  # save(development_dataset, file = "Development_Dataset_Yprev_0.1.Rdata")
-  # save(development_dataset, file = "Development_Dataset_Yprev_0.05.Rdata")
-  save(development_dataset, file = "Development_Dataset_Yprev_0.01.Rdata")
-  
+  # Construct the filename with today's date
+  filename <- paste0("Development_Dataset_Yprev_", sims_parameters$Y_prev, ".Rdata")
+  # Save results
+  setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
+  save(development_dataset, file = filename)
   
 #5. Check Model 
   ################################################################################
