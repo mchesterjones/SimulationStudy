@@ -1,0 +1,10 @@
+name: figures
+title:
+username: mchester-jones
+account: mchester-jones
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 13733569
+bundleId: 9656090
+url: https://mchester-jones.shinyapps.io/figures/
+version: 1
