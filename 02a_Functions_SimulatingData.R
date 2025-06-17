@@ -12,6 +12,7 @@ library(dplyr)
 library(tidyverse)
 library(broom)
 library(pROC)
+library(MASS)
 
 
 
@@ -47,7 +48,7 @@ simulation_nrun_fnc <- function(n_iter,
   
   ## Define an empty variable, which will be used to store the results across all iterations
   results <- NULL
-  set.seed(n_iter*4)
+  set.seed(17625) ## Seed set
 
   all_iterations <- list()
   
@@ -156,11 +157,12 @@ simulation_singlerun_fnc <- function(Y_prev,
                                           model = model)
   
  
+  # Note: Some things are not returned if running full 1000 iterations for space 
   return(list(#"Parameters" = parameters,
-              #"dev_data" = dev_data, 
-              #"model"=model,
-              #"val_data" = df, 
-             # "imputed_datasets" = imputed_datasets, 
+            #  "dev_data" = dev_data, 
+            #  "model"=model,
+             # "val_data" = df, 
+            #  "imputed_datasets" = imputed_datasets, 
               "preds" = preds_per_data_set))
   
 
@@ -200,11 +202,31 @@ simulation_function <- function(N_val,
                                 gamma_U)   ## Coefficient on U on outcome Y 
 {
   
-  IPD <- tibble("x_1" = rnorm(N_val, mean = 0, sd = 1),
-                "x_2" = rnorm(N_val, mean = 0, sd = 1),
-                "x_3" = rnorm(N_val, mean = 0, sd = 1),
-                "x_4" = rnorm(N_val, mean = 0, sd = 1),
-                "x_5" = rnorm(N_val, mean = 0, sd = 1),
+ 
+  # Correlation between variables 
+  mu <- c(0,0,0,0,0)
+    ## Corr structure 
+  ##(X1X1, X1X2, X1X3, X1X4,X1X5,
+  ## X2X1, X2X2, X2X3, X2X4, X2X5
+  ## X3X1, X3X2, X3X3, X3X4, X3X5
+  ## X4X1, X4X2, X4X3,X 4X4, X4X5
+  ## X5X1,X5X2, X5X3, X5X4, X5X5 
+  
+  covar_mat = matrix(c(1.0, 0.6, 0.6, 0.6, 0.6, 
+                       0.6, 1.0, 0.2, 0.2, 0.2, 
+                       0.6, 0.2, 1.0, 0.2, 0.2, 
+                       0.6, 0.2, 0.2, 1.0, 0.2, 
+                       0.6, 0.2, 0.2, 0.2, 1.0), nrow=5)
+  
+  correlated_distributions <- mvrnorm(n=N_val, mu = mu, Sigma = covar_mat)
+  
+  
+  # Generate data
+   IPD <- tibble("x_1" = correlated_distributions[,1],
+                "x_2" = correlated_distributions[,2],
+                "x_3" = correlated_distributions[,3],
+                "x_4" = correlated_distributions[,4],
+                "x_5" = correlated_distributions[,5],
                 "U" = rnorm(N_val, mean = 0, sd = 1), 
                 "ID" = 1:N_val
   )
@@ -216,11 +238,12 @@ simulation_function <- function(N_val,
                                            beta_x2*x_2 +
                                            beta_x3*x_3 +
                                            beta_x4*x_4 +
-                                           beta_x5*x_5 + #R_prev is the missingness level so we control that? We control this by the Y_prev(the number of times R1 is 1 or 0)
+                                           beta_x5*x_5 + 
                                            beta_U*U),
                                 family = binomial(link = "logit"),
                                 data = IPD))[1])
   
+  ## Now Give R 1 or 0 and that will determine whether x1 is missing or not
   IPD$R_1 = rbinom(N_val, size = 1,
                    prob = expit_function(beta_0 +
                                            beta_x1*IPD$x_1 +
@@ -241,7 +264,7 @@ simulation_function <- function(N_val,
                                  family = binomial(link = "logit"),
                                  data = IPD))[1])
   
-  ########
+  ######## Outcome Y (this should match prevalence specified)
   IPD$Y = rbinom(N_val, size = 1,
                  prob = expit_function(gamma_0 +
                                          gamma_x1*IPD$x_1 +
@@ -340,6 +363,7 @@ CCA_function <- function(df) {
 
 
 
+
 ####--------------------------
 ## 3. Master imputation function
 ####--------------------------
@@ -384,9 +408,13 @@ imputation_function <- function(df, m = 5) {
   
   mean_val <- mean_function(df$val_data)
   
- # str(CCA_val_data)
+  # Add in non missing scenario 
+  NM_val <-   df$val_data[,c("x_1true", "x_2", "x_3", "x_4", "x_5", "Y") ]
+  colnames(NM_val) <- c("x_1", "x_2", "x_3", "x_4", "x_5", "Y") ## Rename to X1 
   
+
   return(list(
+    "NM_val" = NM_val, 
     "CCA_val_data" = CCA_val_data,
     "mean_val" = mean_val,
     "MI_val_data_noY" = MI_val_data_noY,
@@ -407,7 +435,6 @@ imputation_function <- function(df, m = 5) {
 #all models into a single data frame.
 
 # The MICE datasets are structured differently and therefore need slightly different code 
-
 
 predict_single_imputed <- function(imputed_datasets, model) {
   
