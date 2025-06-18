@@ -37,8 +37,8 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 
 
 combinations_of_parameters <- crossing(
-            n_iter = 1, 
-            N_val = c(500,10000),
+            n_iter = 1000, 
+            N_val = c(500,10000,100000),
             Y_prev = c(0.01,0.05, 0.1), 
             R_prev = c(0.25,0.50,0.75), 
             ## Beta = affect on Missingness R   
