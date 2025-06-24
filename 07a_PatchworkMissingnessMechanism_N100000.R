@@ -3,6 +3,7 @@
 #### Average and 95% CI 
 ################################################################################
 ## Created: 24Dec2024
+## Last updated: 24Jun2025
 ## AUthor: Mae CHester-Jones
 ## Purpose: Create graphs comparing mechanisms directly filtering on sample size 
 ################################################################################
@@ -32,11 +33,6 @@ load("MNAR_Combined_Long.Rdata")
 MNAR_Long <- simulation_parameters_long
 load("MNAR_Combined.Rdata")
 MNAR_Combined_data <- combined_df
-
-#Load nonmissing
-setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
-load("Nomissing_100000_Combined_Long.Rdata")
-load("Nomissing_100000_Combined.Rdata")
 
 ## Join by sample size 
 ##########################################################################
