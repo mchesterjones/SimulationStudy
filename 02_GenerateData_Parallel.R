@@ -32,7 +32,7 @@ model_10 <- development_dataset[["model"]]
 ################################################################################
 # Dependent Code
 ################################################################################
-source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Programs//Study 1//SimulationStudy1_11Jun2024//SimulationStudy//1_Functions_SimulatingData.R") 
+source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Programs//Study 1//SimulationStudy1_11Jun2024//SimulationStudy//01_Functions_SimulatingData.R") 
 
 ################################################################################
 # Simulation Parameters
@@ -40,8 +40,8 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 
 combinations_of_parameters <- crossing(
   n_iter = 1000, 
-  N_val = c(10000),
-  Y_prev = c(0.01,0.05, 0.1), 
+  N_val = c(100000),
+  Y_prev = c(0.05), 
   R_prev = c(0.25,0.50,0.75), 
   ## Beta = affect on Missingness R   
   beta_x1 = c(0, 0.5), ## 0 for MAR and MCAR and 0.5 for MNAR
@@ -82,12 +82,12 @@ sims_parameters <- sims_parameters %>%
                          beta_x1==0.5 & beta_x2 ==0.5 & beta_U == 0.5 ~ "MNAR"))
 
 # Filter out certain conditions 
-# sims_parameters <- sims_parameters %>%
-#               mutate(remove=case_when(label=="MNAR"& R_prev==0.5 & Y_prev ==0.01 ~ 1,
-#                                       label == "MNAR" & R_prev==0.25 & Y_prev==0.01 ~1, 
-#                                       TRUE ~0 ))
-# sims_parameters <- sims_parameters %>%
-#                     filter(remove==0)
+ sims_parameters <- sims_parameters %>%
+               mutate(remove=case_when(label=="MCAR" ~ 1,
+                                      label == "MNAR" ~1, 
+                                      TRUE ~0 ))
+ sims_parameters <- sims_parameters %>%
+                     filter(remove==0)
 
 ################################################################################
 # doParallel Setup (FASTEST OPTION)
@@ -95,13 +95,13 @@ sims_parameters <- sims_parameters %>%
 
 # Detect number of cores (leave one free for system)
 num_cores <- detectCores() - 1
-cat("Using", num_cores, "cores for doParallel processing\n")
+cat("Using", num_cores, "cores for doParallel processing\n") ## 3 cores here
 
 # STRATEGIC BATCHING: Run by N_val groups for better resource management
 # Uncomment the N_val you want to run:
-#target_N_val <- 500      # Start with this (36 minutes total)
-target_N_val <- 10000  # Then this (4.5 hours total)  
-# target_N_val <- 100000 # Finally this (45 hours total)
+#target_N_val <- 500      # 
+#target_N_val <- 10000  # Around 3.5 hours
+ target_N_val <- 100000 # Have to run in batches 
 
 # Filter to only run specific N_val
 sims_parameters <- sims_parameters %>% 
@@ -134,7 +134,7 @@ results <- foreach(i = 1:nrow(sims_parameters),
                    .errorhandling = "pass") %dopar% {
                      
                      # Source functions (need to do this in each worker)
-                     source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Programs//Study 1//SimulationStudy1_11Jun2024//SimulationStudy//02a_Functions_SimulatingData.R")
+                     source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Programs//Study 1//SimulationStudy1_11Jun2024//SimulationStudy//01_Functions_SimulatingData.R")
 
                      # Extract parameters for the current iteration
                      n_iter <- sims_parameters$n_iter[i]

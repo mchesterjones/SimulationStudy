@@ -3,6 +3,7 @@
 ################################################################################
 ## Purpose: Post simulation, combine results from different scenarios to allow graphs to be generated 
 ## Created: 28Aug2024
+## Last updated 23Jun2025
 ## Author: MCJ
 ################################################################################
 
@@ -23,78 +24,75 @@ library(purrr)
 ## MCAR 500 Datasets
 ################################################################################
 ## Set working directory
-# setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
-# #setwd("/Users/maechester-jones/OneDrive - Nexus365/A DPhil/Simulation studies/Programs/Study 1/SimulationStudy1_11Jun2024/SimulationStudy/Data")
+setwd("C:\\Users\\maecj\\Documents\\Simulation_Data_Study1")
 # ## Load required datasets
-# load("MCAR_Nval_500_Yprev_0.01_Rprev_0.25_03Dec2024.Rdata")
-#    simresults_Yprev1Rprev25 <- simulation_results
-# load("MCAR_Nval_500_Yprev_0.01_Rprev_0.5_03Dec2024.Rdata")
-#    simresults_Yprev1Rprev50 <- simulation_results
-# load("MCAR_Nval_500_Yprev_0.01_Rprev_0.75_03Dec2024.Rdata")
-#    simresults_Yprev1Rprev75 <- simulation_results
-# load("MCAR_Nval_500_Yprev_0.05_Rprev_0.25_03Dec2024.Rdata")
-#    simresults_Yprev5Rprev25 <- simulation_results
-# load("MCAR_Nval_500_Yprev_0.05_Rprev_0.5_03Dec2024.Rdata")
-#    simresults_Yprev5Rprev50 <- simulation_results
-# load("MCAR_Nval_500_Yprev_0.05_Rprev_0.75_03Dec2024.Rdata")
-#    simresults_Yprev5Rprev75 <- simulation_results
-# load("MCAR_Nval_500_Yprev_0.1_Rprev_0.25_03Dec2024.Rdata")
-#    simresults_Yprev10Rprev25 <- simulation_results
-# load("MCAR_Nval_500_Yprev_0.1_Rprev_0.5_03Dec2024.Rdata")
-#    simresults_Yprev10Rprev50 <- simulation_results
-# load("MCAR_Nval_500_Yprev_0.1_Rprev_0.75_03Dec2024.Rdata")
-#    simresults_Yprev10Rprev75 <- simulation_results
+load("MCAR_Nval_500_Yprev_0.01_Rprev_0.25_17Jun2025.Rdata")
+   simresults_Yprev1Rprev25 <- simulation_results
+load("MCAR_Nval_500_Yprev_0.01_Rprev_0.5_17Jun2025.Rdata")
+   simresults_Yprev1Rprev50 <- simulation_results
+load("MCAR_Nval_500_Yprev_0.01_Rprev_0.75_17Jun2025.Rdata")
+   simresults_Yprev1Rprev75 <- simulation_results
+load("MCAR_Nval_500_Yprev_0.05_Rprev_0.25_17Jun2025.Rdata")
+   simresults_Yprev5Rprev25 <- simulation_results
+load("MCAR_Nval_500_Yprev_0.05_Rprev_0.5_17Jun2025.Rdata")
+   simresults_Yprev5Rprev50 <- simulation_results
+load("MCAR_Nval_500_Yprev_0.05_Rprev_0.75_17Jun2025.Rdata")
+   simresults_Yprev5Rprev75 <- simulation_results
+load("MCAR_Nval_500_Yprev_0.1_Rprev_0.25_17Jun2025.Rdata")
+   simresults_Yprev10Rprev25 <- simulation_results
+load("MCAR_Nval_500_Yprev_0.1_Rprev_0.5_17Jun2025.Rdata")
+   simresults_Yprev10Rprev50 <- simulation_results
+load("MCAR_Nval_500_Yprev_0.1_Rprev_0.75_17Jun2025.Rdata")
+   simresults_Yprev10Rprev75 <- simulation_results
 
 # ################################################################################
 #      ## MCAR 10000 Datasets 
 ################################################################################
 # ## Set working directory
-  setwd("H:\\SimulationStudyHDrive\\Data\\")
-     ## Load required datasets
-load("MCAR_Nval_10000_Yprev_0.01_Rprev_0.25_25Nov2024.Rdata")
+setwd("C:\\Users\\maecj\\Documents\\Simulation_Data_Study1")
+## Load required datasets
+load("MCAR_Nval_10000_Yprev_0.01_Rprev_0.25_17Jun2025.Rdata")
      simresults_Yprev1Rprev25 <- simulation_results
-load("MCAR_Nval_10000_Yprev_0.01_Rprev_0.5_25Nov2024.Rdata")
+load("MCAR_Nval_10000_Yprev_0.01_Rprev_0.5_17Jun2025.Rdata")
      simresults_Yprev1Rprev50 <- simulation_results
-load("MCAR_Nval_10000_Yprev_0.01_Rprev_0.75_25Nov2024.Rdata")
+load("MCAR_Nval_10000_Yprev_0.01_Rprev_0.75_18Jun2025.Rdata")
      simresults_Yprev1Rprev75 <- simulation_results
-load("MCAR_Nval_10000_Yprev_0.05_Rprev_0.25_25Nov2024.Rdata")
+load("MCAR_Nval_10000_Yprev_0.05_Rprev_0.25_18Jun2025.Rdata")
      simresults_Yprev5Rprev25 <- simulation_results
-load("MCAR_Nval_10000_Yprev_0.05_Rprev_0.5_25Nov2024.Rdata")
+load("MCAR_Nval_10000_Yprev_0.05_Rprev_0.5_18Jun2025.Rdata")
      simresults_Yprev5Rprev50 <- simulation_results
-load("MCAR_Nval_10000_Yprev_0.05_Rprev_0.75_25Nov2024.Rdata")
+load("MCAR_Nval_10000_Yprev_0.05_Rprev_0.75_18Jun2025.Rdata")
      simresults_Yprev5Rprev75 <- simulation_results
-load("MCAR_Nval_10000_Yprev_0.1_Rprev_0.25_25Nov2024.Rdata")
+load("MCAR_Nval_10000_Yprev_0.1_Rprev_0.25_18Jun2025.Rdata")
      simresults_Yprev10Rprev25 <- simulation_results
-load("MCAR_Nval_10000_Yprev_0.1_Rprev_0.5_25Nov2024.Rdata")
+load("MCAR_Nval_10000_Yprev_0.1_Rprev_0.5_18Jun2025.Rdata")
      simresults_Yprev10Rprev50 <- simulation_results
-load("MCAR_Nval_10000_Yprev_0.1_Rprev_0.75_25Nov2024.Rdata")
+load("MCAR_Nval_10000_Yprev_0.1_Rprev_0.75_18Jun2025.Rdata")
      simresults_Yprev10Rprev75 <- simulation_results
 #      
 # ################################################################################
 #      ## MCAR 100000 Datasets 
 # ################################################################################
 # ## Set working directory    
-# setwd("H:\\SimulationStudyHDrive\\Data\\")
-# # ## Load required datasets 
-# load("MCAR_Nval_1e+05_Yprev_0.01_Rprev_0.25_25Nov2024.Rdata")
+setwd("C:\\Users\\maecj\\Documents\\Simulation_Data_Study1")
+# ## Load required datasets
+# load("MCAR_Nval_1e+05_Yprev_0.01_Rprev_0.25.Rdata")
 # simresults_Yprev1Rprev25 <- simulation_results
-# # ## Set working directory    
-# setwd("C:\\Users\\maecj\\Documents\\Simulation_Data")
-# load("MCAR_Nval_1e+05_Yprev_0.01_Rprev_0.5_27Nov2024.Rdata")
+# load("MCAR_Nval_1e+05_Yprev_0.01_Rprev_0.5.Rdata")
 # simresults_Yprev1Rprev50 <- simulation_results
-# load("MCAR_Nval_1e+05_Yprev_0.01_Rprev_0.75_27Nov2024.Rdata")
+# load("MCAR_Nval_1e+05_Yprev_0.01_Rprev_0.75.Rdata")
 # simresults_Yprev1Rprev75 <- simulation_results
-# load("MCAR_Nval_1e+05_Yprev_0.05_Rprev_0.25_27Nov2024.Rdata")
+# load("MCAR_Nval_1e+05_Yprev_0.05_Rprev_0.25.Rdata")
 # simresults_Yprev5Rprev25 <- simulation_results
-# load("MCAR_Nval_1e+05_Yprev_0.05_Rprev_0.5_27Nov2024.Rdata")
+# load("MCAR_Nval_1e+05_Yprev_0.05_Rprev_0.5.Rdata")
 # simresults_Yprev5Rprev50 <- simulation_results
-# load("MCAR_Nval_1e+05_Yprev_0.05_Rprev_0.75_27Nov2024.Rdata")
+# load("MCAR_Nval_1e+05_Yprev_0.05_Rprev_0.75.Rdata")
 # simresults_Yprev5Rprev75 <- simulation_results
-# load("MCAR_Nval_1e+05_Yprev_0.1_Rprev_0.25_03Dec2024.Rdata")
+# load("MCAR_Nval_1e+05_Yprev_0.1_Rprev_0.25.Rdata")
 # simresults_Yprev10Rprev25 <- simulation_results
-# load("MCAR_Nval_1e+05_Yprev_0.1_Rprev_0.5_03Dec2024.Rdata")
+# load("MCAR_Nval_1e+05_Yprev_0.1_Rprev_0.5.Rdata")
 # simresults_Yprev10Rprev50 <- simulation_results
-# load("MCAR_Nval_1e+05_Yprev_0.1_Rprev_0.75_04Dec2024.Rdata")
+# load("MCAR_Nval_1e+05_Yprev_0.1_Rprev_0.75.Rdata")
 # simresults_Yprev10Rprev75 <- simulation_results
 
 ################################################################################
@@ -129,7 +127,7 @@ target_measures <- list(
 
 ## Create summary of bias 
 # Define the number of iterations
-num_iterations <- 200
+num_iterations <- 1000
 
 
 # Initialize empty lists to store bias summaries for each dataset
@@ -152,7 +150,7 @@ for (i in 1:num_iterations) {
     dataset <- get(dataset_name)
     
     # Loop through each method
-    for (method_id in c("CCA_val_data", "mean_val", "MI_val_data_noY", "MI_val_data_withY")) {
+    for (method_id in c("NM_val","CCA_val_data", "mean_val", "MI_val_data_noY", "MI_val_data_withY")) {
       
       # Extract true Y and estimated Y values
       true_Y <- dataset[["iterations"]][[i]][["preds"]][["preds_per_data_set"]][[method_id]][["Y"]]
@@ -198,7 +196,8 @@ combined_df <- combined_summaries %>%
 
 ## Add in Method Categories
 combined_df <- combined_df %>%
-  mutate(Method = case_when(dataset == "CCA_val_data" ~"Complete Case Analysis", 
+  mutate(Method = case_when(dataset == "NM_val" ~"No Missing Data", 
+                            dataset == "CCA_val_data" ~"Complete Case Analysis", 
                                 dataset == "mean_val" ~"Mean Imputation",
                                 dataset == "MI_val_data_noY" ~ "Multiple Imputation without Outcome",
                                 dataset == "MI_val_data_withY" ~  "Multiple Imputation with Outcome"),
@@ -260,7 +259,9 @@ simulation_parameters_long <- simulation_parameters_long %>%
     Metric == "bias" ~ "Bias",
     Metric == "mse" ~ "Mean Square Error",
     Metric == "rmse" ~ "Root Mean Square Error"),
-    Method = case_when(dataset == "CCA_val_data" ~"Complete Case Analysis", 
+    Method = case_when(
+                                  dataset == "NM_val" ~"No Missing Data", 
+                                  dataset == "CCA_val_data" ~"Complete Case Analysis", 
                                   dataset == "mean_val" ~"Mean Imputation",
                                   dataset == "MI_val_data_noY" ~ "Multiple Imputation without Outcome",
                                   dataset == "MI_val_data_withY" ~  "Multiple Imputation with Outcome"), 
@@ -290,72 +291,29 @@ simulation_parameters_long <- simulation_parameters_long %>%
 # simulation_parameters_long$samplesize <- "N=500"
 # combined_df$samplesize <- "N=500"
 # # 
-simulation_parameters_long$samplesize <- "N=10,000"
-combined_df$samplesize <- "N=10,000"
+ simulation_parameters_long$samplesize <- "N=10,000"
+ combined_df$samplesize <- "N=10,000"
 # #
-# simulation_parameters_long$samplesize <- "N=100,000"
-# combined_df$samplesize <- "N=100,000"
+#simulation_parameters_long$samplesize <- "N=100,000"
+#combined_df$samplesize <- "N=100,000"
 
 
 
-# ##############################################################################
-# # Combine with no missingness 
-# # ##############################################################################
-#Save_File
-# Notes: We store back here rather than H drive
-# Notes: You have to manually select which one you want it saved as
-# setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
+
 # 
-# ## Load datasets
-# load("Nomissing_500_Combined_Long.Rdata")
-# load("Nomissing_500_Combined.Rdata")
-# 
-# 
-# ## Combine datasets
-# combined_df <- rbind(combined_df, no_missing_combined)
-# 
-# simulation_parameters_long <- rbind(simulation_parameters_long, no_missing_long)
-# 
-# 
-# # Store all values at each iteraiton
+##############################################################################
+# Store
+##############################################################################
+
+# Store all values at each iteraiton
+ setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
+
 # save(combined_df,file = "MCAR_500_Combined.Rdata")
 # save(simulation_parameters_long,file = "MCAR_500_Combined_Long.Rdata")
 
-# 
-##############################################################################
-# Combine with no missingness
-##############################################################################
-setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
-## Load datasets
-load("Nomissing_10000_Combined_Long.Rdata")
-load("Nomissing_10000_Combined.Rdata")
-
-## Combine datasets
-combined_df <- rbind(combined_df, no_missing_combined)
-
-simulation_parameters_long <- rbind(simulation_parameters_long, no_missing_long)
-
-
-# Store all values at each iteraiton
 save(combined_df,file = "MCAR_10000_Combined.Rdata")
 save(simulation_parameters_long,file = "MCAR_10000_Combined_Long.Rdata")
 
-
-# ##############################################################################
-# # Combine with no missingness 
-# ##############################################################################
-# setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
-# ## Load datasets
-# load("Nomissing_100000_Combined_Long.Rdata")
-# load("Nomissing_100000_Combined.Rdata")
-# 
-# ## Combine datasets
-# combined_df <- rbind(combined_df, no_missing_combined)
-# 
-# simulation_parameters_long <- rbind(simulation_parameters_long, no_missing_long)
-# 
-# 
-# # Store all values at each iteration
 # save(combined_df,file = "MCAR_100000_Combined.Rdata")
 # save(simulation_parameters_long,file = "MCAR_100000_Combined_Long.Rdata")
 
