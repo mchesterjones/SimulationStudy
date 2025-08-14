@@ -99,7 +99,7 @@ num_cores <- 9
  cat("Using", num_cores, "cores for processing\n")
 
 # Set mechanism-specific seed
-base_seed <- 1482
+base_seed <- 148253
 # mechanism_offset <- switch(RUN_MECHANISM, MCAR=0, MAR=1000, MNAR=2000)
 # set.seed(base_seed + mechanism_offset)
 set.seed(base_seed)
