@@ -28,7 +28,8 @@ load("Development_Dataset_Yprev_0.05.Rdata")
 model_5 <- development_dataset[["model"]]
 load("Development_Dataset_Yprev_0.1.Rdata")
 model_10 <- development_dataset[["model"]]
-
+load("Development_Dataset_Yprev_0.5.Rdata")
+model_50 <- development_dataset[["model"]]
 ################################################################################
 # Dependent Code
 ################################################################################
@@ -39,9 +40,9 @@ source("C://Users//maecj//OneDrive - Nexus365//A DPhil//Simulation studies//Prog
 ################################################################################
 
 combinations_of_parameters <- crossing(
-  n_iter = 1000, 
+  n_iter = 100, 
   N_val = c(100000),
-  Y_prev = c(0.05), 
+  Y_prev = c(0.5), 
   R_prev = c(0.25,0.50,0.75), 
   ## Beta = affect on Missingness R   
   beta_x1 = c(0, 0.5), ## 0 for MAR and MCAR and 0.5 for MNAR
@@ -83,8 +84,7 @@ sims_parameters <- sims_parameters %>%
 
 # Filter out certain conditions 
  sims_parameters <- sims_parameters %>%
-               mutate(remove=case_when(label=="MCAR" ~ 1,
-                                      label == "MNAR" ~1, 
+               mutate(remove=case_when(label=="MAR" ~ 1,
                                       TRUE ~0 ))
  sims_parameters <- sims_parameters %>%
                      filter(remove==0)
@@ -130,7 +130,7 @@ start_time <- Sys.time()
 results <- foreach(i = 1:nrow(sims_parameters), 
                    .combine = rbind,
                    .packages = c("dplyr", "tidyverse", "mice", "broom", "pROC"),
-                   .export = c("simulation_nrun_fnc", "model_1", "model_5", "model_10"),
+                   .export = c("simulation_nrun_fnc", "model_1", "model_5", "model_10","model_50"),
                    .errorhandling = "pass") %dopar% {
                      
                      # Source functions (need to do this in each worker)
@@ -159,6 +159,8 @@ results <- foreach(i = 1:nrow(sims_parameters),
                                      "0.01" = model_1,
                                      "0.05" = model_5,
                                      "0.1" = model_10,
+                                     "0.5" = model_50,
+                                     
                                      stop("Invalid Y_prev value"))
                      
                      # Run simulation
@@ -257,6 +259,7 @@ success_summary <- results[results$status == "SUCCESS", ] %>%
 print(success_summary)
 
 # Save the results summary
+setwd("C:\\Users\\maecj\\Documents\\Simulation_Data_Study1_50")
 save(results, file = paste0("simulation_summary_", format(Sys.Date(), "%d%b%Y"), ".Rdata"))
 
 warnings()

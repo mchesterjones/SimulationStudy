@@ -48,7 +48,6 @@ simulation_nrun_fnc <- function(n_iter,
   
   ## Define an empty variable, which will be used to store the results across all iterations
   results <- NULL
-  set.seed(17625) ## Seed set
 
   all_iterations <- list()
   
@@ -282,7 +281,7 @@ simulation_function <- function(N_val,
   
   ## Remove x_1 if R_1 ==0
   val_data <- val_data %>%
-    mutate(x_1 = ifelse(R_1 == 0, x_1, NA)) ## Error spotted 20Aug2024
+    mutate(x_1 = ifelse(R_1 == 1, x_1, NA)) ## Error spotted 20Aug2024
   
   
   return(list("val_data" = val_data))

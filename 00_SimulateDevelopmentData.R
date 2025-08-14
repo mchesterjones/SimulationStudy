@@ -19,7 +19,9 @@ library(MASS)
 ## Functions for running iterations
 ################################################################################
 
-set.seed(189)
+#set.seed(189) ## 0.01
+#set.seed(1189) ## 0.05
+set.seed(11189) ## 10
 
 sims_parameters <- crossing(
   N_dev = 100000,
@@ -64,35 +66,32 @@ dev_data_simulation_function <- function(
   
 {
   
-  # Updated correlation structure between predictors on 17Jun2025
-  # Define relationships between predictions 
-      ## All have mean 0 
-  mu = c(0, 0 ,0, 0, 0) 
-      ## Corr structure 
-  ##(X1X1, X1X2, X1X3, X1X4,X1X5,
-  ## X2X1, X2X2, X2X3, X2X4, X2X5
-  ## X3X1, X3X2, X3X3, X3X4, X3X5
-  ## X4X1, X4X2, X4X3,X 4X4, X4X5
-  ## X5X1,X5X2, X5X3, X5X4, X5X5 
+  
+  ## Create relationship between x_1 and x_4 and x_5 
+  mu = c(0, 0 ,0, 0,0) # all have mean 0 
   
   covar_mat = matrix(c(1.0, 0.6, 0.6, 0.6, 0.6, 
                        0.6, 1.0, 0.2, 0.2, 0.2, 
                        0.6, 0.2, 1.0, 0.2, 0.2, 
                        0.6, 0.2, 0.2, 1.0, 0.2, 
                        0.6, 0.2, 0.2, 0.2, 1.0), nrow=5)
-  # Create X1,X4,X5
-  correlated_distributions <- mvrnorm(n=N_dev, mu = mu, Sigma = covar_mat)
+  
+  
+  correlated_distributions <- mvrnorm(n=N_dev, 
+                                      mu = mu,
+                                      Sigma = covar_mat)
   
   # Create Development Data
   #---------------------------------------------
   dev_data_IPD <- tibble("x_1" = correlated_distributions[,1],
-                 "x_2" = correlated_distributions[,2],
-                 "x_3" = correlated_distributions[,3],
-                 "x_4" = correlated_distributions[,4],
-                 "x_5" = correlated_distributions[,5], 
-                 "U" = rnorm(N_dev, mean = 0, sd = 1),
-                 "ID" = 1:N_dev)
+                         "x_2" = correlated_distributions[,2],
+                         "x_3" = correlated_distributions[,3],
+                         "x_4" = correlated_distributions[,4],
+                         "x_5" = correlated_distributions[,5], 
+                         "U" = rnorm(N_dev, mean = 0, sd = 1),
+                         "ID" = 1:N_dev)
   
+
   #determine the prevalence of the outcome based on the gamma_0
   gamma_0 <- as.numeric(coef(glm(rbinom(N_dev, 1, prob = Y_prev) ~
                                    offset(gamma_x1*x_1 +
@@ -164,6 +163,11 @@ model <- dev_mod_function(dev_data = dev_data)
   # Save results
   setwd("C:\\Users\\maecj\\OneDrive - Nexus365\\A DPhil\\Simulation studies\\Programs\\Study 1\\SimulationStudy1_11Jun2024\\SimulationStudy\\Data")
   save(development_dataset, file = filename)
+  
+  
+  
+  
+  
   
 #5. Check Model 
   ################################################################################
